@@ -1,0 +1,29 @@
+# Cricket · The crease
+
+Single-file browser cricket game (swipe batting, deterministic simulation, league seasons). `dist/index.html` is GENERATED from `src/` by `tools/build.mjs`; never hand-edit it. Read `README-DEV.md` for the workflow.
+
+## Layout
+
+- `src/core.js`: the pure engine, exported as the frozen global `Cricket`. Deterministic and seeded: every random draw comes from `RNG.stream`; `Math.random` is forbidden here. Presentation code never advances match RNG.
+- `src/ui.js`: pointer input, canvas rendering, audio, menus, storage. Reads engine state; the only writes are through engine calls and `persist()`.
+- `src/ui/index.js`: module entry for the bundled UI (`--bundle`). New presentation code (renderer, three.js) is imported from here, not appended to `src/ui.js`.
+- `src/markup.html`, `src/head.html`, `src/tail.html`, `src/styles/*.css`: the page. `order.txt` records how font and CSS lines interleave; re-run `npm run split` rather than editing it by hand.
+- `dist/index.html` must keep exactly two inline script blocks with ids `cricket-core` and `cricket-ui`, in that order. The test harnesses parse them.
+- `review-check.cjs`, `check-*.cjs`, `review-fixtures/`: regression suite from the engine maintainer's pack. `check-balance.cjs`: gameplay balance acceptance. Both must pass before and after every change.
+
+## Rules
+
+1. Run `npm run build:check` after touching styles or markup: the plain build must reproduce the recorded HTML byte for byte, or you have changed something you did not intend to. Bundled builds (`npm run build:bundle`) are validated by the test suite instead.
+2. Run `npm run check` before claiming anything works. A change to a regression fixture needs a stated reason in `PROJECT_NOTES.md`.
+3. Engine changes (scoring, physics, AI, rules) are versioned: new deliveries carry a new `scoringVersion`; already prepared balls in old saves keep their rules. Do not change `CareerSave` validation so that an older save fails; a save that fails validation is backed up before replacement, never discarded.
+4. Presentation work goes behind a flag until it reaches parity with the canvas renderer, and is judged with screenshots at fixed engine times (Playwright), not by description. Contact must be drawn where `Fielding.contactOrigin` says; fielders where `Fielding.frame` says; the ball where `BallView` says.
+5. No runtime network requests. Fonts are embedded; licences stay in Settings. Output stays one HTML file; budget 1.2 MB uncompressed once three.js is bundled.
+6. Do not change presentation clocks, the swipe grammar (`Gesture`), the Test ball-by-ball design or the save schema number without an explicit decision.
+7. British English in all copy. Keep the existing tone of `PROJECT_NOTES.md` when adding entries: what changed, why, what was measured, what remains unverified.
+
+## Commands
+
+- `npm run split [file]`: regenerate `src/` from a single-file build (used at handover from the engine maintainer's pack).
+- `npm run build` / `npm run build:check` / `npm run build:bundle`.
+- `npm run check`: regression suite plus balance harness.
+- `npm run serve`: local server on port 8000 for Playwright and manual play.

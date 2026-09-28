@@ -1,0 +1,20 @@
+{
+  "name": "cricket-the-crease",
+  "version": "23.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Cricket \u00b7 The crease. Single-file browser cricket game built from src/ by tools/build.mjs.",
+  "scripts": {
+    "split": "node tools/split.mjs",
+    "build": "node tools/build.mjs",
+    "build:check": "node tools/build.mjs --check",
+    "build:bundle": "node tools/build.mjs --bundle",
+    "check": "node review-check.cjs && node check-balance.cjs",
+    "serve": "python3 -m http.server 8000 --directory dist",
+    "frames": "node tools/frames.mjs http://localhost:8000/index.html frames"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "playwright": "^1.63.0"
+  }
+}
