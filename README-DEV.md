@@ -15,7 +15,7 @@ This repository turns the single-file game into editable sources without changin
 ## Building
 
 - `npm run build`: plain build, `src/ui.js` inlined verbatim. Byte-identical to the source pack when nothing has changed.
-- `npm run build:bundle`: bundles `src/ui/index.js` with esbuild (ES modules and npm imports allowed, e.g. `three`), inlined as the same `<script id="cricket-ui">` block. Add `--minify` for a smaller file. Use this once the renderer work begins.
+- `npm run build:bundle`: bundles `src/ui/index.js` with esbuild (ES modules and npm imports allowed, e.g. `three`), inlined as the same `<script id="cricket-ui">` block. Add `--minify` for a smaller file. Use this once the renderer work begins. Note: the review suite's UI facade groups fail on a bundled build because they patch the UI source by text; run `npm run check:bundle` for the engine harness and rely on Playwright for the UI until the facade is adapted.
 
 ## Adding three.js
 

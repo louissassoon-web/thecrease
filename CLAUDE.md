@@ -13,7 +13,7 @@ Single-file browser cricket game (swipe batting, deterministic simulation, leagu
 
 ## Rules
 
-1. Run `npm run build:check` after touching styles or markup: the plain build must reproduce the recorded HTML byte for byte, or you have changed something you did not intend to. Bundled builds (`npm run build:bundle`) are validated by the test suite instead.
+1. Run `npm run build:check` after touching styles or markup: the plain build must reproduce the recorded HTML byte for byte, or you have changed something you did not intend to. The review suite's UI groups patch `src/ui.js` by source text (`replaceFunction` in `check-display-input.cjs`), so they run only against the plain build; a bundled build (`npm run build:bundle`) is checked with `npm run check:bundle` (engine harness) plus the Playwright smoke test and `npm run frames`. Adapting the UI facade to the bundled output is part of the renderer work, not something to skip.
 2. Run `npm run check` before claiming anything works. A change to a regression fixture needs a stated reason in `PROJECT_NOTES.md`.
 3. Engine changes (scoring, physics, AI, rules) are versioned: new deliveries carry a new `scoringVersion`; already prepared balls in old saves keep their rules. Do not change `CareerSave` validation so that an older save fails; a save that fails validation is backed up before replacement, never discarded.
 4. Presentation work goes behind a flag until it reaches parity with the canvas renderer, and is judged with screenshots at fixed engine times (Playwright), not by description. Contact must be drawn where `Fielding.contactOrigin` says; fielders where `Fielding.frame` says; the ball where `BallView` says.
