@@ -1,0 +1,34 @@
+PASS T20 ground strokes, 60 ms timing sd: runs per over                     5.98   target 5-7.5
+FAIL T20 ground strokes, 60 ms timing sd: balls per wicket                105.36   target 30-90
+PASS T20 ground strokes, 130 ms timing sd: balls per wicket                   29   target 12-40
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.09   target 7-10.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                             29   target 20-60
+PASS T20 loft every ball, 60 ms sd: six % of balls                          24.3   target 10-35
+FAIL T20 loft every ball, 60 ms sd: balls per wicket                        4.85   target 5-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       182   target 120-190
+PASS Projected 20-over total, all-loft at 60 ms sd (must trail the mix)      137   target 60-181
+PASS Test ground strokes + 35% defence, 60 ms sd: runs per over             3.08   target 2.8-4.8
+PASS Test ground strokes + 35% defence, 60 ms sd: balls per wicket         84.28   target 40-130
+PASS Perfect full-effort loft on a full ball: six %                        76.25   target 55-90
+PASS Perfect full-effort loft on a full ball: exit speed m/s           40.15 m/s   target 30-44 m/s
+PASS Loft released 80 ms off: six %                                        36.25   target 10-45
+PASS Loft released 80 ms off: caught %                                     23.75   target 15-60
+PASS Loft released 130 ms off: six %                                        6.25   target 0-20
+PASS AI T20 first-innings mean                                            172.47   target 150-180
+PASS AI T20 first-innings standard deviation                               35.96   target 20-45
+PASS AI T20 first-innings wickets                                           7.38   target 5-8.5
+PASS AI T20 sixes per innings                                               5.65   target 4-9
+PASS AI T20 wides, % of balls                                              2.84%   target 1.5-4.5%
+PASS AI T20 lbw, % of dismissals                                           7.62%   target 4-20%
+PASS AI Test first-innings mean                                           285.07   target 280-400
+PASS AI Test first-innings standard deviation                              84.61   target 55-140
+PASS AI Test first innings declared, %                                        0%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      23.22%   target 10-30%
+PASS AI Test lbw, % of dismissals                                         15.69%   target 8-25%
+PASS AI Test won by the side batting last, %                              57.14%   target 30-65%
+PASS AI Test draws, %                                                      7.14%   target 5-25%
+PASS Pace yorker: median lateral deviation at the crease, degrees           1.1°   target 0-3°
+PASS Left pace yorker that passes the stumps: four byes, %                    0%   target 0-5%
+PASS Left pace yorker that passes the stumps: keeper collects for no run, %   98.15%   target 75-100%
+
+30 passed, 2 failed of 32 balance checks.

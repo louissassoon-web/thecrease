@@ -1,0 +1,1 @@
+{"policy":"loft every ball; Gaussian 60 ms timing SD; fixed held-out seeds","balls":2000,"runsPerOver":18.825000000000003,"wickets":348,"sixes":589}

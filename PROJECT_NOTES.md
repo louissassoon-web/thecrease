@@ -1,0 +1,359 @@
+# Cricket · The crease
+
+A single self-contained `dist/index.html`, using vanilla JavaScript and canvas. No build step, libraries, external artwork or runtime network requests are needed by the game itself. The six requested font families are embedded as WOFF2, with their SIL Open Font licences included in Settings.
+
+## Playing
+
+Choose T20 or Test and your team. Each format has a separate saved league season. T20 uses city franchises with real-player fantasy XIs; Tests use national teams. These are original game selections and ratings, not official current line-ups or statistical predictions. Player names remain editable in the match scorecard and edits carry into later fixtures.
+
+Swipe on the field or the pad to select a shot, hold your aim, then lift at contact. Small movements defend. A direct swipe stays grounded. For loft, pull back and then reverse towards the target without lifting between the movements. Larger pull-backs and diagonal follow-throughs are accepted; crossing the initial touch point is unnecessary. LOFT READY confirms recognition before release, and stays latched while aiming. The forward segment supplies direction and power. Short aim corrections and normal thumb curvature remain grounded. Guided late cuts, leg glances and paddle sweeps show an explicit along-the-ground label instead of promising loft. Forward defence has a wider selection range, a longer contact window and softer hands. Direction, stroke strength and release timing are separate inputs. Leaving needs no input. New deliveries use each batter's left- or right-handed stance, with mirrored strokes and field positions. Batting hand can be edited in the scorecard between deliveries.
+
+The shot guide adapts to the bowler and length. Against fuller spin, the leg-side square direction selects a sweep, or a slog sweep with a backswing; the finer downward diagonal selects a paddle. Short spin offers pulls, cuts and back-foot punches. On a short pace ball, the leg-side direction selects a pull at waist height or a hook higher up. Full and reachable good-length balls offer straight, on, off, cover and square drives. Shorter or steeper balls offer compact back-foot punches, with high balls better hooked or cut. The off-side downward diagonal plays a late cut. Late cuts, glances and paddles stay guided along the ground even with a long swipe. An off-side diagonal with a backswing becomes an upper cut only on a high short ball. A square drive needs width. Hooks have a wider usable leg-side range, including the fine hook, and short-ball off-side diagonals select cuts, while a straighter swipe retains the back-foot punch. Trying to sweep a yorker carries a shot-choice penalty.
+
+T20 matches have 20 overs per side and a seeded toss. The chase ends when the target is reached, including a winning wide or no-ball. Tests have two innings per side, a five-day clock, sessions, declarations, a 200-run follow-on threshold, innings wins, chases, ties and draws. Your batting is always played ball by ball. Declare between deliveries from the menu. Tests use red balls and white clothing.
+
+When your team bowls, watch an over or simulate the opposition innings. Watching uses the same delivery, shot and fielding models with a seeded opposition batting controller. Simulation advances only the opposition batting innings, yields between batches, displays commentary and bowling figures, and can be paused. The bowler's rating affects the simulated batsman's timing. Manual bowling controls remain a later phase.
+
+New T20 innings introduce spin in the second over. Tests open with a ten-over spell shared by two pace bowlers before rotating through longer pace and spin spells. Bowlers keep a fixed style, with variations inside that style. Five bowlers share a T20 innings, capped at four overs each. Test spells have no individual over cap. Attacking strokes start with a safe single and let the player call further runs; defensive blocks hold the crease until a run is called with live availability cues. Bowled, caught, LBW and run-out dismissals, wides, front-foot no-balls, byes and leg-byes are modelled. T20 league ties share points; there is no Super Over.
+
+## Revision 24 - batting and opposition calibration
+
+Attacking quality now falls gradually across ordinary phone release offsets. Pace loft coverage is 200-230 ms; spin loft can extend to 270 ms, while ground coverage follows player precision within 210-300 ms. The exponential quality curves are softer, without a quality floor or a power bonus for perfect timing. Ground strokes retain more of their bat contribution at middling quality, so placement and running remain useful.
+
+Loft keeps the 43 m/s player-dependent ceiling and the existing boundary ellipse. Shorter aerial strokes stay flatter; a committed swing opens the face and magnifies angular scatter. Speed falls less steeply with quality, while elevation and direction spread with mistiming. This puts more imperfect full swings into reachable catching arcs. The field still has to intercept the actual flight.
+
+Edges now vary below, above and beside the cordon. Soft defensive edges more often fall short, and defensive timing risk is lower. Movement still raises the edge risk of attacking ground strokes. Catch reach, yorker geometry and keeper collection are unchanged.
+
+The opposition chooses from a perceived line and length and can misread either. Rare large timing errors can miss straight balls; the existing pad and stump geometry decides LBW or bowled. Defence reduces the penalty for a misread. T20 finishers loft more often at the death, with more measured ground effort. Tests select more defensive strokes, and the survival decision considers required rate, wickets, remaining time and a late second-innings deficit. Match context is transient; declarations, clocks and the five-day limit are unchanged.
+
+New balls use scoring version 24. Prepared revision 22 and 23 balls retain exact shot outcomes and AI inputs, and both save revisions remain accepted. Schema 5, profiles 19, swipe grammar, presentation clocks, dependencies and the revision 23 safety fixes are unchanged. The supplied `check-balance.cjs` is byte-for-byte unedited: revision 23 passes 20/32; revision 24 passes 32/32. The 44 portable review groups also pass. See `BALANCE_REPORT.md` and `validation-v24/` for complete output, independent samples and fixture changes.
+
+## Revision 23 - balance and save safety (historical)
+
+Bounce movement is now a signed angle at pitching, shared by delivery, LBW projection and continuation. Its displacement grows with distance travelled after the bounce, removing the extreme sideways yorkers. Bowling plans mix the stumps and off-side channel, with control-dependent wides and variable Test bounce.
+
+Loft uses player-dependent power capped at 43 m/s. Timing error changes speed, direction and elevation. Scoring, the field and radar share a 62 m square / 70 m straight boundary ellipse. Fielding explicitly samples descending catch height and landing; a bounded lunge keeps the collector's hands aligned with a permitted catch.
+
+Attacking contact windows narrow and revision 22's spin quality floor is removed. Mistimed attacks can edge or miss; edge height reflects incoming pace and hand softness. Defence retains generous coverage and holds the crease until a run is called. Controlled drives retain useful power and named-player differences.
+
+The AI reads line, length, height, movement, field gaps and player strengths, with seeded Gaussian timing and occasional reading errors. It leaves and defends on merit, attacks reachable good lengths, and uses the full shot range. Declarations depend on lead, time left, wickets and the remaining bowling work. Totals and results are never forced.
+
+Invalid saves receive a dated, byte-for-byte backup and an export option before replacement. Failed backup writes protect the original. Frame exceptions pause play, report in the feedback row and keep animation callbacks alive. Release/contact writes wait until the ball is dead; completed-ball and running-command writes remain.
+
+New balls use scoring version 23; prepared balls through 22 retain their rules. Schema 5, profiles 19, presentation clocks, swipe grammar and the single-file build stay unchanged. All 44 portable review groups pass. See `validation-v23/REPORT.md` and `validation-v23/` for measurements and regression changes. The requested `check-balance.cjs` was not supplied, reconstructed or edited.
+
+## Revision 22 - catching, returns and contact calibration (historical)
+
+The ball remains visible after interception, including in the keeper/slips' hands and through a deep fielder's return. It shares the nearby fielder's mesh depth ordering. A close catch behind the wicket gets a front/side view, a minimum 1.05-second approach, and 1.25 seconds to see the secure catch. Its wicket announcement starts after 950 ms. The same stored interception still decides the wicket. Return throws are included in the camera bounds rather than fitting only the outgoing shot.
+
+Fielders' strides follow travelled distance, with braking into collection. Body facing blends from gathering into the throw; knees and elbows retain their fixed segment lengths. Keeper crouch changes, hand closure, throwing-arm recovery and the batter's weight transfer have been calibrated. See the animation-library assessment in `HANDOVER.md` for the Tween.js and Spine options considered. No new runtime dependency is required.
+
+A short ball's off-side diagonal now selects a square cut rather than a high back-foot punch. Grounded short cuts with width receive 250-350 ms contact coverage, while middled power retains its earlier precision threshold. At 5,400 matched test inputs, version 20 produced 2,160 misses and 980 edges; version 22 produced no misses and 468 edges. Edges remain possible, especially with poor timing, excess reach or insufficient room.
+
+Controlled spin ground strokes have 520-640 ms contact coverage, defence 560-700 ms, and deliberate loft 285-380 ms. Coverage varies by batter; the original precision window still determines clean timing and power. In 469 matched full/good spin inputs spanning 0-500 ms early/late release, misses fell from 268 to zero. Edges were 14 of 201 contacts before and 26 of 469 after, so there are more total contacts and a lower edge rate per contact. These stress inputs are regression fixtures, not expected match averages. Weak hits remain weak; bowling movement and ground-ball physics are unchanged.
+
+The stadium/kit shop only opens before the first prepared ball or after the match finishes. Over and innings breaks do not unlock it. Purchases recheck access, preventing a stale button from spending coins mid-match. Saved ownership and coins remain intact.
+
+## Ball depth and presentation - revision 21
+
+A compact distance track shows the ball approaching the bat, independent of vertical dip or sideways turn. Its endpoint is the nominal contact time. It sits opposite the batter, clears before replay and stays away from the score. The ordinary ball shadow and a quiet pitch mark remain depth/length cues.
+
+`BallView` keeps a continuous incoming trajectory beyond the crease using the actual post-bounce presentation scale. The previous shot-specific pull towards a fixed point, the 1.035-time clamp, and the switch to a different animation speed are removed. Near the striker, the ball is sorted with the bat and body mesh faces. Its ground shadow is painted before the players. A short interpolation joins the last incoming position to the saved fielding path; an uncontacted through-ball starts at its already elapsed travel time, avoiding a rewind. The early-release downswing meets the ball at arrival. These are presentation corrections: the deterministic shot outcome, pitch physics and field intercepts are unchanged from scoring version 20.
+
+## Coins, grounds and kits
+
+Between matches, open **Stadium & kit shop** from the menu. A T20 win earns 300 coins and a Test win 500. There is one wallet across both formats. A fixture reward is keyed by league, season, fixture seed, player team and opponents, so opening the result again or restarting the fixture does not pay twice. Draws, ties, losses and unfinished matches pay nothing. Owned items can be re-equipped free of charge. Export/import includes coins, ownership, equipment and the paid-fixture ledger. An older save receives the starter wallet. Restart match retains the wallet; Restart entire game clears it, with that consequence stated in the confirmation.
+
+| Ground | City | Coins |
+| --- | --- | ---: |
+| Club ground | Local cricket | Starter |
+| Newlands | Cape Town | 900 |
+| Eden Gardens | Kolkata | 1,800 |
+| Melbourne Cricket Ground | Melbourne | 3,000 |
+| Lord’s | London | 4,500 |
+
+Each ground has its own stand configuration, crowd size, roofing and palette. Newlands has a mountain backdrop; Lord’s has a brick pavilion; the starter has a modest clubhouse and open space. These are original, simplified game interpretations. The [Western Province Cricket Association ground description](https://wpcricket.co.za/newlands-cricket-ground/) and [Lord’s Pavilion heritage page](https://www.lords.org/mcc/heritage-collections/heritage-trail/pavilion) informed the landmark choices. The [MCG seating overview](https://www.mcg.org.au/plan-a-visit/seating-and-ticket-information/seating-maps) informed the large-bowl idea. Geometry and prices are authored game values, not measured dimensions, capacities or market prices. Purchased grounds change scenery; the existing match model still controls pitch preparation and weather.
+
+Kits start with Club basics, then Forest stripe (300), Royal chevron (600), Heritage maroon (900), and Midnight gold (1,500). Shirt/trouser colours, chest patterns and collar trim apply to the user's batting and fielding teams. Test whites retain the selected trim and detailing. No purchase modifies player ratings or shot outcomes.
+
+## Before the delivery
+
+Incoming players get a three-second card with their name, current figures and three labelled ability bars. Batters show timing, power and facing spin; bowlers show control, movement and variations. These use the existing game estimates. A replacement batter is introduced even when entering at the non-striker's end. Introductions are remembered within the innings, so a single does not repeatedly introduce the same player.
+
+Weather descriptions changing produces a separate 2.4-second **Conditions changed** notice. Actual field changes use the 1.8-second field notice. Cards queue, clear before the run-up and cannot overlap live batting. Opening a menu pauses their clock; export/reload restores their position. Reduced motion removes card fades. The first delivery can include batter, bowler, conditions and field cards in sequence.
+
+## Individual player profiles
+
+Revision 19 replaces position-based ability with 145 named player profiles. Timing, power, defence, pace/spin matchups and shot preferences affect real contact and launch behaviour. Bowlers have individual pace, accuracy, movement, bounce, variations and yorker skills. Pause and open Player profiles to inspect either team. These are career-inspired game estimates; see [PLAYER_PROFILES.md](PLAYER_PROFILES.md) for evidence, calibration and limitations.
+
+Newly prepared balls use scoring version 24 and snapshot the version 19 player profiles. Old pending balls retain their original outcomes. Edited names keep the same player identity. The source handover is documented in [HANDOVER.md](HANDOVER.md); `node review-check.cjs` runs the portable review checks without repository history.
+
+## Revision 20 - spin contact and drive selection
+
+The previous model forced contact quality below .36 into an edge, even for sensible ground shots against spin. In a matched late/early-release sample, this created an abrupt change from acceptable contact to a nick or complete miss. Spin now separates the window for making contact from the original precision window used to calculate power. Ground strokes gain 100 ms of coverage on each side, bounded at 300-420 ms; defence gains 110 ms, bounded at 325-450 ms. Deliberate loft gains only 35 ms, bounded at 245-340 ms. Player strengths still affect both precision and coverage. These are game thresholds, not measured human timing values.
+
+Within that coverage, a suitable controlled spin stroke can make weak contact without automatically becoming an edge. Quality is floored at .38 for shot suitability of at least .70; seeded edge risk remains and grows with timing error, movement and reach. Wrong-side shots, unsuitable sweeps, unreachable balls and releases beyond the window remain risky. Perfect timing and middled power receive no bonus. Pace contact windows, bowling trajectories, turn, pitch physics and fielding reach are unchanged. The live input clock waits for the largest available shot window before resolving an unplayed delivery.
+
+The old drive classifier accepted good-length balls only below .72 m at contact, labelling most ordinary good-length drives as punches. New deliveries accept forward drives below 1.10 m on a good length; short or steeper balls retain back-foot options. This rule is shared by the guide and shot name, then used by the rig, pad geometry, contact origin and shot-specific player rating. Good-length forward drives no longer inherit the compact punch's bat-speed restriction. Existing version 19 balls keep their exact saved behaviour.
+
+The focused regression uses 486 matched full/good spin strokes at 240, 300 and 350 ms early or late, across Test/T20 and finger/wrist spin. Version 19 gives 248 misses, 132 edges and 106 non-edge contacts; version 20 gives zero misses, 50 edges and 436 non-edge contacts. A separate 192-stroke ground sample yields 58 fours and includes every running score from zero to three, with no clean ground-stroke sixes. These are calibration fixtures, not predicted match averages. Physical Android testing is still needed to assess feel.
+
+## Automatic overs and faster returns
+
+Start over begins the next six legal deliveries. After each result and return, play leaves a short gap, then prepares the next delivery automatically. Wides and no-balls are rebowled within that over. The sequence stops at the over boundary or an innings interval; Start next over begins the following over. Mid-over older saves continue with Resume over where needed. The pause button stops the sequence, and a resumed delivery gets a settling period.
+
+Changed fields, weather and player introductions appear in a short queue before the run-up. The notices clear automatically. Repeated swipe/release instructions are removed during play; selecting a stroke displays its name and strength. The backswing status and fast-forward button share a reserved row in both pad and full-screen views. The playing field keeps the same size through batting, running, returns and field notices.
+
+Fast-forward 4× is available while the ball, runners and fielders are still in play or returning. It advances their shared replay clock, without regenerating the flight, speeding up one team or deciding additional runs. Normal speed slows it again; a run/cancel action, pause or next delivery also restores normal speed. Camera movement, celebrations and the interval before the next delivery use real time and are not accelerated. Score commitment still happens once at the recorded outcome.
+
+## Backswing input, spin and calmer presentation
+
+Revision 17 introduced backswing input. Revision 18 fixes its overly strict recognition: the old detector rejected large pull-backs and diagonal returns. The new detector recognises a 12-18 CSS-pixel initial stroke followed by a 20-42 pixel reverse projection, with a broad diagonal tolerance and no upper pull-back limit. It evaluates reversal before updating the furthest point, latches loft early, and consumes coalesced pointer samples on move and release. These are game gesture thresholds, not a biomechanical model. Power comes from the forward stroke, release timing is unchanged, and the batter prepares a higher backlift once loft is recognised. Input version 18 applies to unplayed version 17 deliveries too; the deterministic scoring model remains version 17.
+
+Revision 17 uses 3200 presentation milliseconds per physical second after pitching, compared with 2600 before pitching. The physical speed, bounce height, turn, pitch conditions, trajectory and timing-window width are unchanged. The extra reading time changes with length and pace; the 96-delivery regression sample adds 23-326 ms. Grounded/defensive spin strokes receive less compounded edge risk from modest timing error and turn. The same errors on pace or deliberate loft keep their previous response. Poor shot choice, reaching, large errors and real reachable edges remain dangerous.
+
+A controlled comparison uses 288 grounded strokes at 70/130/190 ms release errors, 24 seeds, both formats and both spin archetypes. Version 16 produces 41 edges, including 19 keeper catches; version 17 produces 19 edges, including nine keeper catches. These are repeated game inputs, not predicted match rates. More time after pitching addresses missed arrival cues; only a device play test can establish whether that feels right.
+
+The fielding camera uses a fitted steady view containing the ball path, interception and both wickets. Camera transitions use an independent real-time clock, with no accelerated return pan at 4x. It eases back during the between-ball interval. The controls and pre-delivery card occupy a fixed dock, so phase changes cannot resize the field. Unchanged canvas dimensions are not reset, and a settled field view caches the same stadium and terrain used in motion. The full-screen ready tint and old floating score glyph are removed.
+
+Reduced motion is in paused Settings and uses the phone's preference until the player makes a saved choice. It removes camera travel and animated acknowledgement, using static banners. Calm motion follows the same field geometry. This implements the optional-motion approach described in [W3C's interaction animation guidance](https://www.w3.org/WAI/WCAG22/Understanding/animation-from-interactions).
+
+Revision 18 gives fours, sixes and milestones a large score card over the field, with a prominent numeral, explicit caption and named achievement. The score, pause button and controls remain outside the card. The bowler/radar HUD fades away while the card is visible to avoid competing text; the stadium and field stay in place. Individual 50/100/150/200 milestones retain their raised-bat acknowledgement; each team hundred has a separate card. Simultaneous achievements queue with existing applause. New cards start 450 ms after the result is confirmed, last 2.8 seconds for a boundary or 3.5 seconds for a milestone, and fade in/out over 450/600 ms without zooms or flashes. Reduced motion uses static cards. Progress survives save/resume, older saved results retain their original durations, and the next automatic delivery waits for the complete sequence and camera return. Celebration time is independent of fast-forward.
+
+## Paused settings and restarts
+
+Open the pause menu, then Settings. Full-screen batting removes the lower swipe pad and expands the field. A compact score and pause button stay above the field; shot feedback and running controls occupy their own rows below it. Swipes use the same field surface and timing logic. Turning it off restores the pad. The browser Fullscreen API is requested from the settings gesture; when unavailable, the expanded field remains usable in the current window. Leaving native full screen returns to the pad and pauses in Settings. Display preference is saved on the device. The active paused dialog closes before the fullscreen request and reopens afterwards so it stays above the fullscreen element in the browser’s [top layer](https://developer.mozilla.org/en-US/docs/Glossary/Top_layer). Swipes capture the field canvas or pad, continue beyond its edges, and ignore buttons and non-primary touches.
+
+Sound on/off is in Settings and persists on the device. Opening a paused screen suspends match audio; enabling sound while paused waits for resume. Restarting stops sounds from the previous match.
+
+Restart match replays the current fixture from its original toss and seed. Earlier fixtures and the other career remain. If this match was already recorded, its round is reopened and the league result is removed before replay, preventing double counting. Other games in that round are regenerated by the existing seeded simulation when it is recorded again. Restart entire game clears both careers and saved practice and returns to format/team selection with a fresh seed. Both actions have a separate confirmation; cancelling leaves progress unchanged. Display and sound preferences are retained.
+
+## Compact match display
+
+Revision 14 removes the brand, format selector, toss report, run rate and detailed conditions from the playing header. The batting team, score, overs, batter and relevant chase/lead/day information remain. Format selection, league, scorecard, toss information and save tools remain in the pause menu.
+
+The field-change card sits in a separate row below the field, without an internal scroll area. It has a field summary, one short conditions line and a full-width Ready button. Other action panels hide while the card is open. Bowler information and the radar use separate reserved columns; the radar draws on its own canvas. Wind uses one corner arrow aligned with that radar (up towards the bowler), an eight-direction bearing and speed rounded to the nearest 5 km/h. Full details remain in Settings. These are display changes; the weather calculation still uses the saved continuous values.
+
+Full-screen cameras move slightly to the open side of a right- or left-handed batter, with a small increase in elevation and aspect-dependent camera distance. The replay starts at that same camera position. The cached stadium and ground use the same handed camera. Delivery length, free-hit/no-ball and fielding messages use the feedback row instead of floating over players, the radar or other text.
+
+## Running, throws and dismissals
+
+After contact, only the first safe single starts automatically. **Run 2**, then **Run 3**, calls further runs. The panel shows whether the next run is available, tight or too late by comparing arrival at the crease with the return throw. One future run can be queued at a time; repeated taps cannot queue several attempts. Clearly late calls are disabled. **Cancel queued run** removes an attempt before it starts; it cannot turn a batter back during an active run. A tight call can still end in a run-out. Completed runs appear live; the scorecard updates when play finishes. Calls also stop once the winning runs are planned. Three runs is the limit per delivery in the new game model, for both human and opposition batting. The button closes once the third run is planned. Boundary fours and sixes are unaffected. The cap does not shorten or replace the collection and return trajectory. Older saved balls retain their existing plans, but the current UI does not offer a fourth run.
+
+Previously automatic running took every run considered safe, so Run another usually asked for one too many. Version 12 leaves the second and third runs available for player decisions. Running speed, fielders, the struck-ball trajectory and the return race retain their existing physical model.
+
+Two batters run between measured popping creases, slow into the turn and stretch the bat into their ground. A collector, receiver, backing-up fielder and two supporting fielders share the same positions in the stadium view and radar. Throws have an overarm release and gravitational arc. A direct hit or a receiver removing the bails is compared with the bat reaching the crease. Completed runs stand, the correct batter is dismissed and the bowler receives no run-out wicket. Opposition running uses the same run offers and race, with seeded occasional acceptance of a tight run. There is no full overthrow sequence yet. [MCC run-out law](https://www.lords.org/mcc/the-laws/run-out).
+
+New batting poses move the front foot and weight into the delivery line. LBW checks pad contact, whether the ball pitched outside leg, impact position, attempted stroke and projected interception of the stumps. Outside-off impact is protected when a genuine stroke was attempted. Feedback gives the decision reason. The pad model uses articulated leg capsules rather than a full body collision mesh. [MCC LBW law](https://www.lords.org/mcc/the-laws/leg-before-wicket).
+
+Seeded front-foot no-balls add one penalty run and do not count in the over. T20 gives a free hit on the next legitimate delivery, preserving it through further wides or no-balls. Caught, bowled and LBW are suppressed during that protection; run-outs remain possible. This does not cover all dangerous-delivery no-ball offences. [MCC no-ball law](https://www.lords.org/mcc/the-laws/no-ball), [ICC T20 conditions](https://images.icc-cricket.com/image/upload/prd/igqt8cceiusrtat0ru5u.pdf).
+
+A ball that gets past the keeper can yield byes. Pad deflections can yield leg-byes when a stroke or evasive action was attempted; otherwise those runs are disallowed. Bat runs, wides, no-balls, byes and leg-byes are kept separately, with byes and leg-byes excluded from bowling runs. No-ball deliveries count towards the batter's balls faced, but not the over. [MCC byes and leg-byes law](https://www.lords.org/mcc/the-laws/bye-and-leg-bye).
+
+Wicket applause and stump sounds wait for the dismissal. A throw arriving at a safely grounded batter does not trigger wicket applause. Boundary and personal/team milestone responses retain their separate triggers, with personal milestones counting only bat runs.
+
+## Match conditions
+
+Both formats draw a seeded preparation from firm, grassy and dry surfaces. Venue and format affect the probabilities without forcing every match of a format to use one pitch. The conditions line shows the surface, ball age and current Test wear or T20 bowling phase.
+
+| Behaviour | T20 | Test |
+| --- | --- | --- |
+| Preparation | Greater bias towards a firm, true strip | More initial grass and bounce variation, depending on the seeded surface |
+| Ball | White ball, ageing through the innings | Red ball, ageing through each 80-over cycle |
+| Bowling | Powerplay, middle and death-over plans; more yorkers and slower balls at the death | More good-length probing and fuller deliveries; longer spells |
+| Field | Two fielders outside the 30-yard area in the first six overs; up to five afterwards | More close catchers, adjusted for pace or spin |
+| Deterioration | Limited wear over the match | Wear persists across innings and days, increasing turn and bounce variation |
+
+Freshness affects swing; grass affects seam movement; dryness and wear affect turn, pace off the pitch and bounce. Wear also changes the visible strip and its post-hit rebound. Outfield resistance remains fixed. The model uses separate seeded conditions and never advances the match RNG merely to display the pitch.
+
+The game automatically takes a new Test ball every 80 overs. That is an automated captain's choice: the real rule permits a captain to request a new ball after 80 overs, rather than requiring it. References: [ICC 2025-27 Test conditions](https://images.icc-cricket.com/image/upload/prd/xgmt8r5r41onkqbb5nxv.pdf) and [ICC Men's T20 World Cup 2026 conditions](https://images.icc-cricket.com/image/upload/prd/igqt8cceiusrtat0ru5u.pdf). The pitch coefficients and delivery frequencies are game assumptions, not measurements of particular venues or ball brands. Detailed rain interruptions, dew cycles and reverse swing are not yet modelled.
+
+## Changing weather
+
+Version 13 generates sunny, overcast, breezy and damp periods from a separate match seed. It interpolates weather gradually over the match clock, including across innings; the model changes more slowly in Tests. It neither reads live weather nor advances the delivery RNG. Each prepared delivery saves the exact weather used for swing, bounce and subsequent pitch impacts. The pre-delivery notice and paused Settings describe the current conditions; cloud cover changes the sky and moisture darkens the strip in every camera.
+
+Air temperature and the wind component along the delivery influence the swing multiplier, clamped between 0.84 and 1.18. Surface moisture reduces bounce, pitch pace and grip; it also reduces the restitution of post-hit pitch impacts. These coefficients are game calibration, not measurements or a venue forecast. Cloud cover itself gives no swing bonus. Research by [James, MacDonald and Hart](https://shura.shu.ac.uk/5619/) found no humidity effect in its model and did not establish a direct cloud-cover mechanism. The distinction between pitch properties and bounce also follows [James, Carré and Haake's pitch research](https://shura.shu.ac.uk/650/). Heavy rain, stoppages, DLS, detailed drying/drainage and wind forces on the struck ball remain outside this model.
+
+## Adaptive fields
+
+The captain reads the last 18 recorded deliveries for the batter on strike. Two boundaries or three scoring shots through a sector prompt up to two positional changes. Repeated boundaries bring deep protection; repeated singles can bring a fielder into the ring. Edges and missed balls do not count as an intended scoring pattern. Older patterns fade out. The base plan still follows the format, innings phase and pace or spin, and retains a slip catcher.
+
+Fields respect the two-outside powerplay limit, five outside afterwards, five on the leg side in T20 and two behind the leg-side popping crease in either format. A same-batter T20 free hit retains the previous field. Changes are fixed before the delivery starts; the stored field supplies the stadium view, radar, catches, chases and replay. A pre-delivery card explains changed positions and weather; the bowler remains identified beside the radar. The prepared ball waits for Ready - bowl; the card is removed before the approach and delivery. Watching the opposition automatically clears the card after a short pause. Small tactical adjustments use five-degree steps. The card and prepared delivery survive save/resume. Positions mirror for left-handers. The captain uses completed scoring history and cannot react to the player's current swipe. See [ICC T20 field and free-hit restrictions](https://images.icc-cricket.com/image/upload/prd/igqt8cceiusrtat0ru5u.pdf) and [MCC fielding law](https://www.lords.org/mcc/the-laws/the-fielder). These tactical thresholds are game tuning, not a claim that real captains use a fixed formula.
+
+## Seasons
+
+Each format has eight teams in two divisions of four. Teams meet home and away for six fixtures per season. Other fixtures in the round are simulated when the user's completed match is recorded. The league screen has both tables, the player's fixture list, results and the next-match action. The bottom team in Division 1 swaps with the top team in Division 2 for the next season.
+
+T20 points: win 2, tie 1. Test points: win 12, tie 6, draw 4. Equal points use wins, then net scoring rate. The Test league is a custom competition, not an official World Test Championship schedule. Fixture recording rejects duplicate and mismatched results.
+
+## Animation and fielding
+
+A metre-based field supplies the perspective view, radar and all interception calculations. Batting and following cameras draw the same terrain: fixed mowing stripes, grass flecks, loam grain, worn creases, boot marks, boundary rope and clouds. Ground and stand polygons are clipped where they cross the camera's near plane and screen edges. Previously a whole tile disappeared when one corner crossed behind the camera, and batting and replay used different ground artwork. Both causes are removed. Stadium tiers, spectators, stair aisles, roofs, sightscreens and floodlight towers share fixed world coordinates.
+
+Revision 9 closes every seating step, rear wall, roof and perimeter barrier with opaque faces. Structure and spectators are drawn in one depth order, so gaps between people reveal solid seating rather than the hollow stand interior. Geometry checks cover closed volumes and interior occlusion; no browser visual inspection was performed for this revision.
+
+The batter has articulated legs and arms, a rigid 0.83 m bat and both hands attached to the handle. Foot plant, pelvis rotation, trunk rotation and hand motion overlap. Late cuts use a compact back-foot motion with the blade lowered to the ball's height. Sweeps have a deeper knee bend and low finish; paddles have a shorter stroke; slog sweeps and upper cuts follow through higher. The new stroke poses meet their contact points without stretching limbs or detaching hands. Fielders, keeper, non-striker and bowler now use the same lit body geometry, with articulated knees and elbows, crouches and reachable hand targets. Mesh detail decreases with screen size. Directional body and ball shadows share the lighting direction.
+
+Pace edges retain a share of incoming speed and may travel past slip and keeper. The keeper stands farther back to pace and closer to spin. A missed ball continues physically until a reachable interception, boundary or stop. Catches require an airborne ball within reach. Scores remain provisional while the ball is live, then commit once at the boundary, dismissal or completed return.
+
+Yorkers, full balls, good lengths and short deliveries have separate pitch and height bands. The trajectory includes ballistic height before and after the bounce. Swing, seam and spin movement remain specific to the assigned bowler.
+
+Motion research: [Peploe's batting kinematics thesis](https://repository.lboro.ac.uk/articles/thesis/The_kinematics_of_batting_against_fast_bowling_in_cricket/9517388), and [Peploe, King and Harland's front-foot drive study](https://doi.org/10.1016/j.proeng.2014.06.039). Animation and artwork are original procedural geometry.
+
+Shot distinctions also draw on [Cricket Australia's Twenty20 playbook](https://www.cricket.com.au/news/3275238), which distinguishes a soft paddle from an upper cut played to a high short ball. The game's launch angles and speed coefficients are modelling choices, not measurements from that article.
+
+Real-player name references include the [ICC 2026 T20 squad list](https://www.icc-cricket.com/tournaments/mens-t20-world-cup-2026/news/final-squads-for-icc-men-s-t20-world-cup-2026-confirmed?appview=true), [ECB contracts](https://www.ecb.co.uk/news/4395907), [Cricket Australia contracts](https://www.cricket.com.au/news/4479656/australia-mens-contracted-players-2026-27) and [BCCI contracts](https://www.bcci.tv/webview/news/article/bcci-announces-annual-player-retainership-2025-26-team-india). Test rule references: [ICC 2025-27 playing conditions](https://images.icc-cricket.com/image/upload/prd/xgmt8r5r41onkqbb5nxv.pdf). No logos, portraits or licensed assets are used.
+
+## Ball flight, contact feedback and sound
+
+Revision 17 introduced a backswing gesture, calmer presentation and revised spin contact. Current deliveries use version 22, described above. The full-length drives, fine hooks, Test ground-stroke timing and three-run limit from version 16 are retained. This extends the saved weather from version 13, version 12 running offers and adaptive fields, version 11 contact model and version 7 forward physics integrator. Version 11 adds separate edge contact and revised Test pace timing and bat-speed response; version 9 guided-shot profiles remain for clean cuts, glances and paddles. Version 6 incorrectly chose a shot's stopping distance and then solved for the friction needed to reach it, producing too many boundaries. `NormalBall` starts with exit velocity and integrates the motion forward. It has no requested distance or scoring target. Bat speed depends on swipe effort, batsman power and contact quality. Opposition batsmen use the same model and choose a seeded stroke effort.
+
+Version 8 adds distinct launch profiles. A clean late cut is directed 118-172 degrees from straight ahead, behind point, with a downward exit. Paddles and glances also retain incoming pace while adding limited bat speed, even if the swipe requested loft. Upper cuts use their own pace-deflection calculation and a shallower elevation than a lofted drive. Thin edges retain their separate uncertain deflection. A score still comes from the actual trajectory and fielding event; there is no hard-coded ban on a boundary or predetermined score.
+
+Version 9 corrects an overly weak version 8 cut/glance/paddle response. Firm guidance now retains more incoming speed and adds more bat contribution with effort. Soft hands still reduce carry; the downward exit and first bounce remain. Neither outfield friction nor fielders' reach is weakened to create fours.
+
+Ground strokes leave the actual contact height downwards. A loft has both horizontal and vertical velocity. Gravity and quadratic air drag act during flight. Each impact uses the surface at the landing point: the hard central strip or the grass outfield. Normal restitution reduces vertical speed; friction exchanges horizontal speed and spin while dissipating energy. Low hops become a skid, then a roll with constant turf resistance plus air drag. The trajectory is integrated in 25 ms steps, split at impacts, surface crossings and the transition to rolling. Stored segments support smooth continuous playback independently of display frame rate.
+
+Scoring, camera and fielders use that same saved trajectory. A catch must happen before the first bounce, within actual reach. Fielders retain their reaction and acceleration limits. Runs depend on collection and return time. The model has no directional boundary restriction: cuts, glances and sweeps can reach the rope behind square.
+
+### Version 16 drives and back-foot choices
+
+Loft is an explicit choice, separate from swipe power. Small movements still defend, and longer Ground swipes remain grounded. Full balls support straight, off, cover, on and square drives. The square direction previously selected a cut and received a full-ball penalty, which could force an edge even with accurate timing. A square drive now receives the appropriate front-foot pose and contact assessment when the ball is wide enough. Across-line strokes and cramped square drives retain penalties.
+
+Short balls support hooks towards square and fine leg. Fine hooks previously inherited an unsuitable-drive penalty; their assessment now considers the ball's line and height. Ground hooks roll the ball down more steeply. Back-foot punches have a wider off-side sector, slightly more outgoing pace and their compact follow-through. High balls still penalise punches and favour the hook or cut. Test ground-stroke contact windows widen by 10%; deliberate loft retains the previous Test timing window. Catch reach, boundary geometry and surface resistance are unchanged.
+
+A controlled comparison uses 540 identical physical swipes on full Test pace balls: 12 seeds, five appropriate drive directions/lines, swipe distances of 75/130/180 CSS pixels, and timing errors of 0/45/90 ms. Version 15 produced 96 sixes, 31 wickets and 108 fours; version 16 Ground produced no sixes or wickets and 262 fours. The new sample includes dots, singles, twos, threes and fours. These favourable full-ball inputs are a calibration set, not a match scoring forecast or a claim that drives are dismissal-proof. A separate 120-case mistimed good-length pace sample produces 33 edges, including nine keeper/slip/gully catches; deliberate Loft still produces sixes.
+
+### Version 15 batting feedback
+
+At a 390 CSS-pixel playing width, defence spans movements below 28 pixels and loft begins at 140.4 pixels. Previously those thresholds were 16 and 95.55 pixels, making ordinary forward swipes select loft. The loft threshold adapts to playing width, between 122 and 162 pixels. Timing and direction remain independent of swipe distance, and old prepared deliveries retain their original input ranges.
+
+Spin contact windows increase by 24%, with defence receiving a further 18% across both formats. Ground shots lose less quality for a modest timing error. Defence addresses the delivery line without penalising small directional drift, reduces edge risk, and dissipates more pace on an edge. Poorly timed defensive edges can still carry to the keeper. Attacking pace timing windows remain unchanged, including Test speed and movement penalties. The UI waits for the full defensive window before adjudicating an unplayed ball.
+
+Fuller balls use forward defence with the front foot and weight moving into the ball. Back-foot punches have a shorter, lower bat finish, backward weight transfer and a downward ground launch. Hooks use a higher cross-bat arc and hand finish than pulls. Short spin no longer defaults to a sweep with an automatic short-ball penalty; the guide offers the back foot. These are procedural movements and game balance values, not motion capture or measured human timing windows.
+
+The controlled comparison below reuses the same deliveries, seeds and physical swipe distances. It is a calibration sample, not a real-match forecast. The defensive sample covers full/good leg-spin and off-spin with release errors of 180/100 ms early and 100/180/240 ms late. The forward sample uses 100/125-pixel swipes towards cover, fuller seam/spin deliveries in both formats, and errors of 40/110 ms.
+
+| Controlled sample | Previous build | Version 15 |
+| --- | ---: | ---: |
+| Misses from 400 defensive inputs | 80 | 0 |
+| Wickets from 400 defensive inputs | 82 | 8 |
+| Sixes from 192 everyday forward swipes | 80 | 0 |
+| Wickets from those 192 forward swipes | 26 | 4 |
+
+The new forward sample includes dots, singles, twos, threes and fours. Separate deliberate long swipes still produce sixes. Outfield resistance, surface bounce, catch reach and boundary geometry are unchanged.
+
+### Version 11 contact and Test pace
+
+Previously an edge only occurred below a contact-quality threshold of 0.36. Moderate timing errors could still produce powerful strokes, and many edge trajectories bounced before reaching the keeper or slips. Version 11 records edge contact separately: timing error, late swing/seam/turn, reaching and unsuitable strokes contribute to a seeded edge probability. Clean timing and an appropriate stroke on a reachable ball do not receive an arbitrary base edge probability. The explicit edge flag also selects the nick sound even when the timing grade is good.
+
+Edges vary from fine deflections towards the keeper to thicker deflections towards slip and gully. Defensive strokes dissipate more pace; firmer strokes can carry farther. These are game approximations of bat movement and contact, not a measured grip-force model. Every outcome uses the forward trajectory, first bounce and a fielder's reachable position. There is no automatic dismissal for an edge, and an escaped edge can reach the rope.
+
+Test pace deliveries have shorter timing windows that respond to bowling speed and actual movement. Good-length lofted strokes lose some contact quality; back-foot drives have less room to accelerate the bat. Imperfect Test pace contact contributes less outgoing bat speed. Fuller balls and accurate releases remain scoring opportunities. T20 and spin retain their clean-shot launch response, with the new edge model available in both formats. Pitch restitution, outfield resistance, boundary geometry and catch reach were not retuned for this change. This extends the separation of incoming and bat speed described by [Rod Cross's cricket physics notes](https://www.physics.sydney.edu.au/~cross/cricket.html); the chosen windows, edge probabilities and stroke coefficients are game calibration values.
+
+The comparison uses 180 fixed seeds, retaining 152 full/good deliveries against the first two India Test pace bowlers on the same seeded surface. Zak Crawley attempts a full-effort lofted cover stroke with a 40 ms late release on each delivery. This is a repeated controlled input, not a real-match forecast or target scoring rate.
+
+| Same 152 inputs | Version 10 | Version 11 |
+| --- | ---: | ---: |
+| Sixes | 129 | 43 |
+| Bat runs | 791 | 579 |
+
+With perfect release on those deliveries, version 11 produces 103 sixes. A separate full-effort ground-stroke comparison at 40 ms produces five keeper and three slip/gully edge catches, compared with none in version 10. Soft edges, escaped edges and grounded behind-square boundaries are covered by separate checks.
+
+Bowling speed is displayed as a whole number in km/h. The internal slower-ball velocity retains its precision so formatting cannot alter the flight or a saved delivery.
+
+### Normal dry surface assumptions
+
+This is a simplified game model of a prepared pitch and mown grass outfield, with seeded preparation and wear. It does not reproduce a measured venue, weather, individual surface irregularities, seam orientation or post-hit aerodynamic spin forces. The table gives the baseline constants. For new deliveries, pitch firmness and wear modify the strip's restitution, friction and rolling resistance before forward integration. Outfield values remain fixed. No surface property is adjusted to obtain a score.
+
+| Property | Pitch | Outfield |
+| --- | ---: | ---: |
+| Normal coefficient of restitution | 0.50 | 0.35 |
+| Sliding friction coefficient | 0.20 | 0.35 |
+| Rolling deceleration, m/s² | 0.70 | 2.20 |
+
+The model uses a 0.156 kg ball, 0.035 m radius, 9.81 m/s² gravity, air density 1.225 kg/m³ and a fixed drag coefficient of 0.50. Rotational inertia is approximated by a solid sphere. These are explicit modelling assumptions, not universal measured cricket-ball constants.
+
+Research anchors:
+
+- [Rod Cross, University of Sydney: Physics of Cricket](https://www.physics.sydney.edu.au/~cross/cricket.html) explains the separate contributions of incoming ball speed, bat speed and apparent restitution, as well as drag and oblique bounce. The straight-stroke exit calculation follows that relationship; the directional extension is a game approximation.
+- [James, Carré and Haake: Predicting the playing character of cricket pitches](https://shura.shu.ac.uk/650/) reports first-class pitch measurements and the importance of combining friction, hardness and restitution. It supports modelling the prepared strip separately from the outfield, but does not establish the constants above.
+- [Lopez and Chinnery: Quantitative assessment of cricket outfields in the Caribbean region](https://www.researchgate.net/profile/Francis-Lopez-2/publication/228428856_Quantitative_assessment_of_cricket_outfields_in_the_Caribbean_region/links/53e3d4660cf2fb74870dcd43/Quantitative-assessment-of-cricket-outfields-in-the-Caribbean-region.pdf) measured a 3.38 m/s ramp release and a mean 2.47 m roll on one sampled outfield. This model rolls 2.546 m from that speed, a low-speed plausibility check. It is not validation of every shot speed or of all outfields.
+
+The retained version 7 regression set has 1,440 strokes per effort level: 24 seeds, five bowler types and 12 directions, release errors of 0/40/80 ms and six batsmen. Full balls are used for drives, glances and late cuts; short balls for square shots. Fours account for 3.8% of pushes, 15.1% of firm strokes and 36.4% of full strokes. Each group includes dots, singles, twos and threes. This protects saved version 7 behaviour; it does not describe the current stroke mix.
+
+The retained version 8 cut check covers 1,200 inputs and produces only six fours. That was an overcorrection and is preserved solely for compatibility with pending version 8 shots.
+
+The retained version 9 behind-square check uses 840 strokes per row: 24 seeds, five bowler types, seven directions, good lengths and release errors of 0/35/70 ms. Conditions are held at the baseline surface, with each format's middle-innings field. Every row includes dots, singles, twos and threes; none produces a six. Off-side cuts, leg glances and full paddles against spin can reach the rope. These are controlled game scenarios, not predicted real-match rates or scoring quotas. Version 10 retained these contacted-ball trajectories and first interceptions, with revised running decisions. Version 11 changes contact timing and edge flight. The table remains the retained version 9 baseline, not a current-match scoring forecast.
+
+| Format | Stroke effort | Fours / 840 | Boundary rate |
+| --- | --- | ---: | ---: |
+| T20 | Soft, 0.30 | 62 | 7.4% |
+| T20 | Firm, 0.65 | 329 | 39.2% |
+| T20 | Full, 1.00 | 417 | 49.6% |
+| Test | Soft, 0.30 | 55 | 6.5% |
+| Test | Firm, 0.65 | 263 | 31.3% |
+| Test | Full, 1.00 | 379 | 45.1% |
+
+Perfect timing labels the release, not a guarantee of good shot choice or a boundary. Middled contact is identified separately. Stroke effort changes exit speed without changing the timing grade. Lofted carry emerges from the trajectory, and genuine catches remain possible where the ball is low enough and within the fielder's reach before its first bounce. The keeper anticipates the line, catches high balls with raised hands and brings the ball down after collecting it.
+
+Short pace deliveries have a revised post-bounce speed. Unplayed bouncers continue along their path to the keeper. Leaving or making a small defensive swipe ducks high bouncers. The ball's position remains continuous when the camera starts following it; the result appears after the keeper takes it.
+
+Original synthesised sounds distinguish a thin nick, a middled hit, weaker bat contact, turf bounce, gloves and broken stumps. Audio starts after a user gesture and can be muted in the menu. Audio uses a separate deterministic noise generator and never advances the match RNG. Accelerated innings simulation is silent. No audio files are downloaded.
+
+Crowd responses now cover fours, sixes, wickets, individual 50s, 100s, 150s and 200s, and each team hundred. A milestone is recognised when the score crosses it, including a team hundred reached through extras. Overlapping achievements use one extended response, with milestone labels shown together. Celebrations start at the visible outcome and do not repeat after save/resume. Audio is original synthesis of irregular claps, crowd noise and short echoes, not a recorded crowd or continuous ambience.
+
+The formats now have separate typography and palettes:
+
+| Format | Menus and actions | Scoreboard | General UI / titles |
+| --- | --- | --- | --- |
+| T20 | Russo One | Orbitron | Rajdhani UI; Russo One titles |
+| Test | Inter | Share Tech Mono | Inter UI; Playfair Display team names and titles |
+
+T20 uses navy, bright lime and square action buttons; Tests use pavilion green, cream accents and traditional serif titles. Fonts are embedded from Google Fonts, with licences in Settings. The game remains one self-contained HTML file. Player models have denser curved surfaces, stronger lighting, collars, cloth folds, facial and helmet detail, team colours and smoother shaded limbs. They remain stylised procedural models, not photographic likenesses.
+
+## Saving and verification
+
+Schema 5 preserves both careers, full matches, innings, scores, fixtures, RNG state, pending deliveries, provisional live shots, running commands, committed shots, opposition input and playback position. Device-local storage is updated after each running command and completed ball; JSON export/import can move the save to another browser or a later wrapper. Historical delivery entries are compacted while retaining scorecard and deterministic continuation data. A synthetic five-day 2,700-ball save was checked at approximately 0.89 million characters; this is not a measured worst-case version 10 career size.
+
+Version 5, 6, 7, 8, 9, 10, 11, 12, 13, 15 and 16 pending deliveries keep their exact original outcomes; already played balls and scores remain unchanged. New deliveries use version 19. Revision 14 changed the display and continued to prepare version 13 balls. Revision 18 repairs gesture recognition on every unplayed version 17 delivery, including a prepared saved ball, without changing recorded shots or physics. A previously prepared version 16 ball retains its height buttons for that delivery. The active over limit, any historical selected shot height, between-ball progress and celebration clock are saved and validated; playback speed resets on resume. Existing innings retain their saved bowling rotation; new innings adopt the revised format-specific spells. Stroke effort, conditions and the complete physical replay are saved with the existing career schema, alongside the RNG state. Legacy unplayed bouncers retain their original keeper continuation; new missed balls use the reachable-keeper and extras model. Previous version 1-4 practice saves remain playable from the menu, with their original pending delivery/scoring. The old storage keys are retained. Main format choices are T20 and Test. Import validates scores, extras accounting, teams, fixtures, clocks, batting hand, running commands, saved field positions, weather, pre-delivery pauses and input before replacing the active save. Resuming a live ball restores its provisional result and running plans without applying the score twice.
+
+The hosted link needs a connection to reopen. A downloaded HTML works without external assets, though local-file storage varies by browser. Home-screen offline caching is not implemented.
+
+The menu's Share for testing panel opens the phone's share sheet, with a copy-link fallback, and can copy a report for the latest ball. Reports contain the build, match context, delivery, swipe, pre-shot RNG seed, batter attributes, field, live running commands and result needed to reproduce the core outcome. Version 11 reports also include contact grade, edge type and the timing window. They exclude the full career save and are copied locally; nothing is submitted automatically. Each tester's browser keeps its own career. The testing audience is public: anyone with the game link can open it. Sharing the link does not share Louis's career or grant editing access.
+
+The inline core exposes pure delivery, conditions, weather, restart state, bowling plans, adaptive field tactics, shot vocabulary, contact assessment, ground, stadium, fielding, running, rules, handedness, live-ball resolution, crowd events, camera, batter and fielder rigs, innings, contest, opposition, season and save modules. Drawing, input and storage are separate in `cricket-ui`.
+
+`node check-competition.cjs` covers 11 groups for complete matches, both follow-on choices, declarations, chases, the fifth-day limit, league promotion, seeded save/resume, edge reach, stadium projections and controller transitions. `CRICKET_CHECK_FILTER='^(?!300)' node check-core.cjs` runs the 22 focused legacy, gesture, scoring and movement regressions. The older optional 300-innings batch remains available without the filter. `node check-flight.cjs` retains six flight/sound checks, including exact version 5 compatibility and bouncer collection. `node check-surface.cjs` adds seven groups covering analytic rolling distance, a measured low-speed roll, step-size convergence, impact energy, continuous replay, swipe strength, scoring distributions, reachable catches, exact version 6 preservation and current save/resume.
+
+`node check-shots-scene.cjs` retains seven groups for version 8 grounded cuts, upper cuts, adaptive spin choices, contact geometry, continuous articulated strokes, reachable fielder hands, near-plane/viewport clipping, continuous ground coverage through pans and returns, and exact version 7 preservation. Independent ground-ray checks cover 103,866 screen samples.
+
+`node check-format-crowd.cjs` adds nine groups for bowling plans, pitch wear and ball age, every squad's T20 limits and fields, behind-square scoring, solid stadium geometry, milestone crossings, audio synthesis, playback timing and resume behaviour, and exact version 8 compatibility. Copied opposition-ball test cases reproduce their core outcomes in both formats.
+
+`node check-gameplay.cjs` adds 13 groups for LBW geometry and exclusions, extra runs and bowling figures, free-hit protection, live Run/Hold choices, run-out ownership and strike, reachable keepers, throw-to-hand continuity, runner turns and bat grounding, left-handed contact geometry, live save/resume, delayed wicket audio, deterministic opposition running, exact version 9 compatibility and one-time score commitment. The version 10 update passed all 75 groups.
+
+For version 11, `node check-pace-contact.cjs` adds six groups for moderate-error edges, reachable keeper/slip catches, soft edges dropping short, Test pace power and timing, retained clean T20/spin paths, handedness and free-hit protection, and exact version 10 compatibility. The 13 gameplay, 11 competition, six flight/sound and one current save/resume groups were also rerun: 37 groups pass for this update. Both inline scripts parse, and the actual speed-label expression returns whole km/h values for slower balls and spin. No browser visual QA, listening session or physical Android play test was performed; the 60 fps mobile target is not a measured result.
+
+For version 12, `node check-running-field.cjs` passes nine groups for safe second and third runs, accidental/late calls, cancelled and tight runs, winning-run limits, seeded opposition running, exact live save/replay, scoring-pattern responses, 168 legal field plans across format/phase/bowling style, left-handed mirroring, fixed delivery fields, same-striker free hits, exact version 11 outcomes and running commands, and the running control labels. The 13 gameplay, 11 competition and nine format/crowd groups also pass: 42 groups in this update. Both inline scripts parse. These are core and controller checks; no browser visual QA or physical Android play test was performed.
+
+For version 13, `node check-settings-weather.cjs` passes nine groups for seeded gradual weather, weather effects on actual deliveries and pitch bounce, saved weather/field pauses, match restarts and retained careers, recorded-result rollback, pre-delivery clock gating, full-screen API/fallback behaviour, paused sound preference and exact version 12 physics/input/scorecards. The nine running/field, 13 gameplay, 11 competition and nine format/crowd groups also pass: 51 groups in this update. Font files were decoded and their family names and Latin glyph coverage checked. Both inline scripts parse. Controller checks use lightweight host stubs; there was no browser visual inspection, listening session or physical Android play test.
+
+For revision 14, `node check-display-input.cjs` passes eight groups using the real UI event handlers in a DOM facade: modal/fullscreen ordering, working Resume/Bowl/Ready buttons, identical pad/fullscreen timing and direction, button exclusions, pointer capture and cancellation, fullscreen failure/exit, compact notices, mirrored camera sightlines and replay continuity, and exact version 13 delivery/outcome preservation. It also runs batting and replay draw calls against a recording canvas facade to catch exceptions and non-finite coordinates. The nine settings/weather and 13 gameplay regressions also pass. These checks do not render browser CSS or prove physical Android touch behaviour; browser visual inspection and a device play test are still required to assess those qualities.
+
+For version 15, `node check-batting-balance.cjs` passes eight groups for the wider swipe ranges, spin defence, preserved attacking pace windows, grounded forward strokes, short-spin choices, hooks and punches, continuous movements, the three-run cap, current save validation and exact version 13 outcomes/opposition/run commands. The real UI facade now passes ten groups, including late defensive releases and the fourth-run button guard on both old and new balls. The nine settings/weather, nine running/field, 13 gameplay, 11 competition, six flight/sound and one current surface save/resume groups also pass: 67 groups in this update. Both inline scripts parse, IDs are unique and the six embedded font payloads are unchanged. These checks do not establish physical Android swipe feel, rendered animation quality, sound balance or frame rate; no browser or device play test was performed for this update.
+
+For version 16, `node check-drives-overs.cjs` passes six groups for explicit shot height, five drive directions, grounded scoring variety, usable hooks/punches, continuous poses, retained dangerous Test edges and exact version 15 outcomes. `node check-over-flow.cjs` passes seven groups using real UI handlers and clocks: Ground/Loft in both views, uninterrupted six-legal-ball overs, no-ball replays, fourfold shared playback with identical scoring/RNG, run/pause speed resets, exact paused-over continuation and stopping at an innings interval. The ten display/input, 13 gameplay, nine settings/weather, eight retained batting-balance, 11 competition and two current flight/surface save groups also pass: 66 groups in this update. Both inline scripts parse, DOM references match unique IDs and all six font payloads remain unchanged. No browser visual QA or Android play test was performed; swipe feel and rendered motion still need device feedback.
+
+For revision 17, `node check-backswing-motion.cjs` adds seven groups for all-direction backswing recognition, accidental-gesture rejection, unchanged spin trajectories and timing windows, a controlled edge comparison, exact version 16 compatibility, fitted fielding views, independent camera clocks, queued milestone persistence and articulated acknowledgements. The actual-handler automatic-over and display/input checks also pass. Browser visual QA and physical Android testing have not been performed; automated checks cannot establish comfort, rendered layout or swipe feel.
+
+For revision 18, `node check-loft-feedback.cjs` adds eight groups covering large and diagonal pull-backs, accidental reversals, bundled touch events in both playing views, early and honest intent feedback, preserved version 17 outcomes, aerial drive integration, every milestone caption, queued result cards, reduced motion and save/resume. The seven retained backswing/motion, seven automatic-over, ten display/input and nine format/crowd groups also pass: 41 groups for this update. Inline scripts parse, DOM references match unique IDs, asset references are self-contained and all seven embedded font payloads are unchanged. These checks exercise real handlers through a DOM/canvas facade. No browser visual QA or physical Android test was performed; rendered layout, comfort and swipe feel still need device feedback.
+
+For revision 19, the eight player-profile groups, seven automatic-over groups, ten display/input groups and 13 gameplay groups pass: 38 groups. Two existing test scenarios were recalibrated to select a genuine running gap and an airborne catch inside the rope under the new player power/speed model. The controller harness now finds the core import without depending on its first module name. No browser layout or physical Android play test was performed.
+
+The next gameplay gaps are stumpings, hit wicket, turning back during an active run, a full overthrow chase, practice/tutorial mode and manual bowling. No-balls currently cover front-foot infringements; dangerous-delivery rules, bouncer limits, rain interruptions, injuries and DRS are not implemented. Test new-ball choice remains automatic. Running speeds, throw accuracy and pad contact are game approximations. Figures and crowds remain procedural, without motion capture or photographic player likenesses.
+
+Shop, coins, purchases and further career progression are deliberately deferred. Offline home-screen caching also remains future work. Device testing must assess swipe feel, running-button usability, animation clarity, sound balance and performance; automated checks do not establish those qualities.
+
+For revision 20, the six spin/drive groups, eight player-profile groups, seven automatic-over groups, ten display/input groups and 13 gameplay groups pass: 44 groups. Coverage includes both formats/hands, forward and back-foot geometry, controlled spin errors, reduced speed on weak contact, real keeper edges, grounded scoring variety, actual pad/fullscreen pointer handlers, live save/resume and exact version 19 outcomes. The portable source pack runs 21 groups with Node built-ins. No browser layout or physical Android play test was performed.
+
+Revision 21 adds seven focused groups for depth-cue progression, crease continuity, contact/replay joins, finite player/ball rendering, reward deduplication, actual shop transactions and reload, both team roles, distinct world geometry, reset behaviour, queued player/weather cards and a completed real T20 reward. Revision 22 adds seven fielding/contact/shop regressions, bringing the portable source package to 35 groups. The full display/input and gameplay checks also pass. These checks do not measure Android frame rate, touch feel or rendered layout; physical device testing remains necessary.

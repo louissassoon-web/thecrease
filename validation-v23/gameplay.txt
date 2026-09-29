@@ -1,0 +1,14 @@
+PASS LBW requires legal delivery, pad first, eligible pitch and impact, and a projected hit
+PASS No-balls, byes, leg byes and free hits balance batter and bowling figures
+PASS Run-outs retain completed runs, dismiss the correct batter and do not credit the bowler
+PASS Legacy Run and Hold preserve the saved crease race and struck trajectory
+PASS Throws have continuous flight, a receiver, a backup and a shared world-space frame
+PASS Left-handed shots and articulated contact geometry mirror consistently
+PASS Missed balls require a reachable keeper and permit genuine byes and leg byes
+PASS A no-ball or free hit cannot become a caught, bowled or LBW dismissal
+PASS Live runs and extras survive save/resume without advancing or doubling the score
+PASS Crowd and wicket sounds wait for the crease decision and do not repeat after resuming
+PASS The opposition reads either batting hand and its running intent is seeded
+PASS V9 pending deliveries keep exact outcomes and committed scorecards
+PASS Controller keeps the ball live, blocks the next delivery and commits once at the outcome
+13 gameplay checks passed.

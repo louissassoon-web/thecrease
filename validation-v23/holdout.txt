@@ -1,0 +1,1 @@
+{"matches":70,"fixture":"England v India","results":{"win":69,"draw":1},"firstInnings":{"mean":300.9714285714286,"sd":97.66355826123119,"min":130,"max":536},"batLastWins":37,"maxClock":108000}

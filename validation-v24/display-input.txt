@@ -1,0 +1,11 @@
+PASS Fullscreen preserves the active modal above the game, then actual Resume and Bowl buttons work
+PASS Touch release has identical direction and timing in pad and fullscreen views; buttons do not become shots
+PASS Release beyond the field is retained, while cancelled gestures pause without recording a shot
+PASS The live clock accepts a defensive spin swipe throughout its wider contact window
+PASS The running button cannot call a fourth run, including on an older resumed ball
+PASS Fullscreen rejection and browser exit leave usable settings and preserve the prepared delivery
+PASS Match display omits the toss and prepared notices contain short conditions with a separate wind indicator
+PASS Handed fullscreen cameras separate the bowler from the batter, mirror correctly and join the replay continuously
+PASS Layout and camera changes leave V13 deliveries, shot outcomes and save continuation unchanged
+PASS Batting and replay renderers run with finite coordinates and a separate radar drawing surface
+10 display and input checks passed.

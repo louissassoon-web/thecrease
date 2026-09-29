@@ -1,0 +1,12 @@
+{
+  "sourceRevision": 24,
+  "scoringVersion": 24,
+  "saveSchema": 5,
+  "playerProfilesVersion": 19,
+  "date": "2026-09-28",
+  "sourceCommit": "c144feaed5159223e65a132ab07053a5480b1325",
+  "htmlSha256": "694ec85e5a1b98c791eca6004d0744cf732f593cfebcd66155eb86a435ef9637",
+  "liveUrl": "https://cricket-three-over.workspace-710372.chatgpt.site",
+  "entrypoint": "dist/index.html",
+  "acceptanceHarnessSha256": "27da0186d2bf92a3b3bb7ae87a66e2a3bba9dfdb94a09dbbe21b287610c51d3c"
+}

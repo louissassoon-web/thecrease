@@ -781,7 +781,7 @@ globalThis.Cricket = (() => {
  };
  const Opposition={
   input(m,ball){const rng=RNG.stream(m.rngState),x=Delivery.at(ball,1).x,spin=ball.family.includes('spin'),test=m.format==='TEST',b=m.bowlers[ball.bowler],roll=rng.next();let angle=ball.lengthName==='short'?(x>.12?94:-96):x<-.12?-36:42,mode=roll<(test?.60:.18)?'defend':roll>(test?.975:.85)?'loft':'ground';if(rng.next()<.16&&x<.15)angle=spin&&ball.lengthName!=='short'?-135:-145;if(rng.next()<.09&&x>.05)angle=132;if(rng.next()<(test?.06:.10))angle=-angle;const error=(rng.next()+rng.next()+rng.next()-1.5)*(test?139:149)*(0.85+b.rating/300),leave=rng.next()<(test?.055:.012);const shot=leave?null:{angle,mode,error};if(shot&&ball.scoringVersion>=7)shot.effort=mode==='defend'?0:mode==='ground'?lerp(test?.25:.30,test?.80:1,rng.next()):lerp(.82,1,rng.next());return{shot,rngState:rng.state};},
-  ball(c){const m=Contest.current(c),d=Innings.delivery(m),prepared={...m,rngState:d.rngState},bot=this.input(prepared,d.ball),batter=prepared.batters[prepared.striker],result=Shot.resolve(d.ball,bot.shot,batter,Innings.field(prepared,d.ball),bot.rngState),next=Contest.apply(Contest.withPrepared(c,bot.rngState),d.ball,result);return{contest:Contest.shouldDeclare(next)?Contest.declare(next):next,ball:d.ball,shot:bot.shot,result,testCase:{ball:d.ball,input:bot.shot,seed:bot.rngState,batter:{attributes:batter.attributes},field:Innings.field(prepared,d.ball)}};},
+  ball(c){const m=Contest.current(c),d=Innings.delivery(m),prepared={...m,rngState:d.rngState},bot=this.input(prepared,d.ball,c),batter=prepared.batters[prepared.striker],result=Shot.resolve(d.ball,bot.shot,batter,Innings.field(prepared,d.ball),bot.rngState),next=Contest.apply(Contest.withPrepared(c,bot.rngState),d.ball,result);return{contest:Contest.shouldDeclare(next)?Contest.declare(next):next,ball:d.ball,shot:bot.shot,result,testCase:{ball:d.ball,input:bot.shot,seed:bot.rngState,batter:{attributes:batter.attributes},field:Innings.field(prepared,d.ball)}};},
   quick(seed,format,a,b){let c=Contest.create(seed,format,a,b,'spectator'),guard=0;while(c.phase!=='complete'){if(++guard>7000)throw Error('Simulation did not finish');if(c.phase==='interval')c=Contest.advance(c);else if(c.phase==='followOn')c=Contest.chooseFollowOn(c,true);else c=this.ball(c).contest;}return Contest.summary(c);}
  };
  const Season={
@@ -818,12 +818,12 @@ globalThis.Cricket = (() => {
      for(const b of m.bowlers)if(!BOWLERS.some(t=>t.id===b.archetype)||typeof b.name!=='string'||b.name.length>32)throw Error('Invalid bowler');
     }
     if(!['ready','flight','inPlay','result','finished'].includes(state.phase)||!Number.isFinite(state.elapsed)||state.elapsed< -850||state.elapsed>10000||!Number.isFinite(state.resultAge)||state.resultAge<0||state.resultAge>30000)throw Error('Invalid delivery clock');
-    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
+    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23,24].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
     if(state.fieldBrief!==undefined&&typeof state.fieldBrief!=='boolean'||state.fieldBrief&&(state.phase!=='flight'||state.elapsed!==-850||!Number.isFinite(state.briefAge)||state.briefAge<0||state.briefAge>15000))throw Error('Invalid pre-delivery pause');
     if(state.introducedBatters!==undefined&&(!Array.isArray(state.introducedBatters)||state.introducedBatters.length>11||state.introducedBatters.some(i=>!Number.isInteger(i)||i<0||i>10)))throw Error('Invalid saved player introductions');if(state.reward!==undefined&&![0,300,500].includes(state.reward))throw Error('Invalid saved reward');if(state.briefCards!==undefined&&!Broadcast.valid(state.briefCards))throw Error('Invalid saved introduction');if(state.ballBridge!==undefined&&state.ballBridge!==null&&(!['x','z','h'].every(k=>Number.isFinite(state.ballBridge.from?.[k]))||!Number.isFinite(state.ballBridge.duration)||state.ballBridge.duration<.08||state.ballBridge.duration>.22||state.ballBridge.startAt!==undefined&&(!Number.isFinite(state.ballBridge.startAt)||state.ballBridge.startAt<0||state.ballBridge.startAt>30)))throw Error('Invalid saved ball transition');if(p?.scoringVersion>=19&&(!Players.valid(p.batterProfile,format)||!Players.validBowler(p.bowlerProfile)))throw Error('Invalid saved player profile');
     if(p?.scoringVersion>=13&&(!Weather.valid(p.weather)||JSON.stringify(p.weather)!==JSON.stringify(p.conditions?.weather)))throw Error('Invalid saved weather');
     if(p?.scoringVersion>=12){const sign=Hand.sign(p),field=p.savedField;if(!Array.isArray(field)||!Tactics.legal(field.map(f=>({...f,a:f.a*sign})),m)||typeof p.fieldNote!=='string'||p.fieldNote.length>140)throw Error('Invalid saved field');}
-    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==15||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>3)||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
+    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23,24].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==15||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>3)||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
     if(state.shot&&(!['ground','loft','defend'].includes(state.shot.mode)||!Number.isFinite(state.shot.angle)||Math.abs(state.shot.angle)>180||!Number.isFinite(state.shot.error)||Math.abs(state.shot.error)>10000))throw Error('Invalid saved shot');
     if(state.botInput){const input=state.botInput;if(!Number.isInteger(input.rngState)||input.rngState<0||input.rngState>4294967295||input.shot&&(!['ground','loft','defend'].includes(input.shot.mode)||!Number.isFinite(input.shot.angle)||Math.abs(input.shot.angle)>180||!Number.isFinite(input.shot.error)||Math.abs(input.shot.error)>10000))throw Error('Invalid opposition shot');}
     for(const shot of [state.shot,state.botInput?.shot])if(shot?.effort!==undefined&&(!Number.isFinite(shot.effort)||shot.effort<0||shot.effort>1))throw Error('Invalid stroke strength');
@@ -1424,7 +1424,7 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  Innings.delivery=function(m){
   const bowlingTeamId=m.bowlingTeamId||Squad.teams(m.format).find(t=>t.name===m.bowlingName)?.id,
    prepared={...m,bowlingTeamId,playerModel:19},bowlers=m.bowlers.map((b,i)=>{const p=Players.bowler(prepared,i);if(!p)return b;const previous=m.history.at(-1);if(previous?.over===Math.floor(m.balls/6)&&previous.delivery.bowler===i&&BOWLERS.some(t=>t.id===previous.delivery.archetype))p.type=previous.delivery.archetype;const base=BOWLERS.find(t=>t.id===p.type);return{...b,...base,name:b.name,id:b.id,player:b.player,playerId:p.id,archetype:p.type,arm:p.arm,speed:p.speed,rating:p.rating,skills:p};});
-  const d=deliveryV18({...prepared,bowlers});return{...d,ball:{...d.ball,scoringVersion:23,kick:Math.atan(d.ball.kick/5.5),batterProfile:Players.batter(m),bowlerProfile:bowlers[d.ball.bowler].skills||null}};
+  const d=deliveryV18({...prepared,bowlers});return{...d,ball:{...d.ball,scoringVersion:24,kick:Math.atan(d.ball.kick/5.5),batterProfile:Players.batter(m),bowlerProfile:bowlers[d.ball.bowler].skills||null}};
  };
  Bowling.delivery=function(m,d){
   if(m.playerModel!==19)return bowlingDeliveryV18.call(this,m,d);
@@ -1568,6 +1568,73 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
   if(m.number===1){const sufficient=m.runs>rate*Math.min(780,remaining*.40)+safety;return sufficient&&(m.balls>600&&inHand<=3||remaining<bowlingBudget+600||m.runs>rate*900+60)&&lead>140;}
   const chaseRate=clamp(rate+.20+pitch.wear*.05,.66,1.05),safeLead=remaining*chaseRate+45+inHand*3;
   return remaining>90&&lead>Math.max(160,safeLead)&&remaining<=Math.max(300,bowlingBudget+inHand*18);
+ };
+
+ // V24 calibration: contact decays smoothly across phone release offsets.
+ const contactResolveV23=Contact.resolve,contactWindowV23=Contact.window,launchV23=NormalBall.launch;
+ Contact.window=function(ball,batter,input=null){
+  if(ball.scoringVersion<24)return contactWindowV23.call(this,ball,batter,input);
+  const base=this.precisionWindow(ball,batter,input),spin=Strokes.spin(ball);
+  return input?.mode==='defend'?clamp(base*1.12,240,380):input?.mode==='loft'?clamp(base,200,spin?270:230):this.cutCoverage(ball,input)?clamp(base,200,280):clamp(base*(spin?.85:1),210,300);
+ };
+ Contact.resolve=function(ball,input,batter,seed){
+  if(ball.scoringVersion<24)return contactResolveV23.call(this,ball,input,batter,seed);
+  const rng=RNG.stream(seed),roll=[rng.next(),rng.next(),rng.next(),rng.next()],pos=Delivery.at(ball,1),out={runs:0,wicket:false,wide:false,contact:false,angle:0,distance:0,loft:false,shot:'Leave',title:'Dot ball',detail:'Safely through to the keeper',timing:'Left alone',error:null,quality:0,rngState:rng.state};
+  if(!input)return out;
+  const window=this.window(ball,batter,input),ae=Math.abs(input.error),defend=input.mode==='defend',loft=input.mode==='loft',choice=Shot.suitability(ball,input.angle,input.mode),pressure=clamp(ae/window,0,1),movement=this.movement(ball),cut=this.cutCoverage(ball,input),reach=clamp((Math.abs(pos.x)-.6)/.65,0,1),effort=clamp(input.effort??.65,0,1);
+  Object.assign(out,{error:input.error,angle:input.angle,loft,shot:Shot.describe(input.angle,input.mode,ball),timing:ae<=35?'Perfect timing':ae<=80?'Good timing':input.error<0?'Early':'Late',timingWindow:window,edge:false});
+  if(ae>window||Math.abs(pos.x)>1.37){out.detail='Beaten - no contact';return out;}
+  const q=choice.value*(defend?1-.50*pressure:Math.exp(-(loft?1.6:1.8)*Math.pow(pressure,loft?1.1:1.45))),
+   risk=clamp((defend?.003+movement*.006+.09*pressure*pressure:loft?.008+.11*Math.pow(pressure,1.4):.006+movement*.036+(.10+.065*effort)*Math.pow(pressure,1.35))*(cut?.58:1)+Math.max(0,.83-choice.value)*.65+reach*.09,0,.75),edge=roll[0]<risk||q<(defend?.18:.20);
+  if(q<.20&&roll[2]<.70){out.detail='Beaten - bat passed outside the ball';return out;}
+  Object.assign(out,{contact:true,quality:q,detail:choice.reason,edge,edgeRisk:risk});
+  if(edge){const outside=pos.x>=.04||ball.kick>0,deflection=lerp(.8,32,Math.pow(roll[1],1.6));out.angle=(outside?1:-1)*(180-deflection);out.loft=true;out.edgeType=outside?'Outside edge':'Inside edge';out.detail=out.edgeType+(defend?' - soft hands':' - off the edge of the bat');}
+  return out;
+ };
+ NormalBall.launch=function(out,ball,input,batter,rng){
+  if(ball.scoringVersion<24)return launchV23.call(this,out,ball,input,batter,rng);
+  const b=Players.effective(ball,batter,input),power=b.attributes.power,origin=Fielding.contactOrigin(ball,input),incoming=ball.length/ball.postTime,q=out.quality,effort=clamp(input.effort??.65,0,1),defend=input.mode==='defend';
+  // Soft edges can die before the cordon; harder edges can pass above or
+  // beside it. The unchanged fielder geometry still decides the catch.
+  if(out.edge){const speed=incoming*(defend?.36:.70)*( .90+.20*rng.next()),flight=Math.max(.12,(Strokes.spin(ball)?2.6:12.5)/speed),target=defend?lerp(-1.6,.4,rng.next()):lerp(-.9,3.2,rng.next()),vy=clamp((target-origin.h+4.905*flight*flight)/flight,-2.8,7.5);return{origin,angle:(out.angle+(rng.next()-.5)*(defend?10:24))*Math.PI/180,vx:speed,vy,kind:'edge',spinRatio:.08,effort};}
+  // Preserve guided deflections and their use of the incoming pace.
+  if(['Late cut','Leg glance','Paddle sweep'].includes(out.shot))return launchV23.call(this,out,ball,input,batter,rng);
+  const window=Contact.window(ball,batter,input),error=clamp(input.error/window,-1,1),scatter=rng.next()*2-1,angle=(out.angle+error*16+scatter*(out.loft?8+(1-q)*62:2+Math.abs(error)*26))*Math.PI/180;
+  if(defend)return{origin,angle,vx:1.4+incoming*.045+q*.55,vy:-1.4,kind:'ground',spinRatio:.15,effort};
+  if(!out.loft){const glance=Math.sin(Math.abs(angle)/2)**2,speed=incoming*lerp(.09+.13*q*q,.65,glance)+(2+23*effort)*power*(.25+.75*q)*(1-.55*glance);return{origin,angle,vx:speed,vy:-Math.max(1.2,origin.h*3.7),kind:'ground',spinRatio:.35+.20*q,effort};}
+  // The player's power determines both bat contribution and the attainable
+  // ceiling. Off-centre impact loses energy and rotates the launch face.
+  // A committed swing opens the face more and magnifies angular error;
+  // a shorter aerial stroke stays flatter. Neither bypasses interception.
+  const ceiling=clamp(29+11*power,34,43),potential=Math.min(ceiling,incoming*.16+(12+19*effort)*power),speed=potential*(.55+.45*Math.pow(q,.85)),
+   swingLoad=Math.pow(clamp((effort-.60)/.40,0,1),2),
+   elevation=clamp(12+swingLoad*30+(1-q)*6*swingLoad-error*4+(rng.next()*2-1)*(4+swingLoad*26+(1-q)*20*swingLoad),10,78)*Math.PI/180;
+  return{origin,angle,vx:speed*Math.cos(elevation),vy:speed*Math.sin(elevation),kind:'shot',spinRatio:-.18,effort};
+ };
+
+ // V24 opposition can misread both line and length; the real ball still
+ // goes through the same contact, pad and wicket geometry as human input.
+ const oppositionV23=Opposition.input;
+ Opposition.input=function(m,ball,contest=null){
+  if(ball.scoringVersion<24)return oppositionV23.call(this,m,ball);
+  const rng=RNG.stream(m.rngState),normal=()=>Math.sqrt(-2*Math.log(Math.max(1e-12,rng.next())))*Math.cos(2*Math.PI*rng.next()),p=ball.batterProfile,b=ball.bowlerProfile,test=m.format==='TEST',spin=Strokes.spin(ball),sign=Hand.sign(ball),canonical=Hand.canonical(ball),at=Delivery.at(canonical,1),x=at.x,h=at.h,
+   skill=spin?p?.spin??70:p?.pace??70,rating=p?.timing??70,readMistake=rng.next()<(test?.04:.055)+(100-skill)*.0012,seen=x+(readMistake?normal()*.55:0),
+   lengthError=readMistake?Math.round(normal()):0,readLength=['yorker','full','good','short'][clamp(['yorker','full','good','short'].indexOf(ball.lengthName)+lengthError,0,3)],
+   perceived={...ball,line:ball.line+(seen-x)*sign,lengthName:readLength,contactH:clamp(h+lengthError*.30,.05,2.1)},short=readLength==='short',full=readLength==='full',yorker=readLength==='yorker',death=!test&&m.balls>=90,needed=m.target==null?null:Math.max(0,m.target-m.runs),ballsLeft=test?Math.max(1,(Contest.LIMIT-(m.pitchClock||0))/40):Math.max(1,120-m.balls),required=needed==null?0:needed/ballsLeft*6,
+   totals=contest?Contest.totals(contest):null,deficit=totals?totals[1-m.side]-totals[m.side]:0,
+   saveTest=test&&(needed!==null&&(required>3.5-m.wickets*.10||needed>(10-m.wickets)*35&&ballsLeft<540)||needed===null&&m.number===2&&deficit>60&&ballsLeft<900),set=Math.min(1,(m.batters[m.striker]?.balls||0)/25);
+  if((Math.abs(seen)>1.18||short&&perceived.contactH>1.62&&seen>.45)&&rng.next()<.93 || test&&seen>.42&&rng.next()<(saveTest?.85:.48))return{shot:null,rngState:rng.state};
+  const driveable=full||readLength==='good'&&perceived.contactH<1.05&&Math.abs(seen)>.18&&Math.abs(seen)<.72&&Contact.movement(canonical)<.85,defence=test?(saveTest?.95:yorker?.85:!full&&!short?(driveable?.64:.82):full?.42:.30):yorker?.30:!full&&!short?.055:.015;
+  let mode=rng.next()<defence?'defend':rng.next()<(test?.009:(death?.40:.26)*(full?1.2:short?1:.6)*(m.wickets>6?.65:1))&&!yorker?'loft':'ground';
+  const angles=[0,26,44,68,92,135,-30,-52,-95,-145],field=Innings.field(m,ball),weights=angles.map(angle=>{
+   const shot={angle:angle*sign,mode},value=Shot.suitability(perceived,shot.angle,mode).value,angleRad=angle*Math.PI/180,dist=mode==='loft'?58:26,
+    gap=Math.min(...Fielding.positions(field).map(f=>Math.hypot(f.x*sign-Math.sin(angleRad)*dist,f.z-Math.cos(angleRad)*dist))),stroke=Players.shotSkill(p||{drive:70,backFoot:70,sweep:70,loft:70,defence:70},ball,shot),side=seen>.20&&angle< -18||seen<-.20&&angle>18?.14:1;
+   return Math.pow(value,6)*side*(.65+stroke/130)*(.6+Math.min(25,gap)/25)*(mode==='loft'&&Math.abs(angle)>115?.15:1);
+  });
+  let pick=rng.next()*weights.reduce((a,b)=>a+b,0),index=0;while(index<weights.length-1&&pick>weights[index])pick-=weights[index++];
+  const form=.88+RNG.stream(m.seed^0x395ace).next()*.25,bowler=.90+(b?.rating??75)/500,
+   sd=(test?42:58)*(1.48-rating*.005)*(1.18-skill*.002)*bowler*form*(1.10-set*.10),error=normal()*sd+(readMistake?normal()*(mode==='defend'?220:310):0),effort=mode==='defend'?0:mode==='loft'?lerp(.86,1,rng.next()):lerp(.60,test?.86:.88,rng.next());
+  return{shot:{angle:(mode==='defend'?0:angles[index])*sign,mode,error,effort,callRuns:true,pushRun:!test&&death&&rng.next()<.06},rngState:rng.state};
  };
 
  const Broadcast={
