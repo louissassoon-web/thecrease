@@ -1,12 +1,14 @@
 {
-  "sourceRevision": 24,
-  "scoringVersion": 24,
+  "sourceRevision": 25,
+  "scoringVersion": 25,
   "saveSchema": 5,
   "playerProfilesVersion": 19,
-  "date": "2026-09-28",
-  "sourceCommit": "c144feaed5159223e65a132ab07053a5480b1325",
-  "htmlSha256": "694ec85e5a1b98c791eca6004d0744cf732f593cfebcd66155eb86a435ef9637",
+  "date": "2026-09-29",
+  "sourceCommit": "339cfe1e808712613414b72cd44dfdb3a5af9536",
+  "htmlSha256": "f668b4d496a06038cfaea7a652242e07304264015e37559e77068fb3d44c8cdb",
   "liveUrl": "https://cricket-three-over.workspace-710372.chatgpt.site",
   "entrypoint": "dist/index.html",
-  "acceptanceHarnessSha256": "27da0186d2bf92a3b3bb7ae87a66e2a3bba9dfdb94a09dbbe21b287610c51d3c"
+  "acceptanceHarnessSha256": "c9afb7f29f7c53a6d2b4c70897e8fb8e116a1d163d22d2ab621672299702b848",
+  "balanceChecks": "43/43",
+  "portableReviewGroups": "48/48"
 }

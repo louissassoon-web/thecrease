@@ -1,6 +1,6 @@
 # Cricket game - coder review pack
 
-This is the complete playable source for Louis's browser cricket game, updated on 28 September 2026. Revision 24 calibrates batting quality, lofts, edges and opposition batting. See BALANCE_REPORT.md for the unedited acceptance harness output before and after.
+This is the complete playable source for Louis's browser cricket game, updated on 29 September 2026. Revision 25 addresses spin parity and visible boundary chasing/running. See BALANCE_REPORT.md for the unedited acceptance harness output before and after.
 
 ## Run it
 
@@ -25,7 +25,7 @@ node check-balance.cjs
 node review-check.cjs
 ```
 
-The balance harness runs 32 checks. The portable review runs 44 groups: eight player-profile groups, seven automatic-over/input/replay groups, six spin/drive groups, seven world/presentation/progression groups, seven fielding/contact/shop regression groups and nine model, compatibility and safety groups. No installation or Git history is needed. The UI checks use a DOM/canvas facade; they do not render CSS or replace testing on an Android phone.
+The balance harness runs 43 checks. The portable review runs 48 groups: eight player-profile groups, seven automatic-over/input/replay groups, six spin/drive groups, seven world/presentation/progression groups, seven fielding/contact/shop regression groups nine model, compatibility and safety groups, and four boundary/clock groups. No installation or Git history is needed. The UI checks use a DOM/canvas facade; they do not render CSS or replace testing on an Android phone.
 
 ## Files
 
@@ -41,12 +41,14 @@ The balance harness runs 32 checks. The portable review runs 44 groups: eight pl
 | `check-spin-drives.cjs` | Spin contact, drive footwork, scoring variety, actual pointer handlers and version 19 compatibility |
 | `check-over-flow.cjs` | Continuous overs, gesture input and fast-forward regressions |
 | `check-display-input.cjs` | Shared DOM/canvas harness; its direct legacy tests require the original repository |
-| `review-fixtures/core-v18.js`, `core-v19.js`, `core-v20.js`, `core-v22.js`, `core-v23.js` | Previous pure engines used to prove existing saved shots keep their outcomes |
-| `check-model-v23.cjs` | Angular movement, saved V22/V23 replay, save safety, frame recovery, deferred writes, power/catches and AI |
+| `review-fixtures/core-v18.js`, `core-v19.js`, `core-v20.js`, `core-v22.js`, `core-v23.js`, `core-v24.js` | Previous pure engines used to prove existing saved shots keep their outcomes |
+| `check-model-v23.cjs` | Angular movement, saved V22/V23/V24 replay, save safety, frame recovery, deferred writes, power/catches and AI |
 | `audit-balance.cjs`, `audit-policy.cjs`, `audit-holdout.cjs` | Earlier reproducible diagnostics retained for comparison |
-| `check-balance.cjs` | Unedited user-supplied revision 24 acceptance contract |
+| `check-balance.cjs` | Unedited user-supplied revision 25 acceptance contract |
 | `audit-calibration.cjs`, `audit-matches.cjs` | Independent fixed delivery curves and 40-match samples in each format |
-| `BALANCE_REPORT.md`, `validation-v24/` | Findings and complete captured revision 24 outputs |
+| `BALANCE_REPORT.md`, `validation-v25/` | Findings, full before/after outputs, spin/pace measurements and chase frames |
+| `audit-spin.cjs`, `check-boundaries.cjs` | Spin/pace diagnostics and boundary/clock regressions |
+| `validation-v24/` | Previous revision report and measurements |
 | `validation-v23/` | Previous revision report and measurements |
 | `review-check.cjs` | Portable review test entrypoint |
 | `PROJECT_NOTES.md` | Project history and known limitations; some historical test commands refer to the full repository |
@@ -69,7 +71,19 @@ The first large block is embedded font data. Search for these markers instead of
 
 Several modules are wrapped by later version-specific implementations. Read the last assignment as well as the original definition. This preserves older saves, but the accumulated wrappers are a worthwhile review target. Avoid deleting old paths without a migration plan.
 
-## Revision 24 - batting and opposition calibration
+## Revision 25 - spin parity and live boundaries
+
+Boundary fours and sixes name the quickest chaser to the crossing point. The fielder runs from the real field position, reaches down at the rope after the ball, then turns and walks. The two support fielders retain their small moves. Both boundary types allow running and cancellation while the ball travels; the umpire signal ends the legs at the crossing time. There is no boundary run-out or invented throw. Scoring uses the boundary allowance or completed runs, whichever is greater. Pickups keep their real return and run-out risk.
+
+Spin edges now span downward, steeper and wider deflections instead of all being lobbed at the close keeper. The spin movement contribution to contact risk is reduced to 40%, because the chosen stroke already reads the arrival line. Residual attacking risk scales with bowler control and is larger against pace, where there is less reaction time. Defence remains forgiving; suitability, timing windows and quality curves retain revision 24 behaviour.
+
+Ground strokes gain up to 12% of their bat contribution as incoming speed drops from 28 to 16.5 m/s. This represents time to complete the swing and reach the pitch; incoming-ball energy, guided deflections, loft and named power differences remain intact. T20 bowling transfers a small share of full balls into good lengths and pace yorkers to contain the resulting scoring increase. Test length plans and AI shot selection are unchanged.
+
+New spin deliveries use the same 2600 presentation milliseconds per physical second before and after pitching. The revision 17 post-bounce stretch is retained only for prepared older balls. New balls use scoring version 25; prepared revision 22, 23 and 24 outcomes, AI inputs and saves remain supported. Schema 5, swipe grammar, seeded determinism, the single-file build and the revision 23 safety fixes are unchanged. Chase and runner animation use saved event data and time without advancing match RNG.
+
+The supplied 43-check contract is unedited: revision 24 passes 33/43; revision 25 passes 43/43. All 48 portable review groups pass. Version assertions now expect 25, compatibility fixtures include the frozen revision 24 engine, and the fast-forward fixture explicitly selects a pickup because running no longer implies a throw. Four new groups cover boundary commands/scoring, the real canvas chase path, pickup returns and the uniform clock. See BALANCE_REPORT.md and validation-v25/ for raw outputs and the re-measured spin/pace table. No target is disputed.
+
+## Revision 24 - batting and opposition calibration (historical)
 
 Attacking quality now falls gradually across ordinary phone release offsets. Pace loft coverage is 200-230 ms; spin loft can extend to 270 ms, while ground coverage follows player precision within 210-300 ms. The exponential quality curves are softer, without a quality floor or a power bonus for perfect timing. Ground strokes retain more of their bat contribution at middling quality, so placement and running remain useful.
 

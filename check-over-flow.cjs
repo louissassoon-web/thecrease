@@ -4,7 +4,7 @@ async function check(name,fn){try{await fn();checks++;console.log('PASS '+name);
 function until(h,predicate,limit=2200){for(let i=0;i<limit;i++){if(predicate(h.u.get()))return;h.step();}throw Error('Clock did not reach expected state');}
 async function begin(format='TEST',full=false){const h=host(format);await h.n('resumeBtn').click();if(full){await h.n('settingsBtn').click();await h.u.chooseDisplay(true);await h.n('settingsResumeBtn').click();}await h.n('bowlBtn').click();return h;}
 async function liveRunning(){const h=await begin();until(h,s=>s.phase==='flight'&&!s.fieldBrief);const s=h.u.get(),b=s.pending;let input;
- for(const effort of [.30,.40,.55,.65,.85]){for(const angle of [132,-145,44,-44,87,-95,0]){const shot={angle,mode:'ground',effort,error:0},r=C.Shot.resolve(b,shot,s.match.batters[s.match.striker],C.Innings.field(s.match,b),s.match.rngState);if(r.play.running&&r.play.throw.breakTime>6.2&&r.play.running.legs.length){input=shot;break;}}if(input)break;}
+ for(const effort of [.30,.40,.55,.65,.85]){for(const angle of [132,-145,44,-44,87,-95,0]){const shot={angle,mode:'ground',effort,error:0},r=C.Shot.resolve(b,shot,s.match.batters[s.match.striker],C.Innings.field(s.match,b),s.match.rngState);if(r.play.running&&r.play.throw?.breakTime>6.2&&r.play.running.legs.length){input=shot;break;}}if(input)break;}
  assert.ok(input,'Need a real gap and return');s.shot=input;until(h,s=>s.phase==='inPlay');return h;
 }
 (async()=>{

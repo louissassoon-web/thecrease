@@ -1,0 +1,94 @@
+PASS Four and six running commands are live, cancellable and safe; boundary allowance and completed runs are preserved
+PASS Chaser runs from the field position, gathers low at the rope, then walks; real canvas and engine frames agree without RNG changes
+PASS A cut-off ball retains its collector, throw and run-out route
+[
+  {
+    "type": "four",
+    "stage": "contact",
+    "time": 0,
+    "fielder": "cover",
+    "x": 14.695,
+    "z": 20.225,
+    "action": "run",
+    "gait": 0,
+    "distanceToRope": 41.143
+  },
+  {
+    "type": "four",
+    "stage": "mid-chase",
+    "time": 4.326,
+    "fielder": "cover",
+    "x": 28.529,
+    "z": 31.896,
+    "action": "run",
+    "gait": 1,
+    "distanceToRope": 23.044
+  },
+  {
+    "type": "four",
+    "stage": "arrival",
+    "time": 8.651,
+    "fielder": "cover",
+    "x": 45.721,
+    "z": 46.401,
+    "action": "pickup",
+    "gait": 0.088,
+    "distanceToRope": 0.55
+  },
+  {
+    "type": "four",
+    "stage": "walk",
+    "time": 9.951,
+    "fielder": "cover",
+    "x": 45.405,
+    "z": 46.134,
+    "action": "walk",
+    "gait": 0.27,
+    "distanceToRope": 0.963
+  },
+  {
+    "type": "six",
+    "stage": "contact",
+    "time": 0,
+    "fielder": "cover",
+    "x": 14.695,
+    "z": 20.225,
+    "action": "run",
+    "gait": 0,
+    "distanceToRope": 41.103
+  },
+  {
+    "type": "six",
+    "stage": "mid-chase",
+    "time": 4.322,
+    "fielder": "cover",
+    "x": 29.106,
+    "z": 31.142,
+    "action": "run",
+    "gait": 1,
+    "distanceToRope": 23.023
+  },
+  {
+    "type": "six",
+    "stage": "arrival",
+    "time": 8.644,
+    "fielder": "cover",
+    "x": 47.02,
+    "z": 44.712,
+    "action": "pickup",
+    "gait": 0.088,
+    "distanceToRope": 0.55
+  },
+  {
+    "type": "six",
+    "stage": "walk",
+    "time": 9.944,
+    "fielder": "cover",
+    "x": 46.69,
+    "z": 44.463,
+    "action": "walk",
+    "gait": 0.27,
+    "distanceToRope": 0.963
+  }
+]
+PASS New pace and spin share 2600 ms per physical second before and after pitching; preparation is pure and contact windows stay unchanged

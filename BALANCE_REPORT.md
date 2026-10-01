@@ -1,118 +1,164 @@
-# Revision 24 calibration report
+# Revision 25 - balance and boundary report
 
-28 September 2026. Source/scoring revision 24; save schema 5; player profiles 19.
+29 September 2026. Revision 24 baseline source: `c144feaed5159223e65a132ab07053a5480b1325`.
 
-The supplied, unedited acceptance harness goes from **20 passed, 12 failed** on revision 23 to **32 passed, 0 failed** on revision 24. `node review-check.cjs` passes all **44 portable review groups**. The ten separate display/input checks also pass.
+The supplied contract passes **43/43**, up from **33/43**. `node review-check.cjs` passes **all 48 portable review groups**. The harness was saved as supplied and never edited during calibration. Its SHA-256 is `c9afb7f29f7c53a6d2b4c70897e8fb8e116a1d163d22d2ab621672299702b848`.
 
-## Contract and scope
+Only spin parity, boundary chasing/running and their bowling-balance consequences changed. The baseline reproduces all ten reported failures. Its AI T20 mean is 174.5, rather than the 164 quoted in the request; the complete baseline below records the source actually tested.
 
-`check-balance.cjs` was copied beside `review-check.cjs` and run with `node check-balance.cjs` before any engine edit and again against the final source. Both the supplied file and repository copy have SHA-256:
+## Working passes
+
+- Boundary mechanics: 35/43. Chasers on 100% of fours, running offered on 95.81%, and every four still worth at least four. Every other harness metric was identical to the baseline.
+- Spin wickets: 39/43. Spin edge conversion fell to 30.14%, edge frequency reached 0.97 of pace, and both timing-error wicket ratios passed. The four remaining failures were spin scoring and its clock.
+- Spin scoring and bowling calibration: 42/43. Ground-stroke energy now compensates for a slower arrival. Slightly tighter T20 length plans keep mixed batting and opposition totals in range without weakening AI decisions against spin.
+- Uniform delivery clock: 43/43. Removing the new-ball spin stretch changed the screen scale from 2.8 to 2.6 without changing any other acceptance metric.
+
+Intermediate raw outputs are in `validation-v25/boundaries.txt`, `spin-edges-4.txt` and `spin-scoring-4.txt`. Earlier calibration attempts are retained in the same folder. There are no seed-specific branches or outcomes forced to meet a total.
+
+## Spin and pace re-measured
+
+The table uses the exact section 5 batting policy and seeds. The diagnostic adds only an exit-speed counter to that policy; it does not alter the acceptance harness. Rope reach and exit speed cover contacted, non-edge ground shots within 40 ms, excluding yorkers.
+
+| Metric, 60 ms timing SD | R24 pace | R24 spin | R25 pace | R25 spin |
+| --- | ---: | ---: | ---: | ---: |
+| Runs per over | 6.45 | 4.48 | 6.28 | 6.44 |
+| Balls per wicket | 97.50 | 32.21 | 91.76 | 64.42 |
+| Fours, % of balls | 16.82% | 4.96% | 15.95% | 13.95% |
+| Edges, % of balls | 3.29% | 4.96% | 5.28% | 5.44% |
+| Edges caught | 30.19% | 60.32% | 20.00% | 27.54% |
+| Well-timed ground strokes reaching the rope unfielded | 97.28% | 43.32% | 99.01% | 92.80% |
+| Mean exit speed of those well-timed strokes | 26.13 m/s | 23.20 m/s | 26.53 m/s | 25.39 m/s |
+| Screen time per physical second | 2.60 s | 2.80 s | 2.60 s | 2.60 s |
+| Balls per wicket, 130 ms SD | 49.03 | 17.97 | 36.95 | 34.00 |
+
+Run `node audit-spin.cjs` for the current table, or `node audit-spin.cjs review-fixtures/core-v24.js` for the baseline. Raw counters are in `spin-before.json` and `spin-after.json`.
+
+## Independent population
+
+A separate fixed set of 96 innings per timing level was used to check that the model change generalises (`node audit-spin.cjs --independent`). At 60 ms, pace/spin produced 6.28/6.93 runs per over and 68.21/104.17 balls per wicket. Spin edge conversion was 22.38%. At 130 ms, pace/spin produced 30.08/28.74 balls per wicket.
+
+Sampling still matters: the contract's competent spin/pace wicket ratio is 0.70, while the independent set gives 1.53. Its run-rate ratio is 1.104, slightly above the contract's 1.1 upper bound if applied to that other population. The exact contract passes; these separate observations are reported rather than concealed or used to select favourable seeds. Phone play-testing remains useful for judging the uniform timing cue.
+
+## Boundary motion and running
+
+Every four and six records the fielder with the shortest arrival to the crossing point, with arrival no earlier than crossing plus 0.15 seconds. The chaser has a distinct ID; `event.id` remains unset. The two nearest support fielders keep their small moves. Running uses the same offer/command path for fours and sixes, permits cancelling queued legs, stops at `event.time`, and never invents a return or run-out. A queued leg can be interrupted by the umpire signal. The recorded allowance is the greater of the boundary and runs completed before crossing; the existing three-run UI limit remains.
+
+The real canvas drawing path and `Fielding.frame` were checked at contact, mid-chase, arrival and walking, including serialised running commands. In a representative four, cover starts at (14.70, 20.23) m at contact, reaches (28.53, 31.90) m at 4.33 s with full running gait, then arrives 0.55 m from the crossing point at 8.65 s and reaches low. By 9.95 s he is walking and turning back. The six follows the same sequence. The boundary is scored at its crossing time; the replay remains available to show the lost chase. Detailed frames are in `validation-v25/boundary-frames.txt`.
+
+This is a deterministic engine and actual canvas-call check, not a claim of fresh Android or Playwright visual QA. The allowed description route was used. No presentation callback advances match RNG.
+
+## Review fixtures and compatibility
+
+`node review-check.cjs` result:
 
 ```text
-27da0186d2bf92a3b3bb7ae87a66e2a3bba9dfdb94a09dbbe21b287610c51d3c
+PASS Every player has a stable named profile in both formats; roles are not inferred from batting position
+Matched clean lofts: { samples: 24, rootMeanExitSpeed: 42.77, davidMeanExitSpeed: 49.65 }
+PASS Named strengths change real timing windows, defence, spin match-ups and loft power
+500 death-over deliveries per bowler: {
+  bumrahWides: 13,
+  ranaWides: 15,
+  bumrahYorkers: 269,
+  ranaYorkers: 261
+}
+PASS Bowler speed, control and variations affect real deliveries, with integer speeds and a fixed style through the over
+PASS V18 pending balls retain exact outcomes, while the next preparation adopts profiles deterministically
+PASS Existing edited names retain their original player identity and incoming profiles contain no random variation
+PASS The paused profile selector shows both teams, strengths and actual bowling data without advancing play
+PASS Prepared profile snapshots survive save/resume and validation rejects broken ratings
+PASS Exported ball details remain sufficient to reproduce an opposition shot including its profiles
+8 player-profile checks passed.
+PASS Backswing loft works in both views, while direct swipes stay grounded without height buttons
+PASS One start plays six legal balls automatically, then stops between overs
+PASS A no-ball is rebowled inside the active over without an extra start or a missing legal ball
+PASS Fast-forward advances the shared replay clock fourfold and produces the same score, throw and RNG
+PASS Calling a run or pausing restores normal playback speed and keeps the running decision live
+PASS Paused auto-over saves resume the same prepared ball and complete the over once
+PASS An innings interval stops the automatic sequence even when the over has balls remaining
+7 automatic-over and replay checks passed.
+PASS Drive names, guides, foot plants and contact origins agree for both hands and formats
+Matched spin strokes: {
+  samples: 486,
+  old: { miss: 248, edge: 118, clean: 120 },
+  now: { miss: 0, edge: 50, clean: 436 }
+}
+PASS Controlled spin contact stays usable across late releases without raising middle timing or power
+Ground scoring: {
+  samples: 192,
+  fours: 58,
+  scores: [ 0, 1, 2, 3, 4 ],
+  weakContacts: 27
+}
+PASS Weak spin contact loses speed, clean middles retain their speed, and ground drives offer a scoring range
+Mistimed spin edges: { edges: 8, keeperCatches: 2 }
+PASS Real edges and poor choices still matter, while pace contact windows retain their difficulty
+PASS Late spin releases work through actual pad/fullscreen handlers, and a live save resumes identically
+PASS Prepared V19 balls keep exact outcomes and subsequent deliveries upgrade deterministically
+6 spin and drive checks passed.
+PASS The distance cue reaches the bat consistently and spin has no speed jump or frozen ball at the crease
+PASS Contact-to-fielding joins continuously and nearby ball/body drawing stays finite in both views
+PASS Coins are paid only for a player win, once per fixture across reloads and restarts
+PASS The actual shop buys and equips permanently, applies both team roles and exports the shared wallet
+PASS All grounds have distinct world geometry, render in play, and full reset restores the starter items
+PASS Player graphs and changed conditions appear before bowling, resume mid-card and clear before the run-up
+PASS A completed real T20 fixture credits the UI wallet once, including after reloading
+7 world, presentation and progression checks passed.
+Short outside-off trials: {
+  n: 5400,
+  before: { miss: 2160, edge: 980 },
+  after: { miss: 0, edge: 468 }
+}
+PASS Short outside-off diagonals become controlled cuts, with fewer forced edges and room for genuine mistakes
+Spin release trials: {
+  n: 469,
+  before: { miss: 268, edge: 16 },
+  after: { miss: 0, edge: 24 }
+}
+PASS Spin coverage improves at ordinary phone release offsets while precision, pace difficulty and power stay separate
+PASS Actual rendering retains the ball through keeper/slip catches, gathering, release and the deep return
+PASS Cordon playback shows the interception before returning to batting; catches and high returns fit the camera
+PASS Catching hands hold the ball and fielders keep fixed limb lengths through gather, turn and throw
+PASS Shop access closes at match start and remains blocked through over and innings breaks, including stale buttons
+PASS Saved V20 deliveries retain exact outcomes; new spin swipes work on both touch surfaces and resume identically
+7 fielding, contact and shop regression groups passed.
+PASS V23 bounce angle is length independent and shared by delivery, LBW and continuation
+PASS Prepared V22/V23/V24 balls retain exact outcomes, AI inputs and save compatibility
+PASS Invalid saves are backed up byte-for-byte before replacement, or protected when storage is full
+PASS Frame exceptions surface in feedback and schedule the next animation frame
+PASS Release and first contact defer storage; running commands and completed balls still persist
+PASS New lofts obey the power ceiling, retain player differences, and mistiming changes speed and both launch angles
+PASS Elliptical boundary and descending landing-point interception use the same world geometry
+PASS Attack coverage is narrower than defence; defence holds the crease without preventing a called single
+PASS New opposition inputs are deterministic, varied and repeatable; time and wickets alter declaration decisions
+9 model and safety regression groups passed.
+PASS Four and six running commands are live, cancellable and safe; boundary allowance and completed runs are preserved
+PASS Chaser runs from the field position, gathers low at the rope, then walks; real canvas and engine frames agree without RNG changes
+PASS A cut-off ball retains its collector, throw and run-out route
+PASS New pace and spin share 2600 ms per physical second before and after pitching; preparation is pure and contact windows stay unchanged
+All 48 portable review groups passed.
 ```
 
-No harness line, target, fixture population or seed was changed. Calibration changes operate on timing, shot effort, player skills, movement and match situation. No sampled seed is recognised by the engine, and no total, dismissal or match result is imposed.
+Version assertions now expect 25. The frozen V24 core extends exact old-outcome, opposition-input and save-acceptance checks to revisions 22-24. The fast-forward fixture now requires a real throw when selecting its pickup, because `play.running` also exists on boundaries. No old balance fixture was weakened. Four additional review groups exercise boundary scoring and commands, chaser/canvas agreement, retained pickup returns, and the uniform clock with unchanged contact windows. Schema 5, gestures, quality curves, player power, angular movement and safety fixes remain intact.
 
-The batting pass was reported before the AI pass: it passed 14/16 batting checks, with projected mixed/slog totals of 176/128; both outstanding wicket rates were high. Varying edge trajectories and completing the loft/defence calibration then resolved them. Final projected totals are 185/145. Intermediate command outputs are retained in `validation-v24/`.
+## Targets disputed
 
-Angular bounce movement, ellipse dimensions, fielder reach, keeper collection, bowling plans/wides, declaration logic, presentation clocks, swipe grammar, Test time per ball and the three revision 23 safety fixes remain unchanged. There are no new runtime dependencies or features. The optional contest argument to the AI is transient and adds nothing to the save schema.
+None. The contract is unchanged. The small independent-sample variation above is a measurement limitation, not a request to relax a target.
 
 ## PROJECT_NOTES entry
 
-Attacking quality now falls gradually across ordinary phone release offsets. Pace loft coverage is 200-230 ms; spin loft can extend to 270 ms, while ground coverage follows player precision within 210-300 ms. The exponential quality curves are softer, without a quality floor or a power bonus for perfect timing. Ground strokes retain more of their bat contribution at middling quality, so placement and running remain useful.
+## Revision 25 - spin parity and live boundaries
 
-Loft keeps the 43 m/s player-dependent ceiling and the existing boundary ellipse. Shorter aerial strokes stay flatter; a committed swing opens the face and magnifies angular scatter. Speed falls less steeply with quality, while elevation and direction spread with mistiming. This puts more imperfect full swings into reachable catching arcs. The field still has to intercept the actual flight.
+Boundary fours and sixes name the quickest chaser to the crossing point. The fielder runs from the real field position, reaches down at the rope after the ball, then turns and walks. The two support fielders retain their small moves. Both boundary types allow running and cancellation while the ball travels; the umpire signal ends the legs at the crossing time. There is no boundary run-out or invented throw. Scoring uses the boundary allowance or completed runs, whichever is greater. Pickups keep their real return and run-out risk.
 
-Edges now vary below, above and beside the cordon. Soft defensive edges more often fall short, and defensive timing risk is lower. Movement still raises the edge risk of attacking ground strokes. Catch reach, yorker geometry and keeper collection are unchanged.
+Spin edges now span downward, steeper and wider deflections instead of all being lobbed at the close keeper. The spin movement contribution to contact risk is reduced to 40%, because the chosen stroke already reads the arrival line. Residual attacking risk scales with bowler control and is larger against pace, where there is less reaction time. Defence remains forgiving; suitability, timing windows and quality curves retain revision 24 behaviour.
 
-The opposition chooses from a perceived line and length and can misread either. Rare large timing errors can miss straight balls; the existing pad and stump geometry decides LBW or bowled. Defence reduces the penalty for a misread. T20 finishers loft more often at the death, with more measured ground effort. Tests select more defensive strokes, and the survival decision considers required rate, wickets, remaining time and a late second-innings deficit. Match context is transient; declarations, clocks and the five-day limit are unchanged.
+Ground strokes gain up to 12% of their bat contribution as incoming speed drops from 28 to 16.5 m/s. This represents time to complete the swing and reach the pitch; incoming-ball energy, guided deflections, loft and named power differences remain intact. T20 bowling transfers a small share of full balls into good lengths and pace yorkers to contain the resulting scoring increase. Test length plans and AI shot selection are unchanged.
 
-New balls use scoring version 24. Prepared revision 22 and 23 balls retain exact shot outcomes and AI inputs, and both save revisions remain accepted. Schema 5, profiles 19, swipe grammar, presentation clocks, dependencies and the revision 23 safety fixes are unchanged. The supplied `check-balance.cjs` is byte-for-byte unedited: revision 23 passes 20/32; revision 24 passes 32/32. The 44 portable review groups also pass. See `BALANCE_REPORT.md` and `validation-v24/` for complete output, independent samples and fixture changes.
+New spin deliveries use the same 2600 presentation milliseconds per physical second before and after pitching. The revision 17 post-bounce stretch is retained only for prepared older balls. New balls use scoring version 25; prepared revision 22, 23 and 24 outcomes, AI inputs and saves remain supported. Schema 5, swipe grammar, seeded determinism, the single-file build and the revision 23 safety fixes are unchanged. Chase and runner animation use saved event data and time without advancing match RNG.
 
-## Independent delivery curve
+The supplied 43-check contract is unedited: revision 24 passes 33/43; revision 25 passes 43/43. All 48 portable review groups pass. Version assertions now expect 25, compatibility fixtures include the frozen revision 24 engine, and the fast-forward fixture explicitly selects a pickup because running no longer implies a throw. Four new groups cover boundary commands/scoring, the real canvas chase path, pickup returns and the uniform clock. See BALANCE_REPORT.md and validation-v25/ for raw outputs and the re-measured spin/pace table. No target is disputed.
 
-The same 240 full/good pace deliveries per format were sampled before and after, with a fixed stream separate from the acceptance harness. These are mean contact quality values for the T20 population, including shot suitability; they are not human timing measurements.
-
-| Stroke | Release error | Revision 23 quality | Revision 24 quality |
-| --- | ---: | ---: | ---: |
-| Ground | 0 ms | 0.980 | 0.980 |
-| Ground | 30 ms | 0.829 | 0.899 |
-| Ground | 60 ms | 0.639 | 0.775 |
-| Ground | 90 ms | 0.468 | 0.643 |
-| Ground | 120 ms | 0.330 | 0.516 |
-| Loft | 0 ms | 0.980 | 0.980 |
-| Loft | 30 ms | 0.593 | 0.826 |
-| Loft | 60 ms | 0.334 | 0.680 |
-| Loft | 90 ms | 0.070 | 0.554 |
-| Loft | 120 ms | 0.028 | 0.448 |
-
-Full delivery outcomes, including contact, fours, sixes and catches, are in `validation-v24/curve-before.json` and `curve-after.json`. The 30 ms quality cliff is removed. The physical flight and field still determine the score.
-
-## Independent match sample and limits
-
-A separate fixed sample uses 40 T20s and 40 Tests across all eight teams. Final T20 first innings average 178.18, with 6.83 wickets. Tests average 371.70 with a standard deviation of 109.14, at 3.22 runs an over across the matches. Nine Tests draw (22.5%); the side batting last wins 16 of 40 matches. Eight first innings are declared. Test dismissals include 23.12% bowled and 14.21% LBW.
-
-The top seven average 69.8 balls per dismissal in that Test sample, slightly slower than the suggested 55-65 guidance. The acceptance sample has one draw in 14 Tests; the separate sample has nine in 40. These small populations expose sampling variation, so they do not establish a universal draw rate. I have retained this result rather than selecting seeds or forcing time-outs. These diagnostics use the actual seeded engine and the unchanged five-day limit. Android touch feel has not been physically tested in this pass.
-
-## Review checks and fixture changes
-
-```text
-node review-check.cjs
-All 44 portable review groups passed.
-
-node check-display-input.cjs
-10 display and input checks passed.
-```
-
-The expected version of newly prepared balls changes from 23 to 24 in the player-profile, spin/drive and fielding regression files. `check-model-v23.cjs` keeps its entrypoint name and now compares revision 22 and 23 prepared-ball outcomes and AI inputs against their frozen engines. Both flight and in-play saves validate. The AI regression also checks that a late deficit increases sustained defensive intent without mutating its match input. No regression assertion encoding the old steep quality curve needed to be relaxed. Older revision 18/19/20 behaviour remains covered.
-
-The source download includes the unedited acceptance harness, frozen engines, report, notes and complete captured output. The test facade checks drawing/input code and finite coordinates; it does not replace browser layout or Android testing.
-
-## Targets I disagree with
-
-None. All 32 supplied acceptance targets are retained and pass. The additional top-order survival guidance and sampling limits are reported above.
-
-## Complete before output - revision 23
-
-```text
-FAIL T20 ground strokes, 60 ms timing sd: runs per over                     3.95   target 5-7.5
-PASS T20 ground strokes, 60 ms timing sd: balls per wicket                  55.1   target 30-90
-PASS T20 ground strokes, 130 ms timing sd: balls per wicket                15.14   target 12-40
-FAIL T20 25% loft mix, 60 ms sd: runs per over                              6.36   target 7-10.5
-FAIL T20 25% loft mix, 60 ms sd: balls per wicket                          19.08   target 20-60
-PASS T20 loft every ball, 60 ms sd: six % of balls                         12.04   target 10-35
-PASS T20 loft every ball, 60 ms sd: balls per wicket                        6.52   target 5-16
-PASS Projected 20-over total, 25% loft mix at 60 ms sd                       127   target 120-190
-FAIL Projected 20-over total, all-loft at 60 ms sd (must trail the mix)      147   target 60-126
-FAIL Test ground strokes + 35% defence, 60 ms sd: runs per over             2.28   target 2.8-4.8
-PASS Test ground strokes + 35% defence, 60 ms sd: balls per wicket         41.06   target 40-130
-FAIL Perfect full-effort loft on a full ball: six %                         97.5   target 55-90
-PASS Perfect full-effort loft on a full ball: exit speed m/s           40.03 m/s   target 30-44 m/s
-FAIL Loft released 80 ms off: six %                                            0   target 10-45
-FAIL Loft released 80 ms off: caught %                                     11.25   target 15-60
-PASS Loft released 130 ms off: six %                                           0   target 0-20
-PASS AI T20 first-innings mean                                            153.15   target 150-180
-PASS AI T20 first-innings standard deviation                               32.45   target 20-45
-PASS AI T20 first-innings wickets                                           6.05   target 5-8.5
-FAIL AI T20 sixes per innings                                                3.8   target 4-9
-PASS AI T20 wides, % of balls                                              3.05%   target 1.5-4.5%
-PASS AI T20 lbw, % of dismissals                                            8.6%   target 4-20%
-PASS AI Test first-innings mean                                           338.07   target 280-400
-PASS AI Test first-innings standard deviation                             119.67   target 55-140
-PASS AI Test first innings declared, %                                     7.14%   target 0-30%
-FAIL AI Test bowled, % of dismissals                                       4.15%   target 10-30%
-FAIL AI Test lbw, % of dismissals                                          4.74%   target 8-25%
-PASS AI Test won by the side batting last, %                              42.86%   target 30-65%
-FAIL AI Test draws, %                                                         0%   target 5-25%
-PASS Pace yorker: median lateral deviation at the crease, degrees           1.1°   target 0-3°
-PASS Left pace yorker that passes the stumps: four byes, %                    0%   target 0-5%
-PASS Left pace yorker that passes the stumps: keeper collects for no run, %   98.15%   target 75-100%
-
-20 passed, 12 failed of 32 balance checks.
-```
-
-## Complete after output - revision 24
+## Complete before output - unedited
 
 ```text
 PASS T20 ground strokes, 60 ms timing sd: runs per over                     5.79   target 5-7.5
@@ -147,18 +193,67 @@ PASS AI Test draws, %                                                      7.14%
 PASS Pace yorker: median lateral deviation at the crease, degrees           1.1°   target 0-3°
 PASS Left pace yorker that passes the stumps: four byes, %                    0%   target 0-5%
 PASS Left pace yorker that passes the stumps: keeper collects for no run, %   98.15%   target 75-100%
+FAIL Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              0.33   target 0.7-1.6
+FAIL Spin v pace, 130 ms ground strokes: balls-per-wicket ratio             0.37   target 0.6-1.6
+FAIL Spin v pace, 60 ms ground strokes: runs-per-over ratio                 0.69   target 0.8-1.1
+FAIL Spin v pace, 60 ms ground strokes: four % ratio                         0.3   target 0.55-1.1
+FAIL Well-timed ground strokes that would reach the rope unfielded: spin/pace     0.45   target 0.75-1.1
+FAIL Spin v pace, 60 ms ground strokes: edge % ratio                        1.51   target 0.7-1.3
+FAIL Spin edges that are caught, 60 ms ground strokes, %                  60.32%   target 15-40%
+FAIL Spin flight: screen ms per physical ms (pace is 2.6)                    2.8   target 2.45-2.75
+FAIL Fours with a named chasing fielder (event.chaser or event.id), %         0%   target 90-100%
+FAIL Fours where the batters are offered a run at 0.45 s, %                   0%   target 85-100%
+PASS Fours still scoring at least four, %                                   100%   target 100-100%
 
-32 passed, 0 failed of 32 balance checks.
+33 passed, 10 failed of 43 balance checks.
 ```
 
-## Reproduce
+## Complete after output - unedited
 
-```sh
-node check-balance.cjs
-node review-check.cjs
-node audit-calibration.cjs review-fixtures/core-v23.js
-node audit-calibration.cjs
-node audit-matches.cjs
+```text
+PASS T20 ground strokes, 60 ms timing sd: runs per over                     6.42   target 5-7.5
+PASS T20 ground strokes, 60 ms timing sd: balls per wicket                 68.41   target 30-90
+PASS T20 ground strokes, 130 ms timing sd: balls per wicket                33.11   target 12-40
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.08   target 7-10.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          28.22   target 20-60
+PASS T20 loft every ball, 60 ms sd: six % of balls                         20.47   target 10-35
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        5.35   target 5-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       182   target 120-190
+PASS Projected 20-over total, all-loft at 60 ms sd (must trail the mix)      144   target 60-181
+PASS Test ground strokes + 35% defence, 60 ms sd: runs per over              3.5   target 2.8-4.8
+PASS Test ground strokes + 35% defence, 60 ms sd: balls per wicket         63.97   target 40-130
+PASS Perfect full-effort loft on a full ball: six %                        83.75   target 55-90
+PASS Perfect full-effort loft on a full ball: exit speed m/s           40.15 m/s   target 30-44 m/s
+PASS Loft released 80 ms off: six %                                         32.5   target 10-45
+PASS Loft released 80 ms off: caught %                                      22.5   target 15-60
+PASS Loft released 130 ms off: six %                                        6.25   target 0-20
+PASS AI T20 first-innings mean                                            176.97   target 150-180
+PASS AI T20 first-innings standard deviation                               34.42   target 20-45
+PASS AI T20 first-innings wickets                                           6.88   target 5-8.5
+PASS AI T20 sixes per innings                                               5.63   target 4-9
+PASS AI T20 wides, % of balls                                              2.97%   target 1.5-4.5%
+PASS AI T20 lbw, % of dismissals                                           7.35%   target 4-20%
+PASS AI Test first-innings mean                                           337.86   target 280-400
+PASS AI Test first-innings standard deviation                             105.66   target 55-140
+PASS AI Test first innings declared, %                                     7.14%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      20.51%   target 10-30%
+PASS AI Test lbw, % of dismissals                                          12.7%   target 8-25%
+PASS AI Test won by the side batting last, %                              42.86%   target 30-65%
+PASS AI Test draws, %                                                      7.14%   target 5-25%
+PASS Pace yorker: median lateral deviation at the crease, degrees          1.18°   target 0-3°
+PASS Left pace yorker that passes the stumps: four byes, %                    0%   target 0-5%
+PASS Left pace yorker that passes the stumps: keeper collects for no run, %   98.18%   target 75-100%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio               0.7   target 0.7-1.6
+PASS Spin v pace, 130 ms ground strokes: balls-per-wicket ratio             0.92   target 0.6-1.6
+PASS Spin v pace, 60 ms ground strokes: runs-per-over ratio                 1.03   target 0.8-1.1
+PASS Spin v pace, 60 ms ground strokes: four % ratio                        0.87   target 0.55-1.1
+PASS Well-timed ground strokes that would reach the rope unfielded: spin/pace     0.94   target 0.75-1.1
+PASS Spin v pace, 60 ms ground strokes: edge % ratio                        1.03   target 0.7-1.3
+PASS Spin edges that are caught, 60 ms ground strokes, %                  27.54%   target 15-40%
+PASS Spin flight: screen ms per physical ms (pace is 2.6)                    2.6   target 2.45-2.75
+PASS Fours with a named chasing fielder (event.chaser or event.id), %       100%   target 90-100%
+PASS Fours where the batters are offered a run at 0.45 s, %               98.62%   target 85-100%
+PASS Fours still scoring at least four, %                                   100%   target 100-100%
+
+43 passed, 0 failed of 43 balance checks.
 ```
-
-`audit-calibration.cjs` and `audit-matches.cjs` are supplementary diagnostics, not replacements for the acceptance harness. Earlier revision 23 findings remain in `validation-v23/REPORT.md`.
