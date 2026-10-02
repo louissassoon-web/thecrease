@@ -2,6 +2,7 @@
 // Loads the pure engine from dist/index.html and measures gameplay balance against
 // target ranges. Targets are game-design choices; adjust them deliberately, not to pass.
 // 29 September 2026: sections 5 (spin versus pace parity) and 6 (boundary balls) added for revision 25.
+// 1 October 2026: section 7 (edge risk must follow timing, not a flat tax) and section 8 (AI pace yorker share) added for revision 26.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const html=fs.readFileSync(path.join(__dirname,'dist/index.html'),'utf8');
 vm.runInThisContext(html.match(/<script id="cricket-core">([\s\S]*?)<\/script>/)[1]);
@@ -114,5 +115,22 @@ const all=Object.values(parity),sum=k=>all.reduce((a,t)=>a+(t[k]||0),0);
 check('Fours with a named chasing fielder (event.chaser or event.id), %',100*sum('chased')/Math.max(1,sum('boundaries')),90,100,'%');
 check('Fours where the batters are offered a run at 0.45 s, %',100*sum('runnable')/Math.max(1,sum('slowFours')),85,100,'%');
 check('Fours still scoring at least four, %',100*sum('scoredFour')/Math.max(1,sum('boundaries')),100,100,'%');
+
+// ---- 7. Edge risk must come from the error, not from a flat tax on good strokes ----
+// A perfectly timed ground stroke against pace should hardly ever edge; a stroke 120 ms off should.
+(function(){const teams=C.Squad.teams('T20');let n=0,edge0=0,edge120=0,out0=0;
+ for(let i=0;i<900&&n<400;i++){let c=C.Contest.create(i*13+1,'T20',teams[i%8],teams[(i*3+1)%8],teams[i%8].id);if(!C.Contest.ownTurn(c))continue;const m=C.Contest.current(c),d=C.Innings.delivery(m),ball=d.ball;if(C.Strokes.spin(ball)||!['full','good'].includes(ball.lengthName))continue;const prepared={...m,rngState:d.rngState},batter=prepared.batters[prepared.striker],field=C.Innings.field(prepared,ball),x=C.Delivery.at(ball,1).x*C.Hand.sign(ball),angle=(x>.35?65:x>.1?44:x<-.15?-44:0)*C.Hand.sign(ball);n++;
+  const a=C.Shot.resolve(ball,{angle,mode:'ground',error:0,effort:.75},batter,field,d.rngState);if(a.edge)edge0++;if(a.wicket)out0++;
+  const b=C.Shot.resolve(ball,{angle,mode:'ground',error:120,effort:.75},batter,field,d.rngState+3);if(b.edge)edge120++;}
+ check('Perfectly timed ground stroke on full/good pace: edge %',100*edge0/Math.max(1,n),0,3,'%');
+ check('Perfectly timed ground stroke on full/good pace: dismissed %',100*out0/Math.max(1,n),0,1.5,'%');
+ check('Ground stroke 120 ms off on full/good pace: edge %',100*edge120/Math.max(1,n),8,25,'%');})();
+
+// ---- 8. AI bowling plan: pace yorkers are a weapon, not the stock ball ----
+(function(){const teams=C.Squad.teams('T20');let pace=0,yorkers=0;
+ for(let k=0;k<24;k++){const batting=teams[k%8],bowling=teams[(k+3)%8];let c=C.Contest.create(3000+k*89,'T20',batting,bowling,batting.id);for(let j=1;!C.Contest.ownTurn(c)&&j<50;j++)c=C.Contest.create(3000+k*89+j*17,'T20',batting,bowling,batting.id);
+  let n=0;while(c.phase==='play'&&C.Contest.ownTurn(c)&&n<120){const m=C.Contest.current(c),d=C.Innings.delivery(m),ball=d.ball,prepared={...m,rngState:d.rngState};if(!C.Strokes.spin(ball)){pace++;if(ball.lengthName==='yorker')yorkers++;}
+   const res=C.Shot.resolve(ball,{angle:0,mode:'defend',error:0,effort:0,callRuns:true},prepared.batters[prepared.striker],C.Innings.field(prepared,ball),d.rngState);c=C.Contest.apply(C.Contest.withPrepared(c,d.rngState),ball,res);n++;}}
+ check('AI pace deliveries in T20 that are yorkers, %',100*yorkers/Math.max(1,pace),6,18,'%');})();
 
 console.log(results.join('\n'));console.log('\n'+pass+' passed, '+fail+' failed of '+(pass+fail)+' balance checks.');

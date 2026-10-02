@@ -41,8 +41,8 @@ if(process.argv.includes('--frames'))console.log(JSON.stringify(frames,null,2));
 
 let spin=0,pace=0;for(const format of ['T20','TEST'])for(let seed=1;seed<=40;seed++){
  const m=C.Innings.create(seed*127,C.Squad.team(format,'eng'),C.Squad.team(format,'ind'),format,0);m.balls=(seed%18)*6;
- const before=JSON.stringify(m),d=C.Innings.delivery(m),b=d.ball;assert.equal(b.scoringVersion,25);assert.equal(JSON.stringify(m),before);assert.deepEqual(C.Innings.delivery(copy(m)),d);
+ const before=JSON.stringify(m),d=C.Innings.delivery(m),b=d.ball;assert.equal(b.scoringVersion,26);assert.equal(JSON.stringify(m),before);assert.deepEqual(C.Innings.delivery(copy(m)),d);
  assert.ok(Math.abs(b.duration/(b.preTime+b.postTime)-2600)<1e-9);assert.ok(Math.abs(b.duration*b.bounceT-b.preTime*2600)<1e-8);assert.ok(Math.abs(C.BallView.scale(b)-2600)<1e-8);
- for(const mode of ['ground','loft','defend'])assert.equal(C.Contact.window(b,m.batters[0],{mode,angle:44}),C.Contact.window({...b,scoringVersion:24},m.batters[0],{mode,angle:44}));
+ for(const mode of ['ground','loft','defend']){const input={mode,angle:44},old=C.Contact.window({...b,scoringVersion:24},m.batters[0],input),v25=C.Contact.window({...b,scoringVersion:25},m.batters[0],input),current=C.Contact.window(b,m.batters[0],input);assert.equal(v25,old);if(format==='T20'&&mode==='ground'&&['full','good'].includes(b.lengthName)){assert.ok(current<=old&&current>=200);const controlled=C.Contact.window({...b,bowlerProfile:{...b.bowlerProfile,control:95}},m.batters[0],input),loose=C.Contact.window({...b,bowlerProfile:{...b.bowlerProfile,control:45}},m.batters[0],input);assert.ok(controlled<=loose);}else assert.equal(current,old);}
  if(C.Strokes.spin(b))spin++;else pace++;
-}assert.ok(spin>10&&pace>10);console.log('PASS New pace and spin share 2600 ms per physical second before and after pitching; preparation is pure and contact windows stay unchanged');
+}assert.ok(spin>10&&pace>10);console.log('PASS New pace and spin share 2600 ms per physical second before and after pitching; preparation is pure; only V26 T20 full/good ground coverage responds to bowler control');

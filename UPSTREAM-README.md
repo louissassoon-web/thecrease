@@ -1,6 +1,6 @@
 # Cricket game - coder review pack
 
-This is the complete playable source for Louis's browser cricket game, updated on 29 September 2026. Revision 25 addresses spin parity and visible boundary chasing/running. See BALANCE_REPORT.md for the unedited acceptance harness output before and after.
+This is the complete playable source for Louis's browser cricket game, updated on 1 October 2026. Revision 26 removes flat edge surcharges, reduces pace yorkers and adds opt-in timing calibration. It passes 45/47 balance checks with two explicitly disputed bounds, and all 52 review groups. See BALANCE_REPORT.md for the unedited acceptance harness output before and after.
 
 ## Run it
 
@@ -25,7 +25,7 @@ node check-balance.cjs
 node review-check.cjs
 ```
 
-The balance harness runs 43 checks. The portable review runs 48 groups: eight player-profile groups, seven automatic-over/input/replay groups, six spin/drive groups, seven world/presentation/progression groups, seven fielding/contact/shop regression groups nine model, compatibility and safety groups, and four boundary/clock groups. No installation or Git history is needed. The UI checks use a DOM/canvas facade; they do not render CSS or replace testing on an Android phone.
+The balance harness runs 47 checks. The portable review runs 52 groups: eight player-profile groups, seven automatic-over/input/replay groups, six spin/drive groups, seven world/presentation/progression groups, seven fielding/contact/shop regression groups, nine model, compatibility and safety groups, four boundary/clock groups, and four human timing-offset groups. No installation or Git history is needed. The UI checks use a DOM/canvas facade; they do not render CSS or replace testing on an Android phone.
 
 ## Files
 
@@ -41,18 +41,25 @@ The balance harness runs 43 checks. The portable review runs 48 groups: eight pl
 | `check-spin-drives.cjs` | Spin contact, drive footwork, scoring variety, actual pointer handlers and version 19 compatibility |
 | `check-over-flow.cjs` | Continuous overs, gesture input and fast-forward regressions |
 | `check-display-input.cjs` | Shared DOM/canvas harness; its direct legacy tests require the original repository |
-| `review-fixtures/core-v18.js`, `core-v19.js`, `core-v20.js`, `core-v22.js`, `core-v23.js`, `core-v24.js` | Previous pure engines used to prove existing saved shots keep their outcomes |
-| `check-model-v23.cjs` | Angular movement, saved V22/V23/V24 replay, save safety, frame recovery, deferred writes, power/catches and AI |
+| `review-fixtures/core-v18.js`, `core-v19.js`, `core-v20.js`, `core-v22.js`, `core-v23.js`, `core-v24.js`, `core-v25.js` | Previous pure engines used to prove existing saved shots keep their outcomes |
+| `check-model-v23.cjs` | Angular movement, saved V22/V23/V24/V25 replay, save safety, frame recovery, deferred writes, power/catches and AI |
 | `audit-balance.cjs`, `audit-policy.cjs`, `audit-holdout.cjs` | Earlier reproducible diagnostics retained for comparison |
-| `check-balance.cjs` | Unedited user-supplied revision 25 acceptance contract |
+| `check-balance.cjs` | Unedited user-supplied revision 26 acceptance contract |
 | `audit-calibration.cjs`, `audit-matches.cjs` | Independent fixed delivery curves and 40-match samples in each format |
-| `BALANCE_REPORT.md`, `validation-v25/` | Findings, full before/after outputs, spin/pace measurements and chase frames |
+| `BALANCE_REPORT.md`, `validation-v26/` | Findings, full before/after outputs, spin/pace and edge measurements, yorker phases and calibration results |
+| `check-timing-offset.cjs` | Actual touch release, learning offer, Apply/Not now, settings limits, old saves and AI isolation |
+| `audit-revision26.cjs`, `audit-strategies-v26.cjs` | Independent timing curves, phase counts and fixed batting-policy populations |
+| `validation-v25/` | Previous revision report, measurements and chase frames |
 | `audit-spin.cjs`, `check-boundaries.cjs` | Spin/pace diagnostics and boundary/clock regressions |
 | `validation-v24/` | Previous revision report and measurements |
 | `validation-v23/` | Previous revision report and measurements |
 | `review-check.cjs` | Portable review test entrypoint |
 | `PROJECT_NOTES.md` | Project history and known limitations; some historical test commands refer to the full repository |
 | `RELEASE.json` | Source revision and SHA-256 of the playable HTML |
+
+## Timing calibration
+
+Pause and open Settings for Timing offset, -10/+10 ms and Reset. Negative values compensate for early release; positive values compensate for late release. No offset is applied automatically. A median-based suggestion can appear in the existing feedback area after 20 legal balls or at innings end, once per innings. Apply accepts it; Not now keeps the current value. Both the raw human release error and corrected error are retained in history. Export/import includes the preference and last 40 raw swings. The AI does not use either.
 
 ## Where to start in the code
 
@@ -71,7 +78,19 @@ The first large block is embedded font data. Search for these markers instead of
 
 Several modules are wrapped by later version-specific implementations. Read the last assignment as well as the original definition. This preserves older saves, but the accumulated wrappers are a worthwhile review target. Avoid deleting old paths without a migration plan.
 
-## Revision 25 - spin parity and live boundaries
+## Revision 26 - timing-led edges, bowling lengths and input calibration
+
+New ground-stroke edge risk no longer includes revision 25's flat pace or spin surcharge. The central 30 ms carries no added timing risk; exposure grows with release error and stroke commitment, with a spin reaction-time discount. Movement, unsuitable shots and excess reach still matter. Defence and loft retain their existing contact rules.
+
+T20 pace yorker bases are 5%, 8% and 28% in the powerplay, middle and death, with the existing named yorker skill weighting. Controlled pace bowling puts more full-length attempts on a good length and uses a tighter body/stump line. Bowler control also narrows T20 full/good attacking ground precision within the existing bounds. This contains scoring through bowling quality without taxing a perfectly timed stroke. Test bowling plans, spin lengths, launch physics and AI stroke selection are unchanged.
+
+Timing offset is an optional saved human-input preference, default 0 and limited to ±200 ms. Touch release preserves rawError and subtracts the offset from error; feedback and the existing bat-contact clock use that corrected error. The last 40 raw human swings supply a median check every 20 legal balls and at innings end. Apply or Not now appears once per innings, between deliveries. Applying rounds to 10 ms. Settings has -10/+10 and Reset. AI input is untouched. Older saves gain a zero offset; their own historical uncorrected swings seed the learning buffer without rewriting history or prepared shots.
+
+New balls use scoring version 26. Prepared revision 22–25 outcomes and AI inputs remain exact; schema 5, profiles 19, the swipe grammar, uniform 2600 ms clock, boundary chasing/running and safety fixes stay intact. No dependency or runtime asset was added. All 52 portable review groups pass, including four new calibration groups. The former all-windows-equal fixture now checks the intentional bowler-control effect on new T20 ground attacks while retaining exact older windows and the uniform clock.
+
+The supplied harness is byte-for-byte unchanged: before 44/47, after 45/47. All four new checks pass. Two targets remain disputed and failing: the mixed-policy projected ceiling of 190 (207, while its 10.35 runs/over is allowed) and the pure-slog minimum survival of 5 balls/wicket (4.78). These are not claimed as passes. Wider samples also show AI T20 scoring above the desired band and unreliable Test draws. See BALANCE_REPORT.md and validation-v26/ for full outputs, measurements and limitations. No browser CSS or Android latency result is claimed.
+
+## Revision 25 - spin parity and live boundaries (historical)
 
 Boundary fours and sixes name the quickest chaser to the crossing point. The fielder runs from the real field position, reaches down at the rope after the ball, then turns and walks. The two support fielders retain their small moves. Both boundary types allow running and cancellation while the ball travels; the umpire signal ends the legs at the crossing time. There is no boundary run-out or invented throw. Scoring uses the boundary allowance or completed runs, whichever is greater. Pickups keep their real return and run-out risk.
 
@@ -119,7 +138,7 @@ Short-ball off-side diagonals from 28 to 112 degrees select a square cut. Short 
 
 The shop is available before the first prepared ball and after a complete match. It stays closed at over breaks and Test innings breaks, with the access check repeated at purchase/equip time. Existing coins, ownership, rewards and saves are preserved.
 
-The current source and scoring revision is 24, with version 19 player profiles. Versions 18, 19, 20, 22 and 23 have frozen regression engines to verify old prepared shots remain identical.
+The current source and scoring revision is 26, with version 19 player profiles. Versions 18, 19, 20, 22, 23, 24 and 25 have frozen regression engines to verify old prepared shots remain identical.
 
 ## Animation-library assessment
 

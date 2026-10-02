@@ -1,0 +1,69 @@
+{
+  "curve": [
+    {
+      "error": 0,
+      "n": 1000,
+      "edgePct": 1.6,
+      "dismissedPct": 0.6,
+      "meanEdgeRiskPct": 1.372261484835175,
+      "runsPerOver": 10.05
+    },
+    {
+      "error": 30,
+      "n": 1000,
+      "edgePct": 2.1,
+      "dismissedPct": 0.6,
+      "meanEdgeRiskPct": 2.3769245478136614,
+      "runsPerOver": 11.19
+    },
+    {
+      "error": 60,
+      "n": 1000,
+      "edgePct": 6.1,
+      "dismissedPct": 1.4,
+      "meanEdgeRiskPct": 6.1512713355329405,
+      "runsPerOver": 7.752
+    },
+    {
+      "error": 90,
+      "n": 1000,
+      "edgePct": 14.1,
+      "dismissedPct": 3.2,
+      "meanEdgeRiskPct": 13.272160025468315,
+      "runsPerOver": 3.396
+    },
+    {
+      "error": 120,
+      "n": 1000,
+      "edgePct": 22.8,
+      "dismissedPct": 5.5,
+      "meanEdgeRiskPct": 24.10519155330665,
+      "runsPerOver": 2.382
+    },
+    {
+      "error": 150,
+      "n": 1000,
+      "edgePct": 38.1,
+      "dismissedPct": 9.8,
+      "meanEdgeRiskPct": 38.93030365390653,
+      "runsPerOver": 2.436
+    }
+  ],
+  "phases": {
+    "powerplay": {
+      "pace": 735,
+      "yorkers": 39,
+      "yorkerPct": 5.3061224489795915
+    },
+    "middle": {
+      "pace": 279,
+      "yorkers": 28,
+      "yorkerPct": 10.03584229390681
+    },
+    "death": {
+      "pace": 601,
+      "yorkers": 140,
+      "yorkerPct": 23.29450915141431
+    }
+  }
+}

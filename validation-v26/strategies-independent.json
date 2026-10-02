@@ -1,0 +1,37 @@
+{
+  "inningsPerPolicy": 96,
+  "rows": {
+    "ground": {
+      "rr": 6.83085250338295,
+      "ballsPerWicket": 43.470588235294116,
+      "sixPct": 0,
+      "fourPct": 15.190972222222221,
+      "wickets": 255,
+      "projected": 137
+    },
+    "poor": {
+      "rr": 5.115617926663648,
+      "ballsPerWicket": 21.488326848249027,
+      "sixPct": 0,
+      "fourPct": 8.052989367265122,
+      "wickets": 514,
+      "projected": 102
+    },
+    "mix": {
+      "rr": 9.909107435011816,
+      "ballsPerWicket": 19.96733212341198,
+      "sixPct": 2.337594116617055,
+      "fourPct": 25.337068814568376,
+      "wickets": 551,
+      "projected": 198
+    },
+    "slog": {
+      "rr": 18,
+      "ballsPerWicket": 4.901041666666667,
+      "sixPct": 22.796227962279623,
+      "fourPct": 31.40631406314063,
+      "wickets": 960,
+      "projected": 147
+    }
+  }
+}

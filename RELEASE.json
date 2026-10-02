@@ -1,14 +1,21 @@
 {
-  "sourceRevision": 25,
-  "scoringVersion": 25,
+  "sourceRevision": 26,
+  "scoringVersion": 26,
   "saveSchema": 5,
-  "playerProfilesVersion": 19,
-  "date": "2026-09-29",
-  "sourceCommit": "339cfe1e808712613414b72cd44dfdb3a5af9536",
-  "htmlSha256": "f668b4d496a06038cfaea7a652242e07304264015e37559e77068fb3d44c8cdb",
-  "liveUrl": "https://cricket-three-over.workspace-710372.chatgpt.site",
-  "entrypoint": "dist/index.html",
-  "acceptanceHarnessSha256": "c9afb7f29f7c53a6d2b4c70897e8fb8e116a1d163d22d2ab621672299702b848",
-  "balanceChecks": "43/43",
-  "portableReviewGroups": "48/48"
+  "playerProfileVersion": 19,
+  "date": "2026-10-01",
+  "commit": "cc8fab8c4308e137162b2707871ea495c6f788bc",
+  "htmlSha256": "24c002ad322288115d72da18b72b49c476b65824affed54cdaca52a5ad418f04",
+  "harnessSha256": "1af76b0a6f77fb8d0534ba1975f49abb3500c6f87f6b1ddc624bd3e173b970c0",
+  "url": "https://cricket-three-over.workspace-710372.chatgpt.site",
+  "balance": {
+    "passed": 45,
+    "total": 47,
+    "disputedFailures": [
+      "Pure-slog survival 4.78 balls/wicket, below 5",
+      "Mixed projected total 207, above 190"
+    ]
+  },
+  "reviewGroupsPassed": 52,
+  "report": "BALANCE_REPORT.md"
 }
