@@ -1,0 +1,5 @@
+PASS Twenty human touch swings offer calibration; Apply centres raw -110 ms timing and aligns the bat without advancing RNG
+PASS Not now persists; paused settings clamp to ±200 ms and reset without changing the prepared match
+PASS Revision 25 saves with no offset keep their prepared ball and history; malformed calibration data is rejected
+PASS Human calibration leaves simulated AI shots, history and match RNG identical
+4 timing-offset review groups passed.

@@ -1,0 +1,9 @@
+PASS Field swipes aim in screen order without starting the arm, preparing a ball or consuming RNG
+PASS Release copy is fixed at the widget; drawing and UI refreshes cannot alternate batting and bowling prompts
+PASS The bowler selector appears only before an over starts, including first-ball wides and no-balls
+PASS Every available variation has a directional ball symbol; air, turn, dip and slower-ball cues are distinct
+PASS New spin releases use spin length names with unchanged physical lengths and uniform flight clocks
+PASS Tapping a ring selects that moving outfielder, with no bottom choices, RNG draw or position jump
+PASS Difficult catches carry greater drop risk; drops retain continuous live retrieval and the same seeded roll
+PASS Prepared R31 manual releases, ordinary balls, catches and saves retain exact rules and RNG
+8 revision 32 bowling and fielding groups passed.

@@ -1,0 +1,141 @@
+{
+  "0": {
+    "rr": 7.961165048543689,
+    "ballsPerWicket": 61.8,
+    "sixPct": 0,
+    "fourPct": 21.979166666666668,
+    "wickets": 45,
+    "groups": {
+      "pace/ground": {
+        "balls": 1364,
+        "runs": 2048,
+        "wickets": 27,
+        "fours": 367,
+        "sixes": 0
+      },
+      "spin/ground": {
+        "balls": 1247,
+        "runs": 1635,
+        "wickets": 17,
+        "fours": 266,
+        "sixes": 0
+      },
+      "spin/defend": {
+        "balls": 20,
+        "runs": 1,
+        "wickets": 0,
+        "fours": 0,
+        "sixes": 0
+      },
+      "pace/defend": {
+        "balls": 249,
+        "runs": 6,
+        "wickets": 1,
+        "fours": 0,
+        "sixes": 0
+      }
+    }
+  },
+  "1": {
+    "rr": 17.973867595818817,
+    "ballsPerWicket": 4.783333333333333,
+    "sixPct": 23.73310810810811,
+    "fourPct": 30.405405405405407,
+    "wickets": 240,
+    "groups": {
+      "pace/loft": {
+        "balls": 542,
+        "runs": 1975,
+        "wickets": 117,
+        "fours": 180,
+        "sixes": 190
+      },
+      "pace/ground": {
+        "balls": 132,
+        "runs": 254,
+        "wickets": 4,
+        "fours": 57,
+        "sixes": 0
+      },
+      "spin/loft": {
+        "balls": 405,
+        "runs": 1110,
+        "wickets": 118,
+        "fours": 109,
+        "sixes": 91
+      },
+      "pace/defend": {
+        "balls": 45,
+        "runs": 2,
+        "wickets": 0,
+        "fours": 0,
+        "sixes": 0
+      },
+      "spin/ground": {
+        "balls": 56,
+        "runs": 98,
+        "wickets": 1,
+        "fours": 14,
+        "sixes": 0
+      },
+      "spin/defend": {
+        "balls": 4,
+        "runs": 0,
+        "wickets": 0,
+        "fours": 0,
+        "sixes": 0
+      }
+    }
+  },
+  "0.25": {
+    "rr": 9.908731584620913,
+    "ballsPerWicket": 28.690721649484537,
+    "sixPct": 2.2222222222222223,
+    "fourPct": 26.42361111111111,
+    "wickets": 97,
+    "groups": {
+      "pace/ground": {
+        "balls": 1089,
+        "runs": 1669,
+        "wickets": 14,
+        "fours": 286,
+        "sixes": 0
+      },
+      "pace/loft": {
+        "balls": 265,
+        "runs": 926,
+        "wickets": 29,
+        "fours": 167,
+        "sixes": 35
+      },
+      "spin/loft": {
+        "balls": 264,
+        "runs": 738,
+        "wickets": 45,
+        "fours": 121,
+        "sixes": 29
+      },
+      "spin/ground": {
+        "balls": 979,
+        "runs": 1257,
+        "wickets": 7,
+        "fours": 187,
+        "sixes": 0
+      },
+      "spin/defend": {
+        "balls": 23,
+        "runs": 0,
+        "wickets": 1,
+        "fours": 0,
+        "sixes": 0
+      },
+      "pace/defend": {
+        "balls": 260,
+        "runs": 6,
+        "wickets": 1,
+        "fours": 0,
+        "sixes": 0
+      }
+    }
+  }
+}

@@ -1,0 +1,9 @@
+PASS Human bowling releases from either touch surface; every frame is finite and the ball commits once
+PASS Release length is continuous; player skill, arm, variation and legal field restrictions remain distinct
+PASS Pausing or cancelling the arm preserves the prepared noise; settings and a resumed release survive a save
+PASS Simulate over stops after six legal balls; choosing a bowler respects quota and successive-over rules
+PASS Toss call and bat/bowl choice are saved, seeded and available only before a new match
+PASS Outfield calls include aerial boundaries; close catches are automatic, and selection keeps positions continuous
+PASS Drops deflect at the hands, remain live and can be retrieved; trails and six carry do not advance RNG
+PASS Older prepared R29 deliveries retain byte-identical outcomes and resume into the new controls
+8 revision 30 bowling and fielding groups passed.

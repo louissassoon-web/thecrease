@@ -3,6 +3,11 @@
 // target ranges. Targets are game-design choices; adjust them deliberately, not to pass.
 // 29 September 2026: sections 5 (spin versus pace parity) and 6 (boundary balls) added for revision 25.
 // 1 October 2026: section 7 (edge risk must follow timing, not a flat tax) and section 8 (AI pace yorker share) added for revision 26.
+// 2 October 2026, for revision 27: mixed-policy run-rate band narrowed to 7-9.5 so it agrees with the 190 projected ceiling
+// (with survival above 12 balls per wicket the projection is 20 x run rate, so a 10.5 band was never reachable); all-loft
+// survival floor lowered from 5 to 4 (a committed loft every ball should not be made safer to pass a check); a 60 ms edge check
+// added to section 7 so the risk curve must rise gradually rather than step; AI samples raised from 40 to 120 T20 matches
+// and from 14 to 40 Tests, because 169 on 40 seeds was 180 on the next 120 and 1 draw in 14 Tests was 0 in the next 40.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const html=fs.readFileSync(path.join(__dirname,'dist/index.html'),'utf8');
 vm.runInThisContext(html.match(/<script id="cricket-core">([\s\S]*?)<\/script>/)[1]);
@@ -31,11 +36,11 @@ check('T20 ground strokes, 60 ms timing sd: balls per wicket',groundGood.ballsPe
 const groundPoor=human('T20',{sigma:130,effort:.75,loftRate:0});
 check('T20 ground strokes, 130 ms timing sd: balls per wicket',groundPoor.ballsPerWicket,12,40);
 const mix=human('T20',{sigma:60,effort:.85,loftRate:.25});
-check('T20 25% loft mix, 60 ms sd: runs per over',mix.rr,7,10.5);
+check('T20 25% loft mix, 60 ms sd: runs per over',mix.rr,7,9.5);
 check('T20 25% loft mix, 60 ms sd: balls per wicket',mix.ballsPerWicket,20,60);
 const slog=human('T20',{sigma:60,effort:1,loftRate:1});
 check('T20 loft every ball, 60 ms sd: six % of balls',slog.sixPct,10,35);
-check('T20 loft every ball, 60 ms sd: balls per wicket',slog.ballsPerWicket,5,16);
+check('T20 loft every ball, 60 ms sd: balls per wicket',slog.ballsPerWicket,4,16);
 const projected=r=>Math.round(r.rr/6*Math.min(120,10*r.ballsPerWicket));
 check('Projected 20-over total, 25% loft mix at 60 ms sd',projected(mix),120,190);
 check('Projected 20-over total, all-loft at 60 ms sd (must trail the mix)',projected(slog),60,Math.max(60,projected(mix)-1));
@@ -60,14 +65,14 @@ function ai(format,n){const teams=C.Squad.teams(format),first=[],wk=[],dis={},re
   while(c.phase!=='complete'&&g++<9000){if(c.phase==='interval')c=C.Contest.advance(c);else if(c.phase==='followOn')c=C.Contest.chooseFollowOn(c,true);else{const r=C.Opposition.ball(c);c=r.contest;balls++;wides+=C.Rules.extras(r.result).wides>0?1:0;if(r.result.batRuns===6)sixes++;if(r.result.wicket)dis[r.result.dismissalKind]=(dis[r.result.dismissalKind]||0)+1;}}
   res[c.result.kind]++;const i1=c.innings[0];first.push(i1.runs);wk.push(i1.wickets);inn1++;if(i1.endReason==='declared')declared++;const last=c.innings.at(-1);if(c.result.kind==='win'&&c.result.winner===last.side)lastBatWins++;}
  const w=Object.values(dis).reduce((x,y)=>x+y,0);return{n:inn1,mean:mean(first),sd:sd(first),wickets:mean(wk),widePct:100*wides/balls,sixesPerInnings:sixes/(2*inn1),lbwPct:100*(dis.lbw||0)/Math.max(1,w),bowledPct:100*(dis.bowled||0)/Math.max(1,w),declaredPct:100*declared/inn1,lastBatWinPct:100*lastBatWins/inn1,drawPct:100*res.draw/inn1};}
-const t20=ai('T20',40);
+const t20=ai('T20',120);
 check('AI T20 first-innings mean',t20.mean,150,180);
 check('AI T20 first-innings standard deviation',t20.sd,20,45);
 check('AI T20 first-innings wickets',t20.wickets,5,8.5);
 check('AI T20 sixes per innings',t20.sixesPerInnings,4,9);
 check('AI T20 wides, % of balls',t20.widePct,1.5,4.5,'%');
 check('AI T20 lbw, % of dismissals',t20.lbwPct,4,20,'%');
-const test=ai('TEST',14);
+const test=ai('TEST',40);
 check('AI Test first-innings mean',test.mean,280,400);
 check('AI Test first-innings standard deviation',test.sd,55,140);
 check('AI Test first innings declared, %',test.declaredPct,0,30,'%');
@@ -118,12 +123,14 @@ check('Fours still scoring at least four, %',100*sum('scoredFour')/Math.max(1,su
 
 // ---- 7. Edge risk must come from the error, not from a flat tax on good strokes ----
 // A perfectly timed ground stroke against pace should hardly ever edge; a stroke 120 ms off should.
-(function(){const teams=C.Squad.teams('T20');let n=0,edge0=0,edge120=0,out0=0;
+(function(){const teams=C.Squad.teams('T20');let n=0,edge0=0,edge60=0,edge120=0,out0=0;
  for(let i=0;i<900&&n<400;i++){let c=C.Contest.create(i*13+1,'T20',teams[i%8],teams[(i*3+1)%8],teams[i%8].id);if(!C.Contest.ownTurn(c))continue;const m=C.Contest.current(c),d=C.Innings.delivery(m),ball=d.ball;if(C.Strokes.spin(ball)||!['full','good'].includes(ball.lengthName))continue;const prepared={...m,rngState:d.rngState},batter=prepared.batters[prepared.striker],field=C.Innings.field(prepared,ball),x=C.Delivery.at(ball,1).x*C.Hand.sign(ball),angle=(x>.35?65:x>.1?44:x<-.15?-44:0)*C.Hand.sign(ball);n++;
   const a=C.Shot.resolve(ball,{angle,mode:'ground',error:0,effort:.75},batter,field,d.rngState);if(a.edge)edge0++;if(a.wicket)out0++;
-  const b=C.Shot.resolve(ball,{angle,mode:'ground',error:120,effort:.75},batter,field,d.rngState+3);if(b.edge)edge120++;}
+  const b=C.Shot.resolve(ball,{angle,mode:'ground',error:120,effort:.75},batter,field,d.rngState+3);if(b.edge)edge120++;
+  const g=C.Shot.resolve(ball,{angle,mode:'ground',error:60,effort:.75},batter,field,d.rngState+5);if(g.edge)edge60++;}
  check('Perfectly timed ground stroke on full/good pace: edge %',100*edge0/Math.max(1,n),0,3,'%');
  check('Perfectly timed ground stroke on full/good pace: dismissed %',100*out0/Math.max(1,n),0,1.5,'%');
+ check('Ground stroke 60 ms off on full/good pace: edge % (the curve must rise gradually)',100*edge60/Math.max(1,n),4,10,'%');
  check('Ground stroke 120 ms off on full/good pace: edge %',100*edge120/Math.max(1,n),8,25,'%');})();
 
 // ---- 8. AI bowling plan: pace yorkers are a weapon, not the stock ball ----

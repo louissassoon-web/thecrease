@@ -1,0 +1,8 @@
+PASS Gallery swipes, buttons and keyboard select mirrored lines and visible swing cards without bowling or drawing RNG
+PASS Cancelled and paused gallery gestures cannot launch or change a prepared ball; hold and flick work on both surfaces
+  200 seeded deliveries: full toss 2.575, yorker 0.625, overpitched 1.965 runs per ball.
+PASS Yorker aim has hittable misses on both sides, while full tosses never pitch or acquire bounce movement
+PASS Swing selections bend in opposite directions for either batting hand and player repertoires retain distinct controls
+PASS Behind-arm cameras mirror, keep the target in view and leave frame drawing deterministic
+PASS Prepared R30 manual releases retain exact paths, shots and RNG; R31 full tosses validate and resume safely
+6 revision 31 bowling groups passed.

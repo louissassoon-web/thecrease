@@ -1,0 +1,144 @@
+{
+  "curve": [
+    {
+      "error": 0,
+      "n": 1000,
+      "edgePct": 1.6,
+      "dismissedPct": 0.5,
+      "meanEdgeRiskPct": 1.3982981051170436,
+      "bowled": 0,
+      "lbw": 0,
+      "runsPerOver": 9.438
+    },
+    {
+      "error": 30,
+      "n": 1000,
+      "edgePct": 1.6,
+      "dismissedPct": 0.5,
+      "meanEdgeRiskPct": 1.3982981051170436,
+      "bowled": 0,
+      "lbw": 0,
+      "runsPerOver": 10.338
+    },
+    {
+      "error": 60,
+      "n": 1000,
+      "edgePct": 10.1,
+      "dismissedPct": 2.4,
+      "meanEdgeRiskPct": 9.564233461933703,
+      "bowled": 0,
+      "lbw": 0,
+      "runsPerOver": 5.34
+    },
+    {
+      "error": 90,
+      "n": 1000,
+      "edgePct": 15.3,
+      "dismissedPct": 3.4,
+      "meanEdgeRiskPct": 14.896173967517477,
+      "bowled": 0,
+      "lbw": 0,
+      "runsPerOver": 2.652
+    },
+    {
+      "error": 120,
+      "n": 1000,
+      "edgePct": 18.5,
+      "dismissedPct": 4.1,
+      "meanEdgeRiskPct": 18.377720585288507,
+      "bowled": 0,
+      "lbw": 0,
+      "runsPerOver": 1.92
+    },
+    {
+      "error": 160,
+      "n": 1000,
+      "edgePct": 20.4,
+      "dismissedPct": 4.6,
+      "meanEdgeRiskPct": 21.217610780712207,
+      "bowled": 0,
+      "lbw": 0,
+      "runsPerOver": 1.734
+    }
+  ],
+  "geometry": {
+    "all": {
+      "n": 1000,
+      "hit": 93,
+      "x": 126.99435234874332,
+      "height": 915.9456647243716,
+      "lateral": 580,
+      "over": 487,
+      "hitPct": 9.3,
+      "lateralPct": 58,
+      "overPct": 48.7,
+      "meanX": 0.12699435234874332,
+      "meanH": 0.9159456647243716
+    },
+    "full": {
+      "n": 152,
+      "hit": 93,
+      "x": 14.758663477936675,
+      "height": 64.14010234670171,
+      "lateral": 93,
+      "over": 0,
+      "hitPct": 61.18421052631579,
+      "lateralPct": 61.18421052631579,
+      "overPct": 0,
+      "meanX": 0.09709647024958339,
+      "meanH": 0.4219743575440902
+    },
+    "good": {
+      "n": 848,
+      "hit": 0,
+      "x": 112.23568887080663,
+      "height": 851.8055623776697,
+      "lateral": 487,
+      "over": 487,
+      "hitPct": 0,
+      "lateralPct": 57.429245283018865,
+      "overPct": 57.429245283018865,
+      "meanX": 0.13235340668727197,
+      "meanH": 1.0044876914831011
+    },
+    "seam": {
+      "n": 673,
+      "hit": 61,
+      "x": 91.21206313448829,
+      "height": 617.6369810299866,
+      "lateral": 383,
+      "over": 322,
+      "hitPct": 9.063893016344725,
+      "lateralPct": 56.90936106983655,
+      "overPct": 47.84546805349183,
+      "meanX": 0.1355305544346037,
+      "meanH": 0.9177369703268746
+    },
+    "swing": {
+      "n": 80,
+      "hit": 4,
+      "x": 7.428783797873422,
+      "height": 76.02681993547246,
+      "lateral": 45,
+      "over": 41,
+      "hitPct": 5,
+      "lateralPct": 56.25,
+      "overPct": 51.25,
+      "meanX": 0.09285979747341777,
+      "meanH": 0.9503352491934057
+    },
+    "leftpace": {
+      "n": 247,
+      "hit": 28,
+      "x": 28.35350541638152,
+      "height": 222.2818637589132,
+      "lateral": 152,
+      "over": 124,
+      "hitPct": 11.336032388663968,
+      "lateralPct": 61.53846153846154,
+      "overPct": 50.202429149797574,
+      "meanX": 0.11479151990437862,
+      "meanH": 0.8999265739227256
+    }
+  }
+}

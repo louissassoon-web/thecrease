@@ -1,0 +1,9 @@
+PASS Returning from another app retains full batting layout and restores native full screen from Continue
+PASS Corrected timing and event-specific commentary remain present through full-screen contact and outcome
+PASS Run-up keeps the body clear of the umpire and still reaches either arm’s release point
+PASS Every named profile has appearance data; batting, bowling and fielding use the stable player identity
+PASS The replay keeps a skyline, ball and return in view across straight, square and behind-square strokes
+PASS Paused Test declarations are offered before the run-up and after dead balls, never mid-delivery
+PASS Result animation credits once, counts up the persisted reward, skips, and stays dismissed after reload
+PASS Champion presentation shows the correct team, honours reduced motion and cannot award coins again
+8 revision 28 presentation checks passed.

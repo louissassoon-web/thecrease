@@ -1,0 +1,1298 @@
+{
+  "population": "independent",
+  "n": 40,
+  "draws": 9,
+  "meanDays": 4.178333333333333,
+  "survival": {
+    "balls": 6324,
+    "runs": 2697,
+    "wickets": 63,
+    "defended": 4713,
+    "runsPerOver": 2.5588235294117645,
+    "ballsPerWicket": 100.38095238095238
+  },
+  "firstTwo": {
+    "balls": 48050,
+    "runs": 28881,
+    "wickets": 768,
+    "runsPerOver": 3.60636836628512,
+    "ballsPerWicket": 62.565104166666664
+  },
+  "topSeven": {
+    "balls": 39144,
+    "runs": 24875,
+    "wickets": 546,
+    "runsPerOver": 3.812844880441447,
+    "ballsPerWicket": 71.6923076923077
+  },
+  "games": [
+    {
+      "seed": 2945112732,
+      "days": 3.4611111111111112,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 583,
+          "balls": 860,
+          "wickets": 4,
+          "end": "declared"
+        },
+        {
+          "runs": 262,
+          "balls": 420,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 325,
+          "balls": 490,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 5,
+          "balls": 3,
+          "wickets": 0,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 1427958666,
+      "days": 4.457407407407407,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 327,
+          "balls": 562,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 259,
+          "balls": 417,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 390,
+          "balls": 698,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 459,
+          "balls": 612,
+          "wickets": 4,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 2430128481,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 495,
+          "balls": 780,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 352,
+          "balls": 544,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 533,
+          "balls": 851,
+          "wickets": 9,
+          "end": "declared"
+        },
+        {
+          "runs": 165,
+          "balls": 400,
+          "wickets": 4,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 3510711305,
+      "days": 4.124074074074074,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 229,
+          "balls": 424,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 493,
+          "balls": 786,
+          "wickets": 7,
+          "end": "declared"
+        },
+        {
+          "runs": 402,
+          "balls": 673,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 142,
+          "balls": 233,
+          "wickets": 2,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 72529921,
+      "days": 4.257407407407407,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 170,
+          "balls": 418,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 322,
+          "balls": 534,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 389,
+          "balls": 856,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 239,
+          "balls": 379,
+          "wickets": 3,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 1746798841,
+      "days": 4.416666666666667,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 463,
+          "balls": 746,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 363,
+          "balls": 537,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 244,
+          "balls": 471,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 345,
+          "balls": 526,
+          "wickets": 8,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 2667001298,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 450,
+          "balls": 719,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 379,
+          "balls": 687,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 479,
+          "balls": 624,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 233,
+          "balls": 549,
+          "wickets": 4,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 1453314717,
+      "days": 4.935185185185185,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 411,
+          "balls": 656,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 526,
+          "balls": 980,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 331,
+          "balls": 556,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 217,
+          "balls": 355,
+          "wickets": 4,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 4228142892,
+      "days": 4.048148148148148,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 402,
+          "balls": 606,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 223,
+          "balls": 340,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 259,
+          "balls": 436,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 439,
+          "balls": 698,
+          "wickets": 8,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 1380804432,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 420,
+          "balls": 631,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 239,
+          "balls": 448,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 362,
+          "balls": 625,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 386,
+          "balls": 881,
+          "wickets": 8,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 2321011521,
+      "days": 3.2666666666666666,
+      "result": "win",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 585,
+          "balls": 730,
+          "wickets": 6,
+          "end": "declared"
+        },
+        {
+          "runs": 216,
+          "balls": 337,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 343,
+          "balls": 623,
+          "wickets": 10,
+          "end": "all out"
+        }
+      ]
+    },
+    {
+      "seed": 1453761129,
+      "days": 3.0055555555555555,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 203,
+          "balls": 398,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 375,
+          "balls": 538,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 273,
+          "balls": 474,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 102,
+          "balls": 122,
+          "wickets": 2,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 713608568,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 503,
+          "balls": 811,
+          "wickets": 9,
+          "end": "declared"
+        },
+        {
+          "runs": 315,
+          "balls": 679,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 338,
+          "balls": 609,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 151,
+          "balls": 493,
+          "wickets": 8,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 1315910201,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 460,
+          "balls": 695,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 637,
+          "balls": 942,
+          "wickets": 6,
+          "end": "declared"
+        },
+        {
+          "runs": 398,
+          "balls": 765,
+          "wickets": 9,
+          "end": "declared"
+        },
+        {
+          "runs": 103,
+          "balls": 178,
+          "wickets": 3,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 357814200,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 288,
+          "balls": 430,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 269,
+          "balls": 458,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 609,
+          "balls": 823,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 375,
+          "balls": 871,
+          "wickets": 6,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 1271323572,
+      "days": 3.3944444444444444,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 470,
+          "balls": 820,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 164,
+          "balls": 333,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 315,
+          "balls": 575,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 13,
+          "balls": 12,
+          "wickets": 0,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 2895518354,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 326,
+          "balls": 503,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 173,
+          "balls": 267,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 616,
+          "balls": 977,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 339,
+          "balls": 840,
+          "wickets": 6,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 1590520318,
+      "days": 3.7796296296296297,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 172,
+          "balls": 297,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 422,
+          "balls": 656,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 477,
+          "balls": 658,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 229,
+          "balls": 341,
+          "wickets": 5,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 3975269358,
+      "days": 4.279629629629629,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 339,
+          "balls": 634,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 419,
+          "balls": 674,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 301,
+          "balls": 538,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 225,
+          "balls": 362,
+          "wickets": 7,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 3993676113,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 444,
+          "balls": 766,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 514,
+          "balls": 836,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 389,
+          "balls": 603,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 158,
+          "balls": 347,
+          "wickets": 3,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 3450915734,
+      "days": 3.348148148148148,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 301,
+          "balls": 508,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 234,
+          "balls": 512,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 152,
+          "balls": 262,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 220,
+          "balls": 437,
+          "wickets": 7,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 2348715468,
+      "days": 3.938888888888889,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 505,
+          "balls": 748,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 223,
+          "balls": 364,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 428,
+          "balls": 661,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 147,
+          "balls": 256,
+          "wickets": 1,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 3404970376,
+      "days": 3.4833333333333334,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 298,
+          "balls": 566,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 264,
+          "balls": 451,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 263,
+          "balls": 421,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 301,
+          "balls": 338,
+          "wickets": 5,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 3824493808,
+      "days": 3.9962962962962965,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 556,
+          "balls": 814,
+          "wickets": 7,
+          "end": "declared"
+        },
+        {
+          "runs": 311,
+          "balls": 588,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 302,
+          "balls": 556,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 58,
+          "balls": 95,
+          "wickets": 3,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 3662941098,
+      "days": 4.092592592592593,
+      "result": "win",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 375,
+          "balls": 557,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 352,
+          "balls": 604,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 319,
+          "balls": 530,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 248,
+          "balls": 416,
+          "wickets": 10,
+          "end": "all out"
+        }
+      ]
+    },
+    {
+      "seed": 3770085579,
+      "days": 5,
+      "result": "draw",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 475,
+          "balls": 814,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 583,
+          "balls": 967,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 300,
+          "balls": 501,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 175,
+          "balls": 299,
+          "wickets": 2,
+          "end": null
+        }
+      ]
+    },
+    {
+      "seed": 3701992949,
+      "days": 3.511111111111111,
+      "result": "win",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 367,
+          "balls": 724,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 285,
+          "balls": 451,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 135,
+          "balls": 222,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 204,
+          "balls": 402,
+          "wickets": 10,
+          "end": "all out"
+        }
+      ]
+    },
+    {
+      "seed": 1990192215,
+      "days": 4.520370370370371,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 571,
+          "balls": 769,
+          "wickets": 7,
+          "end": "declared"
+        },
+        {
+          "runs": 389,
+          "balls": 613,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 237,
+          "balls": 343,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 420,
+          "balls": 600,
+          "wickets": 3,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 4077379817,
+      "days": 4.32037037037037,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 444,
+          "balls": 857,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 225,
+          "balls": 502,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 369,
+          "balls": 668,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 154,
+          "balls": 210,
+          "wickets": 3,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 3306629507,
+      "days": 3.8851851851851853,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 557,
+          "balls": 926,
+          "wickets": 7,
+          "end": "declared"
+        },
+        {
+          "runs": 334,
+          "balls": 548,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 268,
+          "balls": 444,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 46,
+          "balls": 81,
+          "wickets": 0,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 1450792780,
+      "days": 4.196296296296296,
+      "result": "win",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 350,
+          "balls": 587,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 381,
+          "balls": 570,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 419,
+          "balls": 713,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 119,
+          "balls": 292,
+          "wickets": 10,
+          "end": "all out"
+        }
+      ]
+    },
+    {
+      "seed": 2263614260,
+      "days": 2.748148148148148,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 130,
+          "balls": 292,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 192,
+          "balls": 376,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 255,
+          "balls": 480,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 194,
+          "balls": 257,
+          "wickets": 3,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 928746089,
+      "days": 4.583333333333333,
+      "result": "win",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 425,
+          "balls": 616,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 294,
+          "balls": 474,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 341,
+          "balls": 561,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 471,
+          "balls": 710,
+          "wickets": 10,
+          "end": "all out"
+        }
+      ]
+    },
+    {
+      "seed": 2055593644,
+      "days": 4.637037037037037,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 382,
+          "balls": 669,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 411,
+          "balls": 731,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 317,
+          "balls": 499,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 289,
+          "balls": 485,
+          "wickets": 9,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 2052332816,
+      "days": 3.2092592592592593,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 263,
+          "balls": 568,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 410,
+          "balls": 619,
+          "wickets": 7,
+          "end": "declared"
+        },
+        {
+          "runs": 205,
+          "balls": 354,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 59,
+          "balls": 99,
+          "wickets": 4,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 1444952190,
+      "days": 3.112962962962963,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 181,
+          "balls": 251,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 348,
+          "balls": 564,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 342,
+          "balls": 522,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 176,
+          "balls": 256,
+          "wickets": 8,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 4232850587,
+      "days": 4.781481481481482,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 299,
+          "balls": 651,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 441,
+          "balls": 810,
+          "wickets": 8,
+          "end": "declared"
+        },
+        {
+          "runs": 306,
+          "balls": 712,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 165,
+          "balls": 303,
+          "wickets": 2,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 3670850017,
+      "days": 4.803703703703704,
+      "result": "win",
+      "lastBatWin": true,
+      "innings": [
+        {
+          "runs": 432,
+          "balls": 676,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 512,
+          "balls": 884,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 318,
+          "balls": 506,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 239,
+          "balls": 422,
+          "wickets": 4,
+          "end": "target"
+        }
+      ]
+    },
+    {
+      "seed": 2683236577,
+      "days": 4.683333333333334,
+      "result": "win",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 314,
+          "balls": 470,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 153,
+          "balls": 299,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 485,
+          "balls": 731,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 376,
+          "balls": 921,
+          "wickets": 10,
+          "end": "all out"
+        }
+      ]
+    },
+    {
+      "seed": 1532045089,
+      "days": 2.8555555555555556,
+      "result": "win",
+      "lastBatWin": false,
+      "innings": [
+        {
+          "runs": 431,
+          "balls": 736,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 221,
+          "balls": 425,
+          "wickets": 10,
+          "end": "all out"
+        },
+        {
+          "runs": 167,
+          "balls": 305,
+          "wickets": 10,
+          "end": "all out"
+        }
+      ]
+    }
+  ]
+}

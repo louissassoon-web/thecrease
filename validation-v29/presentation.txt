@@ -1,0 +1,7 @@
+PASS Run-up releases remain aiming; a held swipe can cross release; a stale gesture cannot hit a different ball
+PASS Late frame callbacks do not rewind the clock; impact carries spare frame time without a settling pause
+PASS Pad and full cameras mirror both hands with equivalent views of the approaching ball
+PASS Sweeps and late drives meet the drawn ball at the blade for both hands, with attached gloves and fixed arm lengths
+PASS The actual post-match shop buys and returns to fixtures, survives reload and stays closed once the next delivery is prepared
+PASS Stationary fielders reuse drawing work; contact presentation resumes identically without altering match randomness
+6 revision 29 batting presentation groups passed.

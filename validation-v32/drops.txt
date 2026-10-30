@@ -1,0 +1,2 @@
+R31: 12 drops / 1250 chances = 0.96%; model expected 0.97%.
+R32: 35 drops / 1250 chances = 2.80%; model expected 3.91%.

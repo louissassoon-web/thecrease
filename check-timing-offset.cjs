@@ -32,7 +32,7 @@ await check('Twenty human touch swings offer calibration; Apply centres raw -110
  const corrected=[];for(const raw of [-120,-110,-100,-120,-110,-100,-120,-110,-100])corrected.push((await swing(h,raw)).error);
  assert.equal(corrected.reduce((a,b)=>a+b,0),0);assert.ok(corrected.every(e=>Math.abs(e)<=10));
  const s=await ready(h),surface=h.n('fieldCanvas');s.elapsed=s.pending.duration-110;h.u.pointerDown(pointer(surface,160,350));h.u.pointerUp(pointer(surface,160,326));assert.equal(s.shot.error,0);assert.equal(h.n('quality').textContent,'0 ms · on time');
- s.elapsed=s.pending.duration+C.BatterRig.settle(s.shot.error);assert.equal(C.BallView.strokeAge(s.pending,s.shot,s.elapsed),0);
+ s.elapsed=s.pending.duration;assert.equal(C.BallView.strokeAge(s.pending,s.shot,s.elapsed),0); // R29 removes the artificial 35 ms impact delay.
  const strokeAge=C.BallView.strokeAge,seen=[];C.BallView.strokeAge=(b,shot,...args)=>{seen.push(copy(shot));return strokeAge(b,shot,...args);};try{h.u.drawField(0);}finally{C.BallView.strokeAge=strokeAge;}assert.equal(seen.at(-1).error,0);assert.equal(seen.at(-1).rawError,-110);
  while(h.u.get().phase==='flight'||h.u.get().phase==='inPlay')h.step();
  await h.n('settingsBtn').click();await h.n('timingResetBtn').click();await h.n('settingsResumeBtn').click();
@@ -60,10 +60,10 @@ await check('Revision 25 saves with no offset keep their prepared ball and histo
  const h=host('TEST',old);assert.equal(h.u.get().pending.scoringVersion,25);assert.deepEqual(copy(h.u.get().pending),old.sessions.TEST.pending);
  for(const patch of [{timingOffset:201},{timingOffset:'-110'},{timingErrors:Array(41).fill(0)},{timingErrors:[null]}])assert.throws(()=>C.CareerSave.validate({...copy(old),...patch}));
 });
-await check('Human calibration leaves watched AI shots, history and match RNG identical',async()=>{
+await check('Human calibration leaves simulated AI shots, history and match RNG identical',async()=>{
  let league,contest;for(let seed=1;seed<100;seed++){league=C.Season.create(seed,'T20','eng');contest=C.Season.begin(league);if(!C.Contest.ownTurn(contest))break;}
  const state={league,contest,match:C.Contest.current(contest),recorded:false,...C.Restart.view()},base=C.CareerSave.pack({active:'T20',sessions:{T20:state}}),out=[];
- for(const offset of [0,-110]){const h=host('T20',{...copy(base),timingOffset:offset});await h.n('resumeBtn').click();await h.n('bowlBtn').click();for(let i=0;i<1500&&!h.u.get().match.history.length;i++)h.step();assert.ok(h.u.get().match.history.length);assert.equal(h.u.get().match.history[0].rawError,undefined);assert.equal(packed(h).timingErrors.length,0);out.push(copy(h.u.get().contest));}
+ for(const offset of [0,-110]){const h=host('T20',{...copy(base),timingOffset:offset});await h.n('resumeBtn').click();await h.n('watchOverBtn').click();assert.ok(h.u.get().match.history.length);assert.equal(h.u.get().match.history[0].rawError,undefined);assert.equal(packed(h).timingErrors.length,0);out.push(copy(h.u.get().contest));}
  assert.deepEqual(out[0],out[1]);
 });
 console.log(checks+' timing-offset review groups passed.');

@@ -1,6 +1,6 @@
 # Cricket game - coder review pack
 
-This is the complete playable source for Louis's browser cricket game, updated on 1 October 2026. Revision 26 removes flat edge surcharges, reduces pace yorkers and adds opt-in timing calibration. It passes 45/47 balance checks with two explicitly disputed bounds, and all 52 review groups. See BALANCE_REPORT.md for the unedited acceptance harness output before and after.
+This is the complete playable source for Louis's browser cricket game, updated on 12 October 2026. Revision 32 clears bowling text from the pitch, adds screen swipes for target lines, direct on-field catcher taps, over-break bowler selection, movement icons and spin-specific length labels. Catching now has a larger difficulty-based handling allowance, and manually selected spinners use their own classification. Older prepared balls keep their rules. Ball purchases remain out of scope. It passes 48 balance checks and 90 portable review groups. See validation-v32/REPORT.md for current results; earlier reports are retained as history.
 
 ## Run it
 
@@ -25,12 +25,19 @@ node check-balance.cjs
 node review-check.cjs
 ```
 
-The balance harness runs 47 checks. The portable review runs 52 groups: eight player-profile groups, seven automatic-over/input/replay groups, six spin/drive groups, seven world/presentation/progression groups, seven fielding/contact/shop regression groups, nine model, compatibility and safety groups, four boundary/clock groups, and four human timing-offset groups. No installation or Git history is needed. The UI checks use a DOM/canvas facade; they do not render CSS or replace testing on an Android phone.
+The balance harness runs 48 checks. The portable review runs 90 groups (including eight R32 controls/catching groups, six R31 bowling-control groups, eight R30 bowling/fielding groups, two R27 model groups, eight R28 presentation groups and six R29 batting presentation groups): eight player-profile groups, seven automatic-over/input/replay groups, six spin/drive groups, seven world/presentation/progression groups, seven fielding/contact/shop regression groups, nine model, compatibility and safety groups, four boundary/clock groups, and four human timing-offset groups. No installation or Git history is needed. The UI checks use a DOM/canvas facade; they do not render CSS or replace testing on an Android phone.
 
 ## Files
 
 | File | Purpose |
 | --- | --- |
+| `check-bowling-v32.cjs`, `measure-fielding-v32.cjs`, `validation-v32/` | Screen aiming, on-field taps, spin labels/icons, drops, exact R31 compatibility |
+| `check-bowling-v31.cjs`, `validation-v31/` | Bowling gallery, release misses, camera, swing and prepared-R30 compatibility |
+| `check-bowling-v30.cjs`, `validation-v30/` | Bowling, simulation, toss, selection, drops, save and compatibility checks |
+| `check-batting-presentation-v29.cjs`, `validation-v29/` | Actual touch, clock, shop, mirrored-camera, contact and redraw regressions, with render measurements |
+| `MONETISATION_NOTES.md` | Proposed native packaging, billing and ads; no payments or ads are live |
+| `check-presentation-v28.cjs`, `validation-v28/` | New UI/presentation regressions, full review output and rendered canvas evidence |
+| `check-model-v27.cjs` | Gradual edge exposure and preserved ground/perfect-loft physics |
 | `dist/index.html` | Complete application; the authoritative source |
 | `PLAYER_PROFILES.md` | Rating methodology, sources, effects, compatibility and limitations |
 | `player-profiles.json` | Readable reference export of ratings for every roster place |
@@ -41,12 +48,12 @@ The balance harness runs 47 checks. The portable review runs 52 groups: eight pl
 | `check-spin-drives.cjs` | Spin contact, drive footwork, scoring variety, actual pointer handlers and version 19 compatibility |
 | `check-over-flow.cjs` | Continuous overs, gesture input and fast-forward regressions |
 | `check-display-input.cjs` | Shared DOM/canvas harness; its direct legacy tests require the original repository |
-| `review-fixtures/core-v18.js`, `core-v19.js`, `core-v20.js`, `core-v22.js`, `core-v23.js`, `core-v24.js`, `core-v25.js` | Previous pure engines used to prove existing saved shots keep their outcomes |
-| `check-model-v23.cjs` | Angular movement, saved V22/V23/V24/V25 replay, save safety, frame recovery, deferred writes, power/catches and AI |
+| `review-fixtures/core-v18.js`, `core-v19.js`, `core-v20.js`, `core-v22.js`, `core-v23.js`, `core-v24.js`, `core-v25.js`, `core-v26.js` | Previous pure engines used to prove existing saved shots keep their outcomes |
+| `check-model-v23.cjs` | Angular movement, saved V22/V23/V24/V25/V26 replay, save safety, frame recovery, deferred writes, power/catches and AI |
 | `audit-balance.cjs`, `audit-policy.cjs`, `audit-holdout.cjs` | Earlier reproducible diagnostics retained for comparison |
-| `check-balance.cjs` | Unedited user-supplied revision 26 acceptance contract |
+| `check-balance.cjs` | Unedited user-supplied revision 27 acceptance contract |
 | `audit-calibration.cjs`, `audit-matches.cjs` | Independent fixed delivery curves and 40-match samples in each format |
-| `BALANCE_REPORT.md`, `validation-v26/` | Findings, full before/after outputs, spin/pace and edge measurements, yorker phases and calibration results |
+| `BALANCE_REPORT.md`, `validation-v27/` | R27 model changes, unedited before/after outputs, edge curves, Test draws and geometry explanation |
 | `check-timing-offset.cjs` | Actual touch release, learning offer, Apply/Not now, settings limits, old saves and AI isolation |
 | `audit-revision26.cjs`, `audit-strategies-v26.cjs` | Independent timing curves, phase counts and fixed batting-policy populations |
 | `validation-v25/` | Previous revision report, measurements and chase frames |
