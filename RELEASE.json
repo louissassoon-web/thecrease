@@ -6,7 +6,7 @@
   "date": "2026-10-30",
   "commit": "a50e0c26dff23bac2dbea2e2a59791e157fb998c",
   "design": "https://claude.ai/code/artifact/45ee297f-2076-43fb-b295-b50f74f8ca90",
-  "htmlSha256": "8dd3247300206349d613bcb04a8c88b49c91bf33af3a55e68cd7d72cca48ca83",
+  "htmlSha256": "2efe4e9e98bc404e5dc23da3debf224f5515c198d533808f95cb56646d6a5ec3",
   "harnessSha256": "8e09003ca2128e0684c87cf7f034178631aac2bd88c3c4f439aa3c4973c59747",
   "url": "https://cricket-three-over.workspace-710372.chatgpt.site",
   "balance": {
@@ -16,5 +16,7 @@
   },
   "reviewGroupsPassed": 90,
   "report": "BALANCE_REPORT.md",
-  "notes": "APP_STORE_READINESS.md"
+  "notes": "APP_STORE_READINESS.md",
+  "previousHtmlSha256": "8dd3247300206349d613bcb04a8c88b49c91bf33af3a55e68cd7d72cca48ca83",
+  "localChanges": "Renderer seam in src/ui.js for the three.js renderer (stage 1, bundled build only); the plain page is no longer byte-identical to the revision 33 pack"
 }

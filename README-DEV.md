@@ -15,19 +15,17 @@ This repository turns the single-file game into editable sources without changin
 ## Building
 
 - `npm run build`: plain build, `src/ui.js` inlined verbatim. Byte-identical to the source pack when nothing has changed.
-- `npm run build:bundle`: bundles `src/ui/index.js` with esbuild (ES modules and npm imports allowed, e.g. `three`), inlined as the same `<script id="cricket-ui">` block. Add `--minify` for a smaller file. Use this once the renderer work begins. Note: the review suite's UI facade groups fail on a bundled build because they patch the UI source by text; run `npm run check:bundle` for the engine harness and rely on Playwright for the UI until the facade is adapted.
+- `npm run build:bundle`: bundles `src/ui/index.js` with esbuild (ES modules and npm imports allowed, e.g. `three`), minified and inlined as the same `<script id="cricket-ui">` block. The bundle carries three.js, which is 1.23 MB unminified on its own, so the minified build is the one measured against the 1.2 MB page budget; `node tools/build.mjs --bundle` without `--minify` gives a readable bundle for debugging. Note: the review suite's UI facade groups fail on a bundled build because they patch the UI source by text; run `npm run check:bundle` for the engine harness and rely on Playwright for the UI until the facade is adapted.
 
-## Adding three.js
+## The three.js renderer
 
-```sh
-npm install three
-```
+`three` is pinned in `package.json` and imported only from `src/ui/three/`, so the plain build never carries it. `src/ui/three/register.js` publishes `window.CricketRenderer` before `src/ui.js` runs; `src/ui.js` creates the renderer when the page is opened with `?renderer=three` or the `cricket.renderer` storage key is `three` (the URL wins, and `?renderer=canvas` forces the canvas renderer for that load). Nothing in Settings switches it yet. With the flag off, or in the plain build, the seam in `src/ui.js` is inert and the canvas renderer draws exactly as before.
 
-Then import it from modules under `src/ui/` and build with `npm run build:bundle`. Keep the canvas renderer selectable behind a flag until the new one passes the same checks; delete it afterwards.
+When the three.js renderer is active, `drawField` hands it the camera it fitted, the stumps, the ball and every posed player, and clears the 2D canvas instead of painting the backdrop; the 2D canvas stays on top as a transparent overlay for the aim line, gesture trail, bowling guide, catch targets and labels, and pointer input still lands on it. `src/ui/three/renderer.js` draws the scene: it reproduces `View.project` (focal length .98 h, principal point at .52 w, .43 h, scene x mirrored) so both renderers put a point on the same pixel. Keep the canvas renderer selectable until the new one passes the same checks; delete it afterwards.
 
 ## Seeing the game while working
 
-`npm run serve`, then open `http://localhost:8000`, or capture reference frames with `npm run frames` (after `npx playwright install chromium` once, or with `CHROMIUM_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"` to use the installed Chrome without a download). `tools/frames.mjs` writes the batting view at release, mid-flight and arrival, plus a field-replay frame, into `frames/`. Those frames are the evidence for any renderer or animation change: both renderers must agree on ball and player positions.
+`npm run serve`, then open `http://localhost:8000`, or capture reference frames with `npm run frames` (after `npx playwright install chromium` once, or with `CHROMIUM_PATH="/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"` to use the installed Chrome without a download). `tools/frames.mjs` runs the page on Playwright's fake clock, stepped one 16 ms frame at a time: it starts a T20 season on a Pixel 7 profile, calls the toss and bats first (replaying the fixture from the toss with the winning call when the opposition win and bat), starts the over, lets the brief release the ball, and writes `batting-ready`, `flight-0ms`, `flight-400ms`, `flight-1200ms` (engine time after release, `TIMES=` changes them) and `field-replay` into `frames/`, prefixed by renderer. It prints the season seed; `SEED=<that number>` repeats the same fixture, toss and delivery, and `RENDERERS=canvas,three` captures both renderers on identical frames and writes `compare-*.png` side by side. Those frames are the evidence for any renderer or animation change: both renderers must agree on ball and player positions.
 
 On any http(s) origin, `npm run serve` included, the page registers `dist/sw.js`, which caches `index.html` and serves the cached copy first. When comparing builds on the same origin, use a fresh browser context or unregister the worker; `tools/frames.mjs` opens a new context each run, so it is unaffected.
 
