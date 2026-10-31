@@ -1,2 +1,2 @@
-CHECK OK: build reproduces the recorded HTML (8dd324730020)
-built dist/index.html 666556 chars, sha256 8dd3247300206349d613bcb04a8c88b49c91bf33af3a55e68cd7d72cca48ca83
+CHECK OK: build reproduces the recorded HTML (0842033f1078)
+built dist/index.html 666540 chars, sha256 0842033f1078ae14f33f04c3556792be5163151cb898b6d0d1abb37ad701df82

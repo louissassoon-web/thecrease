@@ -38,7 +38,7 @@
    const sw=typeof navigator!=='undefined'?navigator.serviceWorker:null,protocol=typeof location!=='undefined'?location.protocol:'';
    if(!sw||!/^https?:$/.test(protocol)){onStatus(protocol==='file:'?'Opened as a file. Progress stays in this browser; export a copy to keep it.':'');return;}
    let top=true;try{top=window.top===window;}catch{}if(!top){onStatus('');return;}
-   const ready=()=>onStatus(standalone()?'Installed. Plays offline; progress is kept on this device.':'Ready to play offline. Add it to your home screen for an app-style window.');
+   const ready=()=>onStatus(standalone()?'Installed. Plays offline; progress is kept on this device.':'Ready to play offline. Install it for an app-style window.');
    sw.addEventListener('message',e=>{if(e.data?.type==='update')onUpdate(()=>{location.reload();});});
    sw.register('./sw.js').then(reg=>{registration=reg;const worker=reg.active||reg.waiting||reg.installing;if(reg.active){ready();check();}else worker?.addEventListener('statechange',()=>{if(worker.state==='activated')ready();});}).catch(()=>onStatus(''));
   }
