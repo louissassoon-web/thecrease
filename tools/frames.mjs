@@ -31,6 +31,7 @@ const toss = [];
 for (let attempt = 0; attempt < 4 && !batting; attempt++) {
   await page.waitForSelector('#tossDialog[open]', { timeout: 20000 });
   await page.click(call === 'tails' ? '#tailsBtn' : '#headsBtn');
+  await page.waitForFunction(() => !document.getElementById('tossContinueBtn').hidden, null, { timeout: 5000 });
   const face = await page.evaluate(() => document.getElementById('tossCoin').textContent === 'T' ? 'tails' : 'heads');
   const won = !await hidden('tossDecision');
   if (won) await page.click('#tossBatBtn');

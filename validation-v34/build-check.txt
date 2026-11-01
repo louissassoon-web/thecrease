@@ -1,0 +1,2 @@
+CHECK OK: build reproduces the recorded HTML (504af4624ef4)
+built dist/index.html 681376 chars, sha256 504af4624ef461719cb13324b647e95274baf2eaac9f20cb95a7c74bc46c77f7

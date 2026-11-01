@@ -2,7 +2,7 @@
 // the cache; on launch and on return to the foreground the page asks this worker to compare the cached
 // index.html with the network copy, and the game offers "Update ready" when it has changed. Only the game's
 // own URL (the scope root or index.html) is served from the cache; other pages on the origin are not touched.
-const VERSION='r33',CACHE='crease-'+VERSION,SHELL=['./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-512-maskable.png','./icon-180.png'],INDEX=new URL('./index.html',self.location.href).pathname,ROOT=INDEX.slice(0,-'index.html'.length);
+const VERSION='r34',CACHE='crease-'+VERSION,SHELL=['./index.html','./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-512-maskable.png','./icon-180.png'],INDEX=new URL('./index.html',self.location.href).pathname,ROOT=INDEX.slice(0,-'index.html'.length);
 self.addEventListener('install',e=>{e.waitUntil(caches.open(CACHE).then(c=>c.addAll(SHELL.map(u=>new Request(u,{cache:'reload'})))).then(()=>self.skipWaiting()));});
 self.addEventListener('activate',e=>{e.waitUntil(caches.keys().then(keys=>{const old=keys.filter(k=>k.startsWith('crease-')&&k!==CACHE);return Promise.all(old.map(k=>caches.delete(k))).then(()=>self.clients.claim()).then(()=>{if(old.length)notify();});}));});
 function notify(){return self.clients.matchAll({includeUncontrolled:true}).then(cs=>cs.forEach(c=>c.postMessage({type:'update'})));}

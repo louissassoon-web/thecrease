@@ -1,12 +1,11 @@
 {
-  "sourceRevision": 33,
-  "scoringVersion": 27,
+  "sourceRevision": 34,
+  "scoringVersion": 34,
   "saveSchema": 5,
   "playerProfileVersion": 19,
-  "date": "2026-10-31",
-  "commit": "a50e0c26dff23bac2dbea2e2a59791e157fb998c",
+  "date": "2026-11-01",
   "design": "https://claude.ai/code/artifact/45ee297f-2076-43fb-b295-b50f74f8ca90",
-  "htmlSha256": "4c5f1946a6000e92d86d29a1d45d0db20fa33d74646220fefccf3a4119970fac",
+  "htmlSha256": "504af4624ef461719cb13324b647e95274baf2eaac9f20cb95a7c74bc46c77f7",
   "harnessSha256": "8e09003ca2128e0684c87cf7f034178631aac2bd88c3c4f439aa3c4973c59747",
   "url": "https://cricket-three-over.workspace-710372.chatgpt.site",
   "balance": {
@@ -14,9 +13,10 @@
     "total": 48,
     "disputedFailures": []
   },
-  "reviewGroupsPassed": 90,
-  "report": "BALANCE_REPORT.md",
+  "reviewGroupsPassed": 100,
+  "report": "validation-v34/REPORT.md",
   "notes": "APP_STORE_READINESS.md",
-  "previousHtmlSha256": "0842033f1078ae14f33f04c3556792be5163151cb898b6d0d1abb37ad701df82",
-  "localChanges": "Renderer seam in src/ui.js for the three.js renderer (stage 1, bundled build only); the plain page is no longer byte-identical to the revision 33 pack"
+  "previousHtmlSha256": "4c5f1946a6000e92d86d29a1d45d0db20fa33d74646220fefccf3a4119970fac",
+  "localChanges": "Gameplay audit fixes on a review branch. Plain single-file build; no new dependencies. Not deployed.",
+  "baseCommit": "d9e69acf1bc30aa59990690fd9abf4eb08de56cf"
 }

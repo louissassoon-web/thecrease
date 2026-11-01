@@ -137,3 +137,7 @@ summary{min-height:44px;padding:10px 0;line-height:24px;cursor:pointer}
 @media(min-height:541px){#game[data-bowling-ready='true'] .play-dock{height:330px}html[data-view='full'] #game[data-bowling-ready='true'] .play-dock{height:256px}}
 .settings-row>label{flex:1 1 auto;min-width:0}.settings-row select{width:auto;min-width:150px;margin:0;flex:none;min-height:44px;padding:8px 10px;font:14px var(--font-ui)}
 #updateBtn[hidden],#installBtn[hidden],#offlineStatus:empty{display:none}
+
+/* R34: visible adjacent deliveries on the bowling camera screen. */
+.variation-options{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr) minmax(0,1fr);align-items:center;text-align:center}.variation-neighbour{display:flex;flex-direction:column;align-items:center;background:transparent;border:0;color:var(--muted);padding:4px;font:12px/1.2 var(--font-ui);min-height:60px}.variation-neighbour canvas{width:32px;height:32px}#galleryDeliveryCard{display:flex!important;flex-direction:column;align-items:center;gap:2px;padding:4px 2px}#galleryDeliveryCard b{font-size:12px;line-height:16px}#galleryDeliveryDetail{display:none}#galleryDeliveryCard canvas{width:32px;height:32px;flex:0 0 32px}.gallery-variation{grid-template-columns:minmax(0,1fr)}#game .gallery-variation>.gallery-arrow{display:none}#returnPanel p{margin:4px 0 0;color:var(--muted);font:11px var(--font-ui)}
+@media(min-height:541px){#game[data-bowling-ready='true'] .play-dock{height:346px}html[data-view='full'] #game[data-bowling-ready='true'] .play-dock{height:272px}}

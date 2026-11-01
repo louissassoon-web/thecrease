@@ -1,0 +1,318 @@
+{
+  "manual": {
+    "spin-full": {
+      "n": 400,
+      "runs": 888,
+      "wickets": 23,
+      "contact": 386,
+      "edges": 15,
+      "boundaries": 141,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 1,
+      "h": 126.44392558814785,
+      "legal": 396
+    },
+    "spin-good": {
+      "n": 400,
+      "runs": 706,
+      "wickets": 13,
+      "contact": 383,
+      "edges": 18,
+      "boundaries": 101,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 1,
+      "h": 277.0034008608752,
+      "legal": 396
+    },
+    "spin-short": {
+      "n": 400,
+      "runs": 891,
+      "wickets": 11,
+      "contact": 386,
+      "edges": 16,
+      "boundaries": 144,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 3,
+      "h": 497.5805307395345,
+      "legal": 396
+    },
+    "spin-drag": {
+      "n": 400,
+      "runs": 257,
+      "wickets": 9,
+      "contact": 108,
+      "edges": 0,
+      "boundaries": 33,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 284,
+      "h": 693.6424950018884,
+      "legal": 366
+    },
+    "pace-full": {
+      "n": 400,
+      "runs": 847,
+      "wickets": 28,
+      "contact": 383,
+      "edges": 27,
+      "boundaries": 136,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 3,
+      "h": 140.298078400835,
+      "legal": 395
+    },
+    "pace-good": {
+      "n": 400,
+      "runs": 650,
+      "wickets": 15,
+      "contact": 384,
+      "edges": 32,
+      "boundaries": 106,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 3,
+      "h": 315.5546908601695,
+      "legal": 395
+    },
+    "pace-short": {
+      "n": 400,
+      "runs": 784,
+      "wickets": 16,
+      "contact": 379,
+      "edges": 18,
+      "boundaries": 116,
+      "byes4": 2,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 3,
+      "h": 574.8880418270422,
+      "legal": 395
+    },
+    "pace-drag": {
+      "n": 400,
+      "runs": 756,
+      "wickets": 21,
+      "contact": 351,
+      "edges": 19,
+      "boundaries": 105,
+      "byes4": 0,
+      "wides4": 5,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 31,
+      "h": 802.8946194493992,
+      "legal": 366
+    }
+  },
+  "left": {
+    "pace": {
+      "n": 2813,
+      "runs": 169,
+      "wickets": 337,
+      "contact": 0,
+      "edges": 0,
+      "boundaries": 13,
+      "byes4": 8,
+      "wides4": 5,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 2813,
+      "h": 2552.88883700529,
+      "legal": 2702
+    },
+    "spin": {
+      "n": 2187,
+      "runs": 82,
+      "wickets": 530,
+      "contact": 0,
+      "edges": 0,
+      "boundaries": 0,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 2187,
+      "h": 1414.0955305625469,
+      "legal": 2105
+    }
+  },
+  "edges": {
+    "pace": {
+      "n": 615,
+      "runs": 918,
+      "wickets": 142,
+      "contact": 615,
+      "edges": 615,
+      "boundaries": 3,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 3,
+      "runOut": 0,
+      "leaves": 0,
+      "h": 592.2728333013787,
+      "legal": 611
+    },
+    "spin": {
+      "n": 301,
+      "runs": 219,
+      "wickets": 73,
+      "contact": 301,
+      "edges": 301,
+      "boundaries": 0,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 0,
+      "h": 185.66333858356026,
+      "legal": 295
+    }
+  },
+  "hoikWrongSide": {
+    "0": {
+      "n": 238,
+      "runs": 761,
+      "wickets": 74,
+      "contact": 238,
+      "edges": 23,
+      "boundaries": 131,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 0,
+      "h": 159.15765620237917,
+      "legal": 235
+    },
+    "60": {
+      "n": 238,
+      "runs": 445,
+      "wickets": 109,
+      "contact": 238,
+      "edges": 26,
+      "boundaries": 84,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 0,
+      "h": 159.15765620237917,
+      "legal": 235
+    },
+    "120": {
+      "n": 238,
+      "runs": 253,
+      "wickets": 114,
+      "contact": 238,
+      "edges": 32,
+      "boundaries": 44,
+      "byes4": 0,
+      "wides4": 0,
+      "edge4": 0,
+      "runOut": 0,
+      "leaves": 0,
+      "h": 159.15765620237917,
+      "legal": 235
+    }
+  },
+  "inside": {
+    "n": 245,
+    "crossingStumps": 15,
+    "sample": [
+      {
+        "seed": 260,
+        "at": {
+          "x": -0.05448992891863168,
+          "z": -0.8,
+          "h": 0.37536890717476357
+        },
+        "crossTime": 0.049999999999999996,
+        "eventTime": 0.6350000000000003,
+        "event": "pickup",
+        "dismissal": null,
+        "runs": 0
+      },
+      {
+        "seed": 447,
+        "at": {
+          "x": -0.009419218800342237,
+          "z": -0.8,
+          "h": 0.11952780085522688
+        },
+        "crossTime": 0.075,
+        "eventTime": 0.21,
+        "event": "pickup",
+        "dismissal": null,
+        "runs": 0
+      },
+      {
+        "seed": 506,
+        "at": {
+          "x": 0.13737976625368895,
+          "z": -0.8,
+          "h": 0.1616620202127563
+        },
+        "crossTime": 0.075,
+        "eventTime": 0.21,
+        "event": "pickup",
+        "dismissal": null,
+        "runs": 0
+      }
+    ]
+  },
+  "latePose": [
+    {
+      "error": 0,
+      "speed": 134,
+      "contactZ": 0,
+      "backAnkleZ": -0.32600000000000007,
+      "frontAnkleZ": 0.5640000000000001,
+      "pelvisZ": 0.134,
+      "stumpsZ": -0.8
+    },
+    {
+      "error": 60,
+      "speed": 134,
+      "contactZ": -0.6927722692307695,
+      "backAnkleZ": -0.7416633615384617,
+      "frontAnkleZ": 0.1483366384615383,
+      "pelvisZ": -0.28166336153846167,
+      "stumpsZ": -0.8
+    },
+    {
+      "error": 120,
+      "speed": 134,
+      "contactZ": -1.385544538461539,
+      "backAnkleZ": -1.1573267230769235,
+      "frontAnkleZ": -0.2673267230769234,
+      "pelvisZ": -0.6973267230769233,
+      "stumpsZ": -0.8
+    },
+    {
+      "error": 180,
+      "speed": 134,
+      "contactZ": -2.078316807692308,
+      "backAnkleZ": -1.5729900846153848,
+      "frontAnkleZ": -0.6829900846153848,
+      "pelvisZ": -1.1129900846153848,
+      "stumpsZ": -0.8
+    }
+  ]
+}
