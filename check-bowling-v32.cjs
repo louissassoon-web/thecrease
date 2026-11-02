@@ -3,7 +3,7 @@ const assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('nod
 const {C,host,pointer,copy}=require('./check-display-input.cjs');let checks=0;
 async function check(name,fn){await fn();console.log('PASS '+name);checks++;}
 function fixture(format='T20',hand='right'){for(let seed=1;seed<100;seed++){const league=C.Season.create(seed,format,'eng'),contest=C.Season.begin(league);if(C.Contest.ownTurn(contest))continue;const m=C.Contest.current(contest);m.batters[m.striker].attributes.hand=hand;return C.CareerSave.pack({schema:5,active:format,sessions:{[format]:{league,contest,match:m,recorded:false,...C.Restart.view()}}});}}
-function readyArm(h){for(let i=0;i<200&&!h.u.get().bowlingAction?.running;i++)h.step();assert.equal(h.u.get().bowlingAction.running,true);assert.equal(h.u.get().bowlingAction.age,0);}
+function readyArm(h){for(let i=0;i<200&&!h.u.get().bowlingAction?.running;i++){h.step();if(!h.u.get().fieldBrief&&!h.u.gesture())h.u.pointerDown(pointer(h.n('fieldCanvas'),180,340));}assert.equal(h.u.get().bowlingAction.running,true);assert.equal(h.u.get().bowlingAction.age,0);}
 (async()=>{
 await check('Field swipes aim in screen order without starting the arm, preparing a ball or consuming RNG',async()=>{
  for(const full of [false,true])for(const hand of ['left','right']){const h=host('T20',fixture('T20',hand));await h.n('resumeBtn').click();if(full)await h.u.chooseDisplay(true);h.u.resize();const s=h.u.get(),surface=h.n('fieldCanvas'),seed=s.match.rngState;
@@ -15,7 +15,7 @@ await check('Field swipes aim in screen order without starting the arm, preparin
 });
 await check('Release copy is fixed at the widget; drawing and UI refreshes cannot alternate batting and bowling prompts',async()=>{
  const h=host('T20',fixture()),surface=h.n('fieldCanvas');await h.n('resumeBtn').click();h.u.pointerDown(pointer(surface,180,340));readyArm(h);const text=[],ctx=h.n('fieldCanvas').getContext('2d');ctx.fillText=(...args)=>text.push(args);const seed=h.u.get().match.rngState,lists=[];
- for(const age of [500,670,700,820,1100]){h.u.get().bowlingAction.age=age;text.length=0;h.u.renderBowling();h.u.renderTools();h.u.drawBowlingGuide();assert.equal(h.n('strokeLegend').textContent,'Swipe up · lift to release');lists.push(text.map(x=>x[0]));for(const [label,x]of text)assert.ok(x>=278,'Pitch text: '+label);assert.equal(h.u.get().match.rngState,seed);}
+ for(const age of [500,670,700,820,1100]){h.u.get().bowlingAction.age=age;text.length=0;h.u.renderBowling();h.u.renderTools();h.u.drawBowlingGuide();assert.equal(h.n('strokeLegend').textContent,'Swipe up · lift to release');lists.push(text.map(x=>x[0]));for(const [label,x]of text)assert.ok(x<=108,'Guide text must stay in the left gutter: '+label);assert.equal(h.u.get().match.rngState,seed);}
  for(const list of lists)assert.deepEqual(list,lists[0]);assert.ok(lists[0].includes('SWIPE UP · LIFT'));assert.ok(lists[0].includes(h.u.get().pending.variation));
 });
 await check('The bowler selector appears only before an over starts, including first-ball wides and no-balls',async()=>{
