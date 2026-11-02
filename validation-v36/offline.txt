@@ -1,0 +1,14 @@
+PASS First install then reload and offline reopen use navigation-safe HTML
+PASS Already-cached redirected HTML is repaired on read
+PASS Shell fetches the canonical directory URL, including subdirectory installs
+PASS Redirected network responses are normalised before serving or caching
+PASS Blocked CacheStorage still permits online play
+PASS Cache read or write failure cannot discard a successful network response
+PASS Unavailable optional icons do not prevent the repaired worker installing
+PASS Error or sign-in HTML cannot overwrite the cached game
+PASS A valid update is cached and announced without navigating the page
+PASS No cache and no connection yields a readable retry page, not Response.error
+PASS Activation prunes only old game caches and leaves unrelated storage alone
+PASS Other page routes are not intercepted
+
+12 passed, 0 failed of 12 offline checks.

@@ -1,11 +1,11 @@
 {
-  "sourceRevision": 35,
+  "sourceRevision": 36,
   "scoringVersion": 35,
   "saveSchema": 5,
   "playerProfileVersion": 19,
   "date": "2026-11-02",
   "design": "https://claude.ai/code/artifact/45ee297f-2076-43fb-b295-b50f74f8ca90",
-  "htmlSha256": "f5c3837fcd8aece2e151ed2c7847fb76e43e40851fe783f6ca7873648bef26b7",
+  "htmlSha256": "1e44f0fd21f4929ffd32511d0dba300ec5e62fdcaa757e4c58727e84759f624d",
   "harnessSha256": "8e09003ca2128e0684c87cf7f034178631aac2bd88c3c4f439aa3c4973c59747",
   "url": "https://cricket-three-over.workspace-710372.chatgpt.site",
   "balance": {
@@ -13,12 +13,12 @@
     "total": 48,
     "disputedFailures": []
   },
-  "reviewGroupsPassed": 107,
-  "report": "validation-v35/REPORT.md",
+  "reviewGroupsPassed": 112,
+  "report": "validation-v36/REPORT.md",
   "notes": "APP_STORE_READINESS.md",
-  "previousHtmlSha256": "504af4624ef461719cb13324b647e95274baf2eaac9f20cb95a7c74bc46c77f7",
-  "localChanges": "R35 three-run cap, pickup decision hold, receiver coverage, physical coin faces and approved UX pass. Single-file canvas build; no new runtime dependencies.",
-  "baseCommit": "c239119e831de3e37c98154609e15ead6abccebd",
-  "offlineShellVersion": "r35",
-  "offlineReport": "validation-v35/offline.txt"
+  "previousHtmlSha256": "f5c3837fcd8aece2e151ed2c7847fb76e43e40851fe783f6ca7873648bef26b7",
+  "localChanges": "R36 stable playing surface, atomic canvas redraws, fixed-direction eased cameras and run-out-only return prompts. Pure engine unchanged from R35; no new dependencies.",
+  "baseCommit": "c9f651caa2465bf1757eae42471eb6744095e5d2",
+  "offlineShellVersion": "r36",
+  "offlineReport": "validation-v36/offline.txt"
 }
