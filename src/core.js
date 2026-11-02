@@ -837,12 +837,12 @@ globalThis.Cricket = (() => {
      for(const b of m.bowlers)if(!BOWLERS.some(t=>t.id===b.archetype)||typeof b.name!=='string'||b.name.length>32)throw Error('Invalid bowler');
     }
     if(!['ready','flight','inPlay','result','finished'].includes(state.phase)||!Number.isFinite(state.elapsed)||state.elapsed< -850||state.elapsed>10000||!Number.isFinite(state.resultAge)||state.resultAge<0||state.resultAge>30000)throw Error('Invalid delivery clock');
-    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
+    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
     if(state.fieldBrief!==undefined&&typeof state.fieldBrief!=='boolean'||state.fieldBrief&&(state.phase!=='flight'||state.elapsed!==-850||!Number.isFinite(state.briefAge)||state.briefAge<0||state.briefAge>15000))throw Error('Invalid pre-delivery pause');
     if(state.introducedBatters!==undefined&&(!Array.isArray(state.introducedBatters)||state.introducedBatters.length>11||state.introducedBatters.some(i=>!Number.isInteger(i)||i<0||i>10)))throw Error('Invalid saved player introductions');if(state.reward!==undefined&&![0,300,500].includes(state.reward))throw Error('Invalid saved reward');if(state.briefCards!==undefined&&!Broadcast.valid(state.briefCards))throw Error('Invalid saved introduction');if(state.ballBridge!==undefined&&state.ballBridge!==null&&(!['x','z','h'].every(k=>Number.isFinite(state.ballBridge.from?.[k]))||!Number.isFinite(state.ballBridge.duration)||state.ballBridge.duration<.08||state.ballBridge.duration>.22||state.ballBridge.startAt!==undefined&&(!Number.isFinite(state.ballBridge.startAt)||state.ballBridge.startAt<0||state.ballBridge.startAt>30)))throw Error('Invalid saved ball transition');if(p?.scoringVersion>=19&&(!Players.valid(p.batterProfile,format)||!Players.validBowler(p.bowlerProfile)))throw Error('Invalid saved player profile');
     if(p?.scoringVersion>=13&&(!Weather.valid(p.weather)||JSON.stringify(p.weather)!==JSON.stringify(p.conditions?.weather)))throw Error('Invalid saved weather');
     if(p?.scoringVersion>=12){const sign=Hand.sign(p),field=p.savedField;if(!Array.isArray(field)||!Tactics.legal(field.map(f=>({...f,a:f.a*sign})),m)||typeof p.fieldNote!=='string'||p.fieldNote.length>140)throw Error('Invalid saved field');}
-    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion>=34?100:p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==(p.scoringVersion>=34?34:15)||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>(p.scoringVersion>=34?100:3))||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
+    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion===34?100:p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==(p.scoringVersion>=35?35:p.scoringVersion>=34?34:15)||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>(p.scoringVersion===34?100:3))||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
     if(state.shot&&(!['ground','loft','defend'].includes(state.shot.mode)||!Number.isFinite(state.shot.angle)||Math.abs(state.shot.angle)>180||!Number.isFinite(state.shot.error)||Math.abs(state.shot.error)>10000))throw Error('Invalid saved shot');
     if(state.botInput){const input=state.botInput;if(!Number.isInteger(input.rngState)||input.rngState<0||input.rngState>4294967295||input.shot&&(!['ground','loft','defend'].includes(input.shot.mode)||!Number.isFinite(input.shot.angle)||Math.abs(input.shot.angle)>180||!Number.isFinite(input.shot.error)||Math.abs(input.shot.error)>10000))throw Error('Invalid opposition shot');}
     for(const shot of [state.shot,state.botInput?.shot])if(shot?.effort!==undefined&&(!Number.isFinite(shot.effort)||shot.effort<0||shot.effort>1))throw Error('Invalid stroke strength');
@@ -1689,7 +1689,7 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  // the resolved path and engine time only; neither consumes match RNG.
  const deliveryV24=Innings.delivery,pursueV24=TeamField.pursue,fieldFrameV24=TeamField.frame,
   runningCreateV24=Running.create,runningFinishV24=Running.finish,runningOfferV24=Running.offer,runningCommandV24=Running.command,runningFrameV24=Running.frame;
- Innings.delivery=function(m){const d=deliveryV24.call(this,{...m,scoringCalibration:27}),b=d.ball;b.scoringVersion=34;b.duration=(b.preTime+b.postTime)*2600;b.bounceT=b.preTime/(b.preTime+b.postTime);return d;};
+ Innings.delivery=function(m){const d=deliveryV24.call(this,{...m,scoringCalibration:27}),b=d.ball;b.scoringVersion=35;b.duration=(b.preTime+b.postTime)*2600;b.bounceT=b.preTime/(b.preTime+b.postTime);return d;};
  TeamField.pursue=function(p,ball,field,canCatch=true){
   const play=pursueV24.call(this,p,ball,field,canCatch),e=play.event;
   if(ball.scoringVersion>=25&&['four','six'].includes(e.type)){
@@ -1813,9 +1813,9 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
    // A manually selected bowler can differ from the legacy scheduled slot.
    // Freeze the selected player's type before constructing the human release.
    if(b.bowlerProfile){b.archetype=b.bowlerProfile.type;b.family=BOWLERS.find(t=>t.id===b.archetype).family;b.arm=b.bowlerProfile.arm;}
-   b.manualBowling={version:34,variation,line,field:preset,noise,control:choices.find(v=>v.name===variation).control,releaseAge:null};b.variation=variation;b.savedField=this.field(m,b,preset);b.fieldNote='Field: '+({balanced:'balanced',attack:'catching positions',defend:'boundary protection'}[preset]);return{ball:b,rngState:rng.state};
+   b.manualBowling={version:35,variation,line,field:preset,noise,control:choices.find(v=>v.name===variation).control,releaseAge:null};b.variation=variation;b.savedField=this.field(m,b,preset);b.fieldNote='Field: '+({balanced:'balanced',attack:'catching positions',defend:'boundary protection'}[preset]);return{ball:b,rngState:rng.state};
   },
-  release(template,rawAge,offset=0){const b={...template,manualBowling:{...template.manualBowling}},c=b.manualBowling;if(!c||![30,31,32,34].includes(c.version))throw Error('This ball has no bowling plan');const age=clamp(rawAge-offset,350,1400),n=c.noise,s=b.bowlerProfile,spin=Strokes.spin(b),p=b.conditions,sign=Hand.sign(b),control=c.control,variation=c.variation;
+  release(template,rawAge,offset=0){const b={...template,manualBowling:{...template.manualBowling}},c=b.manualBowling;if(!c||![30,31,32,34,35].includes(c.version))throw Error('This ball has no bowling plan');const age=clamp(rawAge-offset,350,1400),n=c.noise,s=b.bowlerProfile,spin=Strokes.spin(b),p=b.conditions,sign=Hand.sign(b),control=c.control,variation=c.variation;
    const intended=this.lengthAt(age,c.version),rawLength=clamp(intended+(n[0]+n[1]-1)*(1-control/115)*(c.version>=31?1.1:.75),c.version>=31?-5:.18,10.8),length=rawLength>0?Math.max(.18,rawLength):rawLength,lengthName=c.version>=31?(length<=0?'full':length<.85?'yorker':length<4.05?'full':this.label(length)):this.label(length),speed=Math.round(lerp(...s.speed,n[2])-(variation==='Slower ball'?lerp(13,21,n[3]):0)),movement=.55+s.movement*.006;
    let swing=(variation==='Outswinger'?1:variation==='Inswinger'?-1:0)*lerp(.17,.31,n[3])*p.swing*movement*sign;
    let kick=spin?(b.archetype==='legspin'?(variation==='Googly'?-1:variation==='Top-spinner'?0:1)*lerp(.24,.43,n[4]):variation==='Arm ball'?0:-lerp(.20,.37,n[4]))*p.turn:(n[4]<.5?-1:1)*lerp(.05,.17,n[5])*p.seam;
@@ -1882,8 +1882,8 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  CareerSave.validate=function(raw){const data=saveValidateV29.call(this,raw);if(data.bowlingOffset===undefined)data.bowlingOffset=0;if(!Number.isFinite(data.bowlingOffset)||Math.abs(data.bowlingOffset)>200)throw Error('Invalid bowling timing offset');for(const key of ['bowlingGuide','ballTrail'])if(data[key]!==undefined&&typeof data[key]!=='boolean')throw Error('Invalid bowling preference');for(const state of Object.values(data.sessions)){
    if(state.needsToss!==undefined&&typeof state.needsToss!=='boolean')throw Error('Invalid toss state');
    const pending=state.pending,manual=pending?.manualBowling;if(pending?.fieldingVersion!==undefined&&![30,32].includes(pending.fieldingVersion))throw Error('Invalid fielding rules');
-   if(manual&&(![30,31,32,34].includes(manual.version)||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)))throw Error('Invalid saved bowling release');
-   if(pending?.fullToss!==undefined&&(typeof pending.fullToss!=='boolean'||![31,32,34].includes(manual?.version)||pending.fullToss&&(pending.length>0||pending.postTime!==0||pending.bounceT!==1||pending.contactH<.035||pending.contactH>.95)))throw Error('Invalid full-toss flight');
+   if(manual&&(![30,31,32,34,35].includes(manual.version)||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)))throw Error('Invalid saved bowling release');
+   if(pending?.fullToss!==undefined&&(typeof pending.fullToss!=='boolean'||![31,32,34,35].includes(manual?.version)||pending.fullToss&&(pending.length>0||pending.postTime!==0||pending.bounceT!==1||pending.contactH<.035||pending.contactH>.95)))throw Error('Invalid full-toss flight');
    const change=state.live?.play?.catchChoice;if(change&&(!Number.isFinite(change.time)||change.time<0||change.time>30||!Array.isArray(change.positions)||change.positions.length!==11||change.positions.some(f=>!Number.isFinite(f.x)||!Number.isFinite(f.z)||Math.hypot(f.x,f.z)>100)))throw Error('Invalid saved fielding choice');
    const a=state.bowlingAction;if(a&&(!Number.isFinite(a.age)||a.age<0||a.age>1400||typeof a.running!=='boolean'||typeof a.released!=='boolean'))throw Error('Invalid bowling action');const plan=state.bowlingPlan;if(plan&&(!Number.isFinite(plan.line)||plan.line< -1.1||plan.line>1.25||typeof plan.variation!=='string'||plan.variation.length>30||!['balanced','attack','defend'].includes(plan.field)))throw Error('Invalid bowling plan');for(const m of state.contest.innings)if(m.bowlingChoices){for(const [over,index]of Object.entries(m.bowlingChoices))if(!/^\d+$/.test(over)||+over>449||!Number.isInteger(index)||index<0||index>4)throw Error('Invalid bowler selection');if(m.format==='T20'&&m.bowlers.some(b=>b.balls>24))throw Error('Bowler exceeded four overs');}if(state.toss30&&(!['heads','tails'].includes(state.toss30.call)||!['heads','tails'].includes(state.toss30.face)||![0,1].includes(state.toss30.winner)||![null,'bat','bowl'].includes(state.toss30.choice)||typeof state.toss30.seen!=='boolean'))throw Error('Invalid toss');}return data;};
 
@@ -1929,26 +1929,27 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  const runningCreateV33=Running.create,runningOfferV33=Running.offer,runningCommandV33=Running.command;
  Running.create=function(out,ball){
   if(ball.scoringVersion<34)return runningCreateV33.call(this,out,ball);
+  if(ball.scoringVersion>=35)out={...out,play:{...out.play,returnVersion:35}};
   const e=out.play.event,manual=!!ball.manualBowling&&!out.wicket&&['pickup','take'].includes(e.type);
   if(manual)out={...out,play:{...out.play,transfer:Math.max(out.play.transfer,.95),returnChoice:{deadline:e.time+.78}}};
   const result=runningCreateV33.call(this,out,ball);
-  if(result.play.running)result.play={...result.play,running:{...result.play.running,version:34,maxRuns:Math.min(100,ball.runsNeeded==null?100:Math.max(0,ball.runsNeeded-(out.noBall||out.wide?1:0)))}};
+  if(result.play.running)result.play={...result.play,running:{...result.play.running,version:ball.scoringVersion>=35?35:34,maxRuns:Math.min(ball.scoringVersion>=35?3:100,ball.runsNeeded==null?(ball.scoringVersion>=35?3:100):Math.max(0,ball.runsNeeded-(out.noBall||out.wide?1:0)))}};
   return result;
  };
  Running.offer=function(out,time){
   const p=out?.play,r=p?.running;
-  if(r?.version!==34)return runningOfferV33.call(this,out,time);
+  if(![34,35].includes(r?.version))return runningOfferV33.call(this,out,time);
   const legs=r.legs,queued=legs.some(l=>l.start>time+.025),number=legs.length+1,
    leg=this.leg(Math.max(time+.13,legs.length?legs.at(-1).end+this.turn:.32),legs.length),
    margin=(p.boundaryVersion===25?p.event.time:p.throw.breakTime)-leg.end,
    closed=out.disallowRuns||time>=out.decisionTime-.10||legs.length>=r.maxRuns,
    status=closed?'closed':queued?'queued':margin<.20?'risky':'available';
-  return{status,number,leg,margin,queued,allowed:!closed&&!queued,canHold:!closed&&queued,
-   hint:closed?'Ball dead - stay in your ground':queued?'Run queued. Hold cancels it before you turn.':status==='risky'?'Risky run - the field may beat you. Your call.':'Ball in play - call run '+number+' or hold'};
+  return{status,number,leg,margin,queued,allowed:!closed&&!queued,canHold:!out.disallowRuns&&time<out.decisionTime-.10&&queued,
+   hint:closed?(r.version>=35&&legs.length>=3?'Three-run limit - hold your ground':'Ball dead - stay in your ground'):queued?'Run queued. Hold cancels it before you turn.':status==='risky'?'Risky run - the field may beat you. Your call.':'Ball in play - call run '+number+' or hold'};
  };
  Running.command=function(out,kind,time){
   const p=out.play,r=p.running;
-  if(r?.version!==34)return runningCommandV33.call(this,out,kind,time);
+  if(![34,35].includes(r?.version))return runningCommandV33.call(this,out,kind,time);
   if(!Number.isFinite(time)||time<0||r.commands.length>=100||out.disallowRuns||time>=out.decisionTime-.10)return out;
   let legs=r.legs.map(l=>({...l}));
   if(kind==='hold')legs=legs.filter(l=>l.start<=time+.025);
@@ -1963,8 +1964,8 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
    const old=out.play,positions=TeamField.frame(out,time).fielders.map(f=>({...f})),
     play={...old,transfer:time-old.event.time+.17,returnChoice:{...old.returnChoice,end,time,positions}},route=TeamField.route(play,end),
     receivers=positions.filter(f=>f.id!==old.event.id).sort((a,b)=>TeamField.arrive(a,route.error+.32,route.target.z)-TeamField.arrive(b,route.error+.32,route.target.z));
-   route.receiver=receivers[0].id;route.backup=receivers[1].id;
-   if(!route.direct)route.breakTime=Math.max(route.landing,time+TeamField.arrive(receivers[0],route.error+.32,route.target.z))+.18+Math.abs(route.error)*.13;
+   if(old.returnVersion<35||old.returnVersion===undefined){route.receiver=receivers[0].id;route.backup=receivers[1].id;
+   if(!route.direct)route.breakTime=Math.max(route.landing,time+TeamField.arrive(receivers[0],route.error+.32,route.target.z))+.18+Math.abs(route.error)*.13;}
    return Running.finish({...out,play},play.running.legs,route);
   }
  };
@@ -1981,6 +1982,42 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
    return{...f,x:from.x+dx*k,z:from.z+dz*k,travel:(from.travel||0)+travel,moving:travel<d-.02,gait:travel<d-.02?1:0,heading:{x:dx,z:dz}};
   });return frame;
  };
+ // R35: a return is thrown to a real receiver. If a bowler fields the ball,
+ // another fielder covers that wicket and a second backs up beyond the stumps.
+ // Delay the release when needed, rather than parking a thrown ball in mid-air.
+ const routeV34=TeamField.route,ballAtV34=TeamField.ballAt,fieldFrameV34=TeamField.frame;
+ TeamField.route=function(p,end=0){
+  const r=routeV34.call(this,p,end);if(p.returnVersion!==35)return r;
+  const choice=p.returnChoice,from=choice?.positions||[...p.starts,p.keeper],start=choice?.time||0,
+   target={x:r.error+.32,z:r.target.z+.12},ready=f=>start+TeamField.arrive(f,target.x,target.z),
+   cover=from.filter(f=>f.id!==p.event.id).map(f=>({f,ready:ready(f)})).sort((a,b)=>a.ready-b.ready);
+  r.receiver=cover[0].f.id;r.backup=cover[1].f.id;r.receiveTarget=target;r.receiverReady=cover[0].ready;
+  if(!r.direct)r.release=Math.max(r.release,r.receiverReady-r.flight);r.landing=r.release+r.flight;
+  r.breakTime=r.landing+(r.direct?0:.18+Math.abs(r.error)*.13);r.coverVersion=35;r.coverTime=Math.max(r.breakTime,r.receiverReady+.35);
+  return r;
+ };
+ TeamField.ballAt=function(p,t){
+  const r=p.throw,e=p.event;
+  if(p.returnVersion===35&&r?.direct&&r.receiverReady>r.landing&&t>=r.landing){const u=t-r.landing,h=t<r.receiverReady?Math.max(.035,.68-1.4*u-4.905*u*u):lerp(.035,.8,BatterRig.smooth((t-r.receiverReady)/.35));return{x:r.error,z:r.target.z,h};}
+  if(p.returnVersion!==35||!r||t<e.time||t>=r.release)return ballAtV34.call(this,p,t);
+  const k=BatterRig.smooth((t-e.time)/.35);return{x:lerp(e.x,r.from.x,k),z:lerp(e.z,r.from.z,k),h:lerp(e.h,r.from.h,k)};
+ };
+ TeamField.frame=function(out,t){
+  const frame=fieldFrameV34.call(this,out,t),p=out.play,r=p.throw;if(p.returnVersion!==35||!r)return frame;
+  const c=p.returnChoice,start=c?.time||0,starts=c?.positions||[...p.starts,p.keeper];
+  if(t<start)return frame;
+  frame.fielders=frame.fielders.map(f=>{
+   if(f.id===p.event.id)return{...f,action:t<r.release-.18?'pickup':'throw',throwBlend:BatterRig.smooth((t-r.release+.18)/.18)};
+   if(f.id!==r.receiver&&f.id!==r.backup)return f;
+   const from=starts.find(a=>a.id===f.id),target=f.id===r.receiver?r.receiveTarget:r.backupTarget,
+    dx=target.x-from.x,dz=target.z-from.z,d=Math.hypot(dx,dz),travel=Math.min(d,BallFlight.run(from,t-start)),k=d?travel/d:1,moving=travel<d-.02;
+   return{...f,x:from.x+dx*k,z:from.z+dz*k,travel:(from.travel||0)+travel,moving,gait:moving?BatterRig.smooth((d-travel)/.75):0,heading:{x:dx,z:dz},
+    action:f.id===r.backup?'backup':moving?'run':t<r.landing-.25?'ready':t<r.breakTime?'catch':'break',
+    hands:f.id===r.receiver&&t>=r.landing-.25?{...frame.ball}:null,actionBlend:f.id===r.receiver?BatterRig.smooth((t-r.landing+.25)/.25):0};
+  });return frame;
+ };
+ const finishReturnV34=Running.finish;
+ Running.finish=function(out,legs,route){const result=finishReturnV34.call(this,out,legs,route);if(out.play.returnVersion===35&&route?.coverTime)result.play={...result.play,returnTime:Math.max(result.play.returnTime,route.coverTime)};return result;};
  const saveValidateV33=CareerSave.validate;
  CareerSave.validate=function(raw){
   const data=saveValidateV33.call(this,raw);

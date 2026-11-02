@@ -60,7 +60,7 @@ await check('Late spin releases work through actual pad/fullscreen handlers, and
  }
 });
 await check('Prepared V19 balls keep exact outcomes and subsequent deliveries upgrade deterministically',()=>{
- for(const format of ['TEST','T20'])for(let seed=1;seed<=4;seed++){const m=O.Innings.create(seed,O.Squad.team(format,'eng'),O.Squad.team(format,'ind'),format,0);for(const over of [0,1,11]){m.balls=over*6;const d=O.Innings.delivery(m);for(const shot of [null,input(44,90),input(-95,50,'loft')])assert.equal(JSON.stringify(C.Shot.resolve(d.ball,shot,m.batters[0],C.Innings.field(m,d.ball),d.rngState)),JSON.stringify(O.Shot.resolve(d.ball,shot,m.batters[0],O.Innings.field(m,d.ball),d.rngState)));const before=JSON.stringify(m),a=C.Innings.delivery(m);assert.equal(a.ball.scoringVersion,34);assert.deepEqual(a,C.Innings.delivery(copy(m)));assert.equal(JSON.stringify(m),before);}}
+ for(const format of ['TEST','T20'])for(let seed=1;seed<=4;seed++){const m=O.Innings.create(seed,O.Squad.team(format,'eng'),O.Squad.team(format,'ind'),format,0);for(const over of [0,1,11]){m.balls=over*6;const d=O.Innings.delivery(m);for(const shot of [null,input(44,90),input(-95,50,'loft')])assert.equal(JSON.stringify(C.Shot.resolve(d.ball,shot,m.batters[0],C.Innings.field(m,d.ball),d.rngState)),JSON.stringify(O.Shot.resolve(d.ball,shot,m.batters[0],O.Innings.field(m,d.ball),d.rngState)));const before=JSON.stringify(m),a=C.Innings.delivery(m);assert.equal(a.ball.scoringVersion,35);assert.deepEqual(a,C.Innings.delivery(copy(m)));assert.equal(JSON.stringify(m),before);}}
 });
 console.log(checks+' spin and drive checks passed.');
 })();
