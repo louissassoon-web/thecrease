@@ -3,13 +3,13 @@
   "version": "23.0.0",
   "private": true,
   "type": "module",
-  "description": "Cricket · The crease. Single-file browser cricket game built from src/ by tools/build.mjs.",
+  "description": "Cricket \u00b7 The crease. Single-file browser cricket game built from src/ by tools/build.mjs.",
   "scripts": {
     "split": "node tools/split.mjs",
     "build": "node tools/build.mjs",
     "build:check": "node tools/build.mjs --check",
     "build:bundle": "node tools/build.mjs --bundle --minify",
-    "check": "node tools/build.mjs && node review-check.cjs && node check-balance.cjs",
+    "check": "node tools/build.mjs && node check-offline.cjs && node review-check.cjs && node check-balance.cjs",
     "serve": "python3 -m http.server 8000 --directory dist",
     "frames": "node tools/frames.mjs http://localhost:8000/index.html frames",
     "check:bundle": "node tools/build.mjs --bundle --minify && node check-balance.cjs && node tools/build.mjs"

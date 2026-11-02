@@ -17,6 +17,8 @@
   "report": "validation-v34/REPORT.md",
   "notes": "APP_STORE_READINESS.md",
   "previousHtmlSha256": "4c5f1946a6000e92d86d29a1d45d0db20fa33d74646220fefccf3a4119970fac",
-  "localChanges": "Gameplay audit fixes on a review branch. Plain single-file build; no new dependencies. Not deployed.",
-  "baseCommit": "d9e69acf1bc30aa59990690fd9abf4eb08de56cf"
+  "localChanges": "R34 gameplay audit plus offline navigation hotfix. Plain single-file game; no new dependencies.",
+  "baseCommit": "d9e69acf1bc30aa59990690fd9abf4eb08de56cf",
+  "offlineShellVersion": "r34.1",
+  "offlineReport": "validation-r34-offline/REPORT.md"
 }

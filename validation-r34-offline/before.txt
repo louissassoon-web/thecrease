@@ -1,0 +1,32 @@
+FAIL First install then reload and offline reopen use navigation-safe HTML: redirected cached HTML would cause a navigation network error
+
+true !== false
+
+FAIL Already-cached redirected HTML is repaired on read: redirected cached HTML would cause a navigation network error
+
+true !== false
+
+FAIL Shell fetches the canonical directory URL, including subdirectory installs: The expression evaluated to a falsy value:
+
+  assert(w.requests.includes('https://example.test/game/'))
+
+FAIL Redirected network responses are normalised before serving or caching: redirected cached HTML would cause a navigation network error
+
+true !== false
+
+FAIL Blocked CacheStorage still permits online play: storage blocked
+FAIL Cache read or write failure cannot discard a successful network response: cache read failed
+FAIL Unavailable optional icons do not prevent the repaired worker installing: missing icon
+FAIL Error or sign-in HTML cannot overwrite the cached game: redirected cached HTML would cause a navigation network error
+
+true !== false
+
+PASS A valid update is cached and announced without navigating the page
+FAIL No cache and no connection yields a readable retry page, not Response.error: Expected values to be strictly equal:
+
+0 !== 503
+
+PASS Activation prunes only old game caches and leaves unrelated storage alone
+PASS Other page routes are not intercepted
+
+3 passed, 9 failed of 12 offline checks.
