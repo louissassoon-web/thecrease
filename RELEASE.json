@@ -1,11 +1,11 @@
 {
-  "sourceRevision": 36,
-  "scoringVersion": 35,
+  "sourceRevision": 37,
+  "scoringVersion": 37,
   "saveSchema": 5,
   "playerProfileVersion": 19,
-  "date": "2026-11-02",
+  "date": "2026-11-04",
   "design": "https://claude.ai/code/artifact/45ee297f-2076-43fb-b295-b50f74f8ca90",
-  "htmlSha256": "1e44f0fd21f4929ffd32511d0dba300ec5e62fdcaa757e4c58727e84759f624d",
+  "htmlSha256": "d8415d3654d819e453a33f0be122150a5d75dd2ddf643c2ec056e381ec3d624d",
   "harnessSha256": "8e09003ca2128e0684c87cf7f034178631aac2bd88c3c4f439aa3c4973c59747",
   "url": "https://cricket-three-over.workspace-710372.chatgpt.site",
   "balance": {
@@ -13,12 +13,12 @@
     "total": 48,
     "disputedFailures": []
   },
-  "reviewGroupsPassed": 112,
-  "report": "validation-v36/REPORT.md",
+  "reviewGroupsPassed": 119,
+  "report": "validation-v37/REPORT.md",
   "notes": "APP_STORE_READINESS.md",
-  "previousHtmlSha256": "f5c3837fcd8aece2e151ed2c7847fb76e43e40851fe783f6ca7873648bef26b7",
-  "localChanges": "R36 stable playing surface, atomic canvas redraws, fixed-direction eased cameras and run-out-only return prompts. Pure engine unchanged from R35; no new dependencies.",
-  "baseCommit": "c9f651caa2465bf1757eae42471eb6744095e5d2",
-  "offlineShellVersion": "r36",
-  "offlineReport": "validation-v36/offline.txt"
+  "previousHtmlSha256": "1e44f0fd21f4929ffd32511d0dba300ec5e62fdcaa757e4c58727e84759f624d",
+  "localChanges": "R37 continuous run-out choices, safer opposition running, hand/arm-aware bowling controls and cameras, first-play demo, haptic diagnostics and quieter generated audio. No new dependencies.",
+  "baseCommit": "909ff72787ba78b14488d8749a4a98e39f71197c",
+  "offlineShellVersion": "r37",
+  "offlineReport": "validation-v37/offline.txt"
 }

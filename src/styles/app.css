@@ -200,3 +200,6 @@ html[data-motion='reduced'] #returnPanel{animation:none}
 dialog[open]{animation:quiet-card .2s ease-out both}html[data-motion="reduced"] dialog[open]{animation:none}
 
 html[data-view="full"] #game{min-height:0}
+
+/* R37: a small, skippable guide without moving the playing surface. */
+#demoDialog{max-width:380px}#demoDialog .dialog-head{align-items:center}#demoDialog .dialog-content{padding-top:8px}#demoCanvas{display:block;width:100%;height:auto;border-radius:12px;margin:14px 0}#demoCopy{min-height:3.5em;line-height:1.5}#demoTitle{margin:0 0 10px}#demoCaption{min-height:2.6em}#demoDialog .dialog-actions{display:flex;justify-content:space-between}#demoDialog button,.haptics-test button{min-height:44px}.haptics-test{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin:0 0 12px}.haptics-test a{color:var(--gold,#d8ba79);font-size:13px}.haptics-test p{width:100%;margin:0}.quick-help{margin-top:20px}#helpDialog details{margin-top:14px}#helpDialog details p{line-height:1.5}#helpDemoBtn{min-height:44px}
