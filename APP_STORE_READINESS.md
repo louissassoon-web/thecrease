@@ -12,7 +12,7 @@
 **App switching, interruptions, audio, save/resume**
 - Leaving the foreground still pauses, saves and opens the menu. Added: a save and audio suspend on page `freeze`; audio resume now also recovers from the iOS `interrupted` state on the player's next tap; returning to the app checks for an update.
 - Shell events: dispatch `cricket:pause` on window to pause; `cricket:back` for the hardware back button (closes the open dialog or pauses; required decisions stay open; `event.detail.handled` tells the shell whether to leave the app instead).
-- All UI storage goes through `Platform.storage` (localStorage stays the synchronous hot copy; a shell mirrors writes to native storage or answers reads). A hook `get` that returns `undefined` or `null` falls through to the hot copy; `set` mirrors even when the hot copy is full, then rethrows so the game can report it. The Sound module keeps its two direct `localStorage` calls for `cricket.sound`, so that key is hydrated but not mirrored. `navigator.storage.persist()` is requested on the first tap. Save export and recovery export go through `Platform.saveFile`, because Blob downloads do not work inside a WebView.
+- All UI storage goes through `Platform.storage` (localStorage stays the synchronous hot copy; a shell mirrors writes to native storage or answers reads). A hook `get` that returns `undefined` or `null` falls through to the hot copy; `set` mirrors even when the hot copy is full, then rethrows so the game can report it. Sound and volume now use the same storage wrapper and are mirrored too. `navigator.storage.persist()` is requested on the first tap. Save export and recovery export go through `Platform.saveFile`, because Blob downloads do not work inside a WebView.
 
 **Offline play, loading speed, battery, mid-range devices**
 - Hosted version: a service worker caches the game and serves it instantly; on launch and on return to the foreground the page asks the worker to compare the cached `index.html` with the network copy, and "Update ready · Reload the game" appears in the pause menu when it has changed. Nothing reloads during play. Registration happens only on a top-level http(s) page, so also on `localhost` during development, and never from `file:`, inside a frame or in native builds. A web app manifest plus icons allow home-screen install; Android and desktop Chromium show an "Install this game" button when the browser offers it. The old "prototype needs a connection" notice is replaced by a live status line.
@@ -33,7 +33,7 @@ Define before the game script runs (inject a `<script>` ahead of `cricket-ui` wh
 window.CricketPlatform = {
   native: true, name: 'capacitor-ios',
   storage: { get(key), set(key, value), remove(key) },   // mirror; localStorage remains the hot copy; get returns undefined or null for a miss
-  haptics: { pulse(kind) },                              // light | medium | heavy | boundary | wicket
+  haptics: { pulse(kind) },                              // light | medium | heavy | boundary | wicket | test
   fullscreen(full),                                      // hide/show status bar
   saveFile(name, text, type),                            // return false to fall back to a Blob download
   purchases: null, ads: null                             // later phase
@@ -46,7 +46,7 @@ window.dispatchEvent(back); if (!back.detail.handled) App.exitApp();
 document.documentElement.style.setProperty('--safe-top', '24px');
 ```
 
-Hydration for native storage: read the saved keys (`cricket.career.v5`, `cricket.career.v5.recoveryKey`, backups `cricket.career.v5.backup.*`, `cricket.before-import`, `cricket.view`, `cricket.motion`, `cricket.sound`, `cricket.haptics`, `cricket.graphics`, and the legacy `cricket.the-crease.v2` or `cricket.three-over.v1` when present) from native storage into `localStorage` before the game script runs, then mirror every `set`. Keys and formats are unchanged, so an exported JSON save moves between the web and native builds.
+Hydration for native storage: read the saved keys (`cricket.career.v5`, `cricket.career.v5.recoveryKey`, backups `cricket.career.v5.backup.*`, `cricket.before-import`, `cricket.view`, `cricket.motion`, `cricket.sound`, `cricket.volume`, `cricket.haptics`, `cricket.graphics`, and the legacy `cricket.the-crease.v2` or `cricket.three-over.v1` when present) from native storage into `localStorage` before the game script runs, then mirror every `set`. Keys and formats are unchanged, so an exported JSON save moves between the web and native builds.
 
 ## Choices that would complicate the transition
 
@@ -83,3 +83,5 @@ Both
 - Done here: the edited UI script and worker parse; the game loads without console errors; settings, pause menu, scorecard and bowling layouts were inspected; the pause-on-hidden path triggered correctly in a background preview.
 - Not done here: `node check-balance.cjs` and `node review-check.cjs` could not be run in this environment. Run both before accepting the revision. (Done at handover into the repository on 30 October 2026: 90/90 review groups, 48/48 balance checks, outputs identical to revision 32; see `validation-v33/REPORT.md`.) The engine is untouched, so the balance contract should be byte-identical; UI checks exercise the real handlers through the DOM facade, which this revision was written against (no new globals, element ids present in markup, guarded platform calls).
 - Still required: physical Android and iPhone testing of swipe feel, safe areas, haptics, background/return, audio after a call, the Auto graphics step-down on a mid-range phone, and home-screen install.
+
+R37 device notes: web vibration returns the browser’s acceptance flag and handles asynchronous native-plugin rejection. The Settings test sends a longer pulse from a direct tap. Browser acceptance does not prove motor activity; Pixel/Chrome hardware testing remains outstanding. A browser embedding the game can block vibration; the Settings link opens the canonical game URL. Native wrappers should map the `test` pulse too. The new `tutorialSeen` career property is optional under schema 5; absence in an older career does not trigger onboarding. New careers show a three-part, skippable demo, replayable from How to play. Sound volume is local and mirrored via Platform.storage. The quieter R37 palette is still generated audio, not recorded library material. No external audio fetch, SDK, dependency or third-party audio licence is added.

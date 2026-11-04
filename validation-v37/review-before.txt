@@ -1,0 +1,160 @@
+PASS Every player has a stable named profile in both formats; roles are not inferred from batting position
+Matched clean lofts: { samples: 24, rootMeanExitSpeed: 42.77, davidMeanExitSpeed: 49.65 }
+PASS Named strengths change real timing windows, defence, spin match-ups and loft power
+500 death-over deliveries per bowler: {
+  bumrahWides: 13,
+  ranaWides: 15,
+  bumrahYorkers: 177,
+  ranaYorkers: 165
+}
+PASS Bowler speed, control and variations affect real deliveries, with integer speeds and a fixed style through the over
+PASS V18 pending balls retain exact outcomes, while the next preparation adopts profiles deterministically
+PASS Existing edited names retain their original player identity and incoming profiles contain no random variation
+PASS The paused profile selector shows both teams, strengths and actual bowling data without advancing play
+PASS Prepared profile snapshots survive save/resume and validation rejects broken ratings
+PASS Exported ball details remain sufficient to reproduce an opposition shot including its profiles
+8 player-profile checks passed.
+PASS Backswing loft works in both views, while direct swipes stay grounded without height buttons
+PASS One start plays six legal balls automatically, then stops between overs
+PASS A no-ball is rebowled inside the active over without an extra start or a missing legal ball
+PASS Fast-forward advances the shared replay clock fourfold and produces the same score, throw and RNG
+PASS Calling a run or pausing restores normal playback speed and keeps the running decision live
+PASS Paused auto-over saves resume the same prepared ball and complete the over once
+PASS An innings interval stops the automatic sequence even when the over has balls remaining
+7 automatic-over and replay checks passed.
+PASS Drive names, guides, foot plants and contact origins agree for both hands and formats
+Matched spin strokes: {
+  samples: 486,
+  old: { miss: 248, edge: 118, clean: 120 },
+  now: { miss: 0, edge: 50, clean: 436 }
+}
+PASS Controlled spin contact stays usable across late releases without raising middle timing or power
+Ground scoring: {
+  samples: 192,
+  fours: 58,
+  scores: [ 0, 1, 2, 3, 4 ],
+  weakContacts: 27
+}
+PASS Weak spin contact loses speed, clean middles retain their speed, and ground drives offer a scoring range
+Mistimed spin edges: { edges: 8, keeperCatches: 2 }
+PASS Real edges and poor choices still matter, while pace contact windows retain their difficulty
+PASS Late spin releases work through actual pad/fullscreen handlers, and a live save resumes identically
+PASS Prepared V19 balls keep exact outcomes and subsequent deliveries upgrade deterministically
+6 spin and drive checks passed.
+PASS The distance cue reaches the bat consistently and spin has no speed jump or frozen ball at the crease
+PASS Contact-to-fielding joins continuously and nearby ball/body drawing stays finite in both views
+PASS Coins are paid only for a player win, once per fixture across reloads and restarts
+PASS The actual shop buys and equips permanently, applies both team roles and exports the shared wallet
+PASS All grounds have distinct world geometry, render in play, and full reset restores the starter items
+PASS Player graphs and changed conditions appear before bowling, resume mid-card and clear before the run-up
+PASS A completed real T20 fixture credits the UI wallet once, including after reloading
+7 world, presentation and progression checks passed.
+Short outside-off trials: {
+  n: 5400,
+  before: { miss: 2160, edge: 980 },
+  after: { miss: 0, edge: 468 }
+}
+PASS Short outside-off diagonals become controlled cuts, with fewer forced edges and room for genuine mistakes
+Spin release trials: {
+  n: 469,
+  before: { miss: 268, edge: 16 },
+  after: { miss: 0, edge: 24 }
+}
+PASS Spin coverage improves at ordinary phone release offsets while precision, pace difficulty and power stay separate
+PASS Actual rendering retains the ball through keeper/slip catches, gathering, release and the deep return
+PASS Cordon playback shows the interception before returning to batting; catches and high returns fit the camera
+PASS Catching hands hold the ball and fielders keep fixed limb lengths through gather, turn and throw
+PASS Shop access closes at match start and remains blocked through over and innings breaks, including stale buttons
+PASS Saved V20 deliveries retain exact outcomes; new spin swipes work on both touch surfaces and resume identically
+7 fielding, contact and shop regression groups passed.
+PASS V23 bounce angle is length independent and shared by delivery, LBW and continuation
+PASS Prepared V22/V23/V24/V25/V26 balls retain exact outcomes, AI inputs and save compatibility
+PASS Invalid saves are backed up byte-for-byte before replacement, or protected when storage is full
+PASS Frame exceptions surface in feedback and schedule the next animation frame
+PASS Release and first contact defer storage; running commands and completed balls still persist
+PASS New lofts obey the power ceiling, retain player differences, and mistiming changes speed and both launch angles
+PASS Elliptical boundary and descending landing-point interception use the same world geometry
+PASS Attack coverage is narrower than defence; defence holds the crease without preventing a called single
+PASS New opposition inputs are deterministic, varied and repeatable; time and wickets alter declaration decisions
+9 model and safety regression groups passed.
+PASS Four and six running commands are live, cancellable and safe; boundary allowance and completed runs are preserved
+PASS Chaser runs from the field position, gathers low at the rope, then walks; real canvas and engine frames agree without RNG changes
+PASS A cut-off ball retains its collector, throw and run-out route
+PASS New pace and spin share 2600 ms per physical second before and after pitching; preparation is pure; new T20 ground precision responds to control, with V27 spin coverage calibrated separately
+PASS Twenty human touch swings offer calibration; Apply centres raw -110 ms timing and aligns the bat without advancing RNG
+PASS Not now persists; paused settings clamp to ±200 ms and reset without changing the prepared match
+PASS Revision 25 saves with no offset keep their prepared ball and history; malformed calibration data is rejected
+PASS Human calibration leaves simulated AI shots, history and match RNG identical
+4 timing-offset review groups passed.
+PASS V27 edge exposure has a neutral centre and a gradual, symmetric rise through ordinary and large release errors
+PASS Ground launches and perfect committed lofts retain their physics; off-centre lofts lose energy without extra random draws
+2 revision 27 model review groups passed.
+PASS Returning from another app retains full batting layout and restores native full screen from Continue
+PASS Corrected timing and event-specific commentary remain present through full-screen contact and outcome
+PASS Run-up keeps the body clear of the umpire and still reaches either arm’s release point
+PASS Every named profile has appearance data; batting, bowling and fielding use the stable player identity
+PASS The replay keeps a skyline, ball and return in view across straight, square and behind-square strokes
+PASS Paused Test declarations are offered before the run-up and after dead balls, never mid-delivery
+PASS Result animation credits once, counts up the persisted reward, skips, and stays dismissed after reload
+PASS Champion presentation shows the correct team, honours reduced motion and cannot award coins again
+8 revision 28 presentation checks passed.
+PASS Run-up releases remain aiming; a held swipe can cross release; a stale gesture cannot hit a different ball
+PASS Late frame callbacks do not rewind the clock; impact carries spare frame time without a settling pause
+PASS Pad and full cameras mirror both hands with equivalent views of the approaching ball
+PASS Sweeps and late drives meet the drawn ball at the blade for both hands, with attached gloves and fixed arm lengths
+PASS The actual post-match shop buys and returns to fixtures, survives reload and stays closed once the next delivery is prepared
+PASS Stationary fielders reuse drawing work; contact presentation resumes identically without altering match randomness
+6 revision 29 batting presentation groups passed.
+PASS Human bowling releases from either touch surface; every frame is finite and the ball commits once
+PASS Release length is continuous; player skill, arm, variation and legal field restrictions remain distinct
+PASS Pausing or cancelling the arm preserves the prepared noise; settings and a resumed release survive a save
+PASS Simulate over stops after six legal balls; choosing a bowler respects quota and successive-over rules
+PASS Toss call and bat/bowl choice are saved, seeded and available only before a new match
+PASS Outfield calls include aerial boundaries; close catches are automatic, and selection keeps positions continuous
+PASS Drops deflect at the hands, remain live and can be retrieved; trails and six carry do not advance RNG
+PASS Older prepared R29 deliveries retain byte-identical outcomes and resume into the new controls
+8 revision 30 bowling and fielding groups passed.
+PASS Gallery swipes, buttons and keyboard select mirrored lines and visible swing cards without bowling or drawing RNG
+PASS Cancelled and paused gallery gestures cannot launch or change a prepared ball; hold and flick work on both surfaces
+  200 seeded deliveries: full toss 2.590, yorker 0.675, overpitched 2.010 runs per ball.
+PASS Yorker aim has hittable misses on both sides, while full tosses never pitch or acquire bounce movement
+PASS Swing selections bend in opposite directions for either batting hand and player repertoires retain distinct controls
+PASS Behind-arm cameras mirror, keep the target in view and leave frame drawing deterministic
+PASS Prepared R30 manual releases retain exact paths, shots and RNG; R31 full tosses validate and resume safely
+6 revision 31 bowling groups passed.
+PASS Field swipes aim in screen order without starting the arm, preparing a ball or consuming RNG
+PASS Release copy is fixed at the widget; drawing and UI refreshes cannot alternate batting and bowling prompts
+PASS The bowler selector appears only before an over starts, including first-ball wides and no-balls
+PASS Every available variation has a directional ball symbol; air, turn, dip and slower-ball cues are distinct
+PASS New spin releases use spin length names with unchanged physical lengths and uniform flight clocks
+PASS Tapping a ring selects that moving outfielder, with no bottom choices, RNG draw or position jump
+PASS Difficult catches carry greater drop risk; drops retain continuous live retrieval and the same seeded roll
+PASS Prepared R31 manual releases, ordinary balls, catches and saves retain exact rules and RNG
+8 revision 32 bowling and fielding groups passed.
+PASS Toss result and actions wait for settlement; the reveal consumes no match RNG
+PASS Current speed and no-ball calls are hidden before release; known free hits remain visible
+PASS Inside edges hit the stumps before collection, while no-balls and free hits protect the batter
+PASS A short spinner is attackable instead of an automatic high-ball leave
+PASS Wrong-side hoiks can miss even at perfect timing; chase pressure changes T20 intent
+PASS Further runs stop at three; risky runs can still be run out or cancelled
+PASS Run-out return ends are selectable through real field taps, with continuous fielders and saved decisions
+PASS New late-shot footwork stays clear of the wicket, with the old rig unchanged for prepared balls
+PASS Prepared R33 deliveries, AI choices, manual releases and saves retain their exact rules
+PASS Opening the league after a result and reloading cannot bounce back into the completed match ceremony
+10 revision 34 audit regression groups passed.
+PASS Three runs cap the engine and grey the real button; a queued third can still be cancelled
+PASS 4× clamps at a run-out chance, waits without RNG or runner changes, then resumes after either return choice
+  Verified 12 seeded bowler collections.
+PASS A fielding bowler has another receiver and a backup; the receiver reaches the returning ball in time
+PASS Prepared R34 deliveries, returns and saves retain their rules byte for byte
+PASS Introductions can be tapped away without a shot, or end in three seconds with unchanged match RNG
+PASS The toss has two physical faces and reveals only on settlement without changing RNG
+PASS The scorecard is read-only; profile editing updates and persists the selected player
+7 revision 35 UX regression groups passed.
+PASS Routine collections continue at 4× without a return popup or hidden wicket targets
+PASS Running alone does not prompt: both ends must be assessed, and safe or grounded batters carry on
+PASS Resize notifications keep the current pixels until the next frame paints their replacement
+PASS Waiting, introduction and release share one camera, and the next-ball handover is continuous
+PASS Fielding views fit the ball path without reversing the pitch direction or using match RNG
+5 revision 36 calm-play groups passed.
+All 112 portable review groups passed.
