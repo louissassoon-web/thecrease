@@ -94,9 +94,9 @@ The loft-mix check passes by about one wicket in ten innings. On 120 innings rev
 
 The new dismissals and the bowling error were paid for so that the contract's totals stayed inside their bands: the T20 pace timing edge is 0.85 of its revision 37 chance; the Test timing edge is 1.10 for pace and 0.77 for spin; the opposition's Test timing sd is 45 ms (42); its T20 misread base is 0.064 (0.055); outside edges on balls missing the stumps no longer play on. All of these apply to scoring version 38 only.
 
-## Decisions that need the owner's confirmation
+## Decisions confirmed by the owner
 
-`CLAUDE.md` asks for an explicit decision before presentation clocks or the control grammar change. Three changes here touch them.
+`CLAUDE.md` asks for an explicit decision before presentation clocks or the control grammar change. Three changes here touch them. The owner confirmed all three on 11 November 2026.
 
 1. The run-out choice window is shown at 0.4× and 4× drops a second early. The engine's window, the throw and the running are unchanged. This was the direct request in note 2.
 2. On the field, a finger that moves more than 8 px restarts the 180 ms hold that begins the run-up. Without it a slow swipe to change the ball would start the bowling action. The hold length is unchanged, and the pad still starts the action at once.
