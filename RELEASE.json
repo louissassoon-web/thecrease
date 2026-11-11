@@ -1,11 +1,11 @@
 {
-  "sourceRevision": 37,
-  "scoringVersion": 37,
+  "sourceRevision": 38,
+  "scoringVersion": 38,
   "saveSchema": 5,
   "playerProfileVersion": 19,
-  "date": "2026-11-04",
+  "date": "2026-11-11",
   "design": "https://claude.ai/code/artifact/45ee297f-2076-43fb-b295-b50f74f8ca90",
-  "htmlSha256": "d8415d3654d819e453a33f0be122150a5d75dd2ddf643c2ec056e381ec3d624d",
+  "htmlSha256": "9360f8b1616b971665019757ecbfcd4de99ed06bf4b4077e92304e9cf1ecb35d",
   "harnessSha256": "8e09003ca2128e0684c87cf7f034178631aac2bd88c3c4f439aa3c4973c59747",
   "url": "https://cricket-three-over.workspace-710372.chatgpt.site",
   "balance": {
@@ -13,12 +13,17 @@
     "total": 48,
     "disputedFailures": []
   },
-  "reviewGroupsPassed": 119,
-  "report": "validation-v37/REPORT.md",
+  "reviewGroupsPassed": 131,
+  "report": "validation-v38/REPORT.md",
   "notes": "APP_STORE_READINESS.md",
-  "previousHtmlSha256": "1e44f0fd21f4929ffd32511d0dba300ec5e62fdcaa757e4c58727e84759f624d",
-  "localChanges": "R37 continuous run-out choices, safer opposition running, hand/arm-aware bowling controls and cameras, first-play demo, haptic diagnostics and quieter generated audio. No new dependencies.",
-  "baseCommit": "909ff72787ba78b14488d8749a4a98e39f71197c",
-  "offlineShellVersion": "r37",
-  "offlineReport": "validation-v37/offline.txt"
+  "previousHtmlSha256": "d8415d3654d819e453a33f0be122150a5d75dd2ddf643c2ec056e381ec3d624d",
+  "localChanges": "R38 owner play notes: bowling wheel with aim arrow, execution error for every bowler, opposition punishes loose balls, edges for four, high-ball and mistimed-stroke contact, run-call wording, earlier and slower run-out choice, broadcast strip, light and weather on screen, longer vibration pulses. No new dependencies.",
+  "baseCommit": "87a742da942cf21221bc3898bb1dd624210ad7bb",
+  "offlineShellVersion": "r38",
+  "offlineReport": "validation-v38/offline.txt",
+  "acceptance": {
+    "harness": "check-balance-r38.cjs",
+    "passed": 51,
+    "total": 51
+  }
 }

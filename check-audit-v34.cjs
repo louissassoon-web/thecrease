@@ -28,10 +28,18 @@ await check('Wrong-side hoiks can miss even at perfect timing; chase pressure ch
  for(let seed=1;seed<=300;seed++){const c=C.Contest.create(113*seed+700000,'T20',teams[seed%8],teams[(seed+3)%8],'spectator'),m={...C.Contest.current(c),balls:96,runs:130,target:150},d=C.Innings.delivery(m),b=d.ball,sign=C.Hand.sign(b),x=C.Delivery.at(b,1).x*sign;if(['full','good'].includes(b.lengthName)&&Math.abs(x)>.25&&Math.abs(x)<.85){const r=C.Shot.resolve(b,{mode:'loft',angle:(x>0?-52:44)*sign,error:0,effort:1},m.batters[m.striker],C.Innings.field(m,b),d.rngState);if(r.contact)contacts++;else misses++;}if(JSON.stringify(C.Opposition.input(m,b,c))!==JSON.stringify(C.Opposition.input({...m,target:220},b,c)))changes++;}
  assert.ok(misses>0&&contacts>0);assert.ok(changes>100);assert.ok(C.Opposition.t20Intent({balls:96,runs:130,target:220})>C.Opposition.t20Intent({balls:96,runs:130,target:150}));
 });
-await check('Further runs stop at three; risky runs can still be run out or cancelled',()=>{
+await check('Further runs stop at three; tight runs can still be run out or cancelled, hopeless ones are refused',()=>{
  const app=fixture(),m=C.Contest.current(app.sessions.T20.contest),{r}=play(m);let out={...r,decisionTime:20,play:{...r.play,throw:{...r.play.throw,breakTime:20},running:{...r.play.running,legs:[],commands:[]}}},time=.4;
  for(let i=0;i<3;i++){assert.equal(C.Running.offer(out,time).allowed,true);out=C.Running.command(out,'run',time);time=out.play.running.legs.at(-1).start+.25;}assert.equal(out.play.running.legs.length,3);assert.equal(C.Running.offer(out,time).allowed,false);assert.equal(C.Running.command(out,'run',time),out);
- const clean={...r,play:{...r.play,running:{...r.play.running,legs:[],commands:[]}}},when=clean.play.throw.breakTime-1.4,risk=C.Running.command(clean,'run',when);assert.equal(risk.dismissalKind,'runOut');assert.equal(C.Running.command(risk,'hold',when+.05).wicket,false);
+ // R38: a run the throw would beat by more than a third of a second is refused; inside that margin it is still the batter's call.
+ const clean={...r,play:{...r.play,running:{...r.play.running,legs:[],commands:[]}}},arrival=clean.play.throw.breakTime,late=arrival-1.4;assert.equal(clean.play.running.offerVersion,38);
+ assert.equal(C.Running.offer(clean,late).status,'late');assert.equal(C.Running.offer(clean,late).allowed,false);assert.match(C.Running.offer(clean,late).hint,/^No run/);assert.equal(C.Running.command(clean,'run',late),clean);
+ let tight=null,when=null,safe=0;for(let seed=1;seed<400&&(!tight||!safe);seed++){const d=C.Innings.delivery({...m,rngState:seed*733}),hit=C.Shot.resolve(d.ball,{angle:44,mode:'ground',effort:.65,error:30,callRuns:false},m.batters[m.striker],C.Innings.field(m,d.ball),d.rngState);if(!hit.play.running||!hit.play.throw||hit.wicket||hit.play.event.type!=='pickup')continue;
+  for(let t=.05;t<hit.decisionTime-.12;t+=.01){const offer=C.Running.offer(hit,t);if(offer.status!=='tight')continue;if(offer.margin>=0){assert.notEqual(C.Running.command(hit,'run',t).dismissalKind,'runOut');safe++;}else if(!tight){tight=hit;when=t;}break;}}
+ assert.ok(tight&&safe>0);assert.equal(C.Running.offer(tight,when).allowed,true);assert.match(C.Running.offer(tight,when).hint,/^Tight/);
+ const risk=C.Running.command(tight,'run',when);assert.equal(risk.dismissalKind,'runOut');assert.equal(C.Running.command(risk,'hold',when+.05).wicket,false);
+ // A ball prepared under R37 keeps its call: the same hopeless run may still be attempted, and is run out.
+ const older={...clean,play:{...clean.play,running:{...clean.play.running}}};delete older.play.running.offerVersion;assert.equal(C.Running.offer(older,late).status,'risky');assert.equal(C.Running.command(older,'run',late).dismissalKind,'runOut');
 });
 await check('Run-out return ends are selectable through real field taps, with continuous fielders and saved decisions',async()=>{
  const teams=C.Squad.teams('T20');let choices=0,runOutChoices=0;

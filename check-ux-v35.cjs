@@ -14,10 +14,21 @@ await check('Three runs cap the engine and grey the real button; a queued third 
  for(let i=0;i<3;i++){assert.equal(h.n('runBtn').disabled,false);await h.n('runBtn').click();if(i<2){s.resultAge=(s.live.play.running.legs.at(-1).start+.25)*1000;h.u.renderUI();}}
  assert.equal(h.n('runBtn').disabled,true);assert.equal(h.n('runBtn').textContent,'Three-run limit');const before=JSON.stringify(s.live);await h.n('runBtn').dispatch('click');assert.equal(JSON.stringify(s.live),before);assert.equal(s.live.play.running.legs.length,3);assert.equal(h.n('holdBtn').disabled,false);await h.n('holdBtn').click();assert.equal(s.live.play.running.legs.length,2);assert.equal(h.n('runBtn').disabled,false);
 });
-// R37 supersedes the R36 freeze: the same real controls must now stay live.
-await check('4× falls to 1× at a run-out chance; runners keep moving and either end remains selectable',async()=>{
- for(const end of [0,1]){const h=host('T20',fixture(true));await h.n('resumeBtn').click();const a=sample(h.u.get().match,true,true),s=mount(h,a,a.r.play.event.time-.25),rng=s.match.rngState;await h.n('fastForwardBtn').click();h.step();const t=C.Fielding.playback(s.live.play,s.resultAge);assert.ok(t>a.r.play.event.time&&t<a.r.play.event.time+.1);assert.equal(h.n('returnPanel').hidden,false);assert.equal(h.n('fastForwardBtn').hidden,true);const age=s.resultAge;h.step();assert.equal(s.resultAge,age+100);assert.equal(s.match.rngState,rng);
- await h.n('menuBtn').click();const packed=save(h);C.CareerSave.validate(copy(packed));const re=host('T20',packed);await re.n('resumeBtn').click();await re.n(end?'returnBowlerBtn':'returnStrikerBtn').click();const rs=re.u.get();assert.equal(rs.live.play.throw.end,end);assert.equal(re.n('returnPanel').hidden,true);assert.equal(re.n('fastForwardBtn').hidden,false);const before=rs.resultAge;re.step();assert.equal(rs.resultAge-before,100);await re.n('fastForwardBtn').click();re.step();assert.equal(rs.resultAge-before,500);assert.equal(rs.match.rngState,rng);C.CareerSave.validate(save(re));}
+// R37 superseded the R36 freeze: the controls stay live and play keeps moving. R38 keeps that and changes the timing:
+// 4× gives way one second of play before the pickup, the choice opens then, and the engine's window is shown at 0.4×.
+await check('4× gives way a second before a run-out chance; an early pick is thrown at the pickup and either end remains selectable',async()=>{
+ const near=(x,y)=>assert.ok(Math.abs(x-y)<1e-6,x+' is not '+y);
+ for(const end of [0,1]){const button=end?'returnBowlerBtn':'returnStrikerBtn';
+  // An end picked during the warning waits for the pickup. Nothing is thrown, saved or drawn from the match RNG until then.
+  const h=host('T20',fixture(true));await h.n('resumeBtn').click();const a=sample(h.u.get().match,true,true),pickup=a.r.play.event.time;assert.ok(pickup>1.6);const s=mount(h,a,pickup-1.5),rng=s.match.rngState,at=()=>C.Fielding.playback(s.live.play,s.resultAge);
+  await h.n('fastForwardBtn').click();h.step();near(at(),pickup-1.1);assert.equal(h.n('returnPanel').hidden,true);
+  h.step();near(at(),pickup-.925);assert.equal(h.n('returnPanel').hidden,false);assert.equal(h.n('returnTitle').textContent,'Run-out chance coming');assert.equal(h.n('fastForwardBtn').hidden,true);h.u.drawField(0);assert.equal(h.u.catchTargets().filter(t=>t.end!==undefined).length,2);
+  const before=JSON.stringify(s.live);await h.n(button).click();assert.equal(JSON.stringify(s.live),before);assert.equal(h.n(button).attrs['aria-pressed'],'true');assert.match(h.n('returnHint').textContent,/at the pickup/);
+  for(let i=0;i<9;i++){h.step();assert.equal(s.live.play.returnChoice.end,undefined);}near(at(),pickup-.025);
+  h.step();assert.equal(s.live.play.returnChoice.end,end);assert.equal(s.live.play.throw.end,end);assert.equal(h.n('returnPanel').hidden,true);assert.equal(h.n('fastForwardBtn').hidden,false);assert.equal(s.match.rngState,rng);C.CareerSave.validate(save(h));
+  // Waiting for the pickup works as before, at 0.4×. A save taken inside the window reloads with the choice still open.
+  const w=host('T20',fixture(true));await w.n('resumeBtn').click();const ws=mount(w,a,pickup),age=ws.resultAge;assert.equal(w.n('returnPanel').hidden,false);assert.equal(w.n('returnTitle').textContent,'Run-out chance!');w.step();near(ws.resultAge,age+40);assert.equal(w.n('fastForwardBtn').hidden,true);assert.equal(ws.match.rngState,rng);
+  await w.n('menuBtn').click();const packed=save(w);C.CareerSave.validate(copy(packed));const re=host('T20',packed);await re.n('resumeBtn').click();await re.n(button).click();const rs=re.u.get();assert.equal(rs.live.play.throw.end,end);assert.equal(re.n('returnPanel').hidden,true);assert.equal(re.n('fastForwardBtn').hidden,false);const start=rs.resultAge;re.step();assert.equal(rs.resultAge-start,100);await re.n('fastForwardBtn').click();re.step();assert.equal(rs.resultAge-start,500);assert.equal(rs.match.rngState,rng);C.CareerSave.validate(save(re));}
 });
 await check('A fielding bowler has another receiver and a backup; the receiver reaches the returning ball in time',()=>{
  const m=C.Contest.current(fixture(true).sessions.T20.contest);let seen=0;

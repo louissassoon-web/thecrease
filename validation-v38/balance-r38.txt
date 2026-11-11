@@ -1,0 +1,59 @@
+PASS T20 attacking pace edges that reach the rope, % (plan 8-15)                              10.84%   target 6-17%
+PASS T20 attacking pace edges that are caught, % (plan 20-40; revision 37 was 31)             21.29%   target 15-36%
+PASS Test attacking pace edges that reach the rope, % (plan 8-15)                             10.83%   target 6-19%
+PASS Test attacking pace edges that are caught, % (plan 20-40)                                32.48%   target 24-48%
+PASS Sample size: pace balls between 1.75 m and the wide line on a hittable line                  51   target 25-2000
+PASS Above 1.75 m, straight-bat strokes hit cleanly in front of square, % (plan under 5)          0%   target 0-5%
+PASS Above 1.75 m, a hook finds the edge, % (plan at least 25 at 1.85 m)                      40.52%   target 22-60%
+PASS Above 1.75 m, hook edges that are top edges, %                                             100%   target 90-100%
+PASS Top edges that go behind square, %                                                         100%   target 100-100%
+PASS Between 1.5 and 1.75 m, a hook finds the edge, % (more than a pull, less than at head height)    7.75%   target 2-40.5%
+PASS Between 1.2 and 1.45 m, a pull finds the edge, % (the pull stays a safe stroke)           2.78%   target 0-8%
+PASS Between 1.2 and 1.45 m, a pull makes contact, %                                            100%   target 97-100%
+PASS Pace balls held as long as possible that are called wide over the head, %                73.67%   target 60-100%
+PASS T20 ground contacts that go up in front of the bat, 120 ms timing sd, % (plan 4-10; revision 38 is just under)    3.54%   target 2.6-10%
+PASS T20 ground contacts that go up in front of the bat, 60 ms timing sd, % (good timing rarely does)    0.62%   target 0.1-1.5%
+PASS Of those at 120 ms, caught, % (the rest land safely)                                     46.19%   target 25-60%
+PASS Different fielders who take those catches                                                     7   target 4-11
+PASS Of those catches, taken by the bowler, %                                                 27.84%   target 5-45%
+PASS T20 spin, good length: runs per ball (plan 1.05-1.25)                                       1.1   target 1-1.3
+PASS T20 spin, full: runs per ball (plan at least 1.5; revision 37 was 1.29)                    1.51   target 1.38-2.4
+PASS T20 spin, overpitched: runs per ball (plan at least 1.5; revision 37 was 1.33)             1.86   target 1.5-2.6
+PASS T20 spin, short: runs per ball (plan at least 1.5; revision 37 was 1.33)                   1.85   target 1.55-2.6
+PASS T20 spin, drag down: runs per ball (revision 37 was 1.38)                                  1.83   target 1.65-2.7
+PASS T20 spin, full toss: runs per ball (plan at least 1.8; revision 37 was 1.65)               2.15   target 1.75-2.8
+PASS T20 spin, very full: runs per ball (plan 0.9-1.4; revision 37 was 0.30, revision 38 is just above)     1.36   target 0.9-1.85
+PASS T20 spin, drag down wickets as a multiple of good-length wickets (plan no more often)      0.58   target 0-1.15
+PASS T20 spin, short: runs per wicket as a multiple of good length                              2.91   target 1-9
+PASS T20 spin, drag down: runs per wicket as a multiple of good length                          2.87   target 1-9
+PASS T20 spin, full toss: runs per wicket as a multiple of good length                          4.44   target 1-9
+INFO T20 spin, full: runs per wicket as a multiple of good length                               1.23   near 1: it costs more runs and still takes wickets. See REPORT.md
+PASS T20 pace balls over the head that the batter leaves, %                                   92.51%   target 75-100%
+PASS Sample size: Test balls that are slow, short, outside off, in reach and below the shoulder      541   target 300-5000
+PASS Test slow short wide balls in reach that the batter leaves, % (plan under 25)             4.44%   target 0-12%
+PASS Test slow short wide balls in reach hit for four, % (plan at least 30)                   35.12%   target 30-60%
+PASS Test slow short wide balls in reach: runs per ball as a multiple of a good ball on the stumps or corridor     5.67   target 3-9
+PASS Player bowling, control 80-87: length error sd, m (plan 0.4-0.6 at control 85)           0.51 m   target 0.4-0.62 m
+PASS Player bowling, control 80-87: line error sd, m (plan 0.12-0.20)                         0.13 m   target 0.11-0.2 m
+PASS Player bowling, control 80-87: loose balls, % (plan 3-6)                                  4.36%   target 2.5-6.5%
+PASS Player bowling: length error sd, control 88 and above over control 80-87 (better bowlers miss by less)     0.71   target 0.5-0.9
+PASS Player bowling: length error sd, control below 80 over control 80-87                       1.28   target 1.1-1.7
+PASS Pace release at the yorker instant that lands a yorker, %                                53.07%   target 45-80%
+PASS T20 opposition pace: loose balls, %                                                       2.68%   target 1.8-4.5%
+PASS T20 opposition pace: length error sd without them, m                                      0.3 m   target 0.15-0.45 m
+PASS T20 opposition pace: full tosses, % (plan 1-3)                                            1.27%   target 0.6-3%
+PASS Test opposition pace: loose balls, %                                                      2.69%   target 1.5-4.5%
+PASS Test opposition pace: length error sd without them, m                                    0.26 m   target 0.15-0.45 m
+INFO Test opposition pace: full tosses, % (plan 1-3)                                           0.35%   below plan. See REPORT.md
+PASS Run button: share of open calls labelled tight, % (plan under 25; revision 37 said risky on most)    7.63%   target 1-25%
+PASS Run button: tight or no-run calls on a ball heading for the rope                              0   target 0-0
+PASS Run button: no-run calls that can still be taken                                              0   target 0-0
+PASS Run button: a run called when it says the run is on that ends in a run out, %                0%   target 0-0%
+PASS Run button: a run called when it says tight that ends in a run out, % (it could go either way)   61.54%   target 25-75%
+PASS T20 25% loft mix, 60 ms sd, on 120 innings: balls per wicket (the contract uses 10 and a floor of 20)    21.51   target 20-60
+INFO   the same measurement on revision 37                                                     20.63   its ten contract innings read 24.04; the floor is 20
+INFO T20 ground strokes, 60 ms sd, on 120 innings: balls per wicket                             67.3   revision 37: 62.0; contract band 30-90
+INFO T20 ground strokes, 130 ms sd, on 120 innings: balls per wicket                            22.5   revision 37: 22.4; contract band 12-40
+INFO Test ground strokes + 35% defence, 60 ms sd, on 40 innings: balls per wicket               80.3   revision 37: 78.3; contract band 40-130
+
+51 passed, 0 failed of 51 revision 38 checks.
