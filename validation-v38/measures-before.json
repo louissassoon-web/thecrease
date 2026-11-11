@@ -1,0 +1,100 @@
+{
+ "engine": "review-fixtures/core-v37.js",
+ "edgesT20": {
+  "edges": 355,
+  "fourPct": 5.07,
+  "caughtPct": 30.7
+ },
+ "edgesTEST": {
+  "edges": 216,
+  "fourPct": 2.78,
+  "caughtPct": 35.19
+ },
+ "highBalls": {
+  "headHighBalls": 329,
+  "straightBatCleanInFrontPct": 87.16,
+  "hookEdgePct": 2.53,
+  "hookEdgesBehindSquarePct": 100,
+  "hookCleanContactPct": 97.47,
+  "chestHighPullEdgePct": 0,
+  "heldTooLongWidePct": 7
+ },
+ "popUps120ms": {
+  "groundContacts": 5858,
+  "inTheAirPct": 0,
+  "caughtPct": null
+ },
+ "popUps60ms": {
+  "groundContacts": 6346,
+  "inTheAirPct": 0,
+  "caughtPct": null
+ },
+ "t20SpinByLength": {
+  "Full toss": {
+   "balls": 302,
+   "runsPerBall": 1.68,
+   "wicketPct": 10.93
+  },
+  "Very full": {
+   "balls": 414,
+   "runsPerBall": 0.29,
+   "wicketPct": 3.62
+  },
+  "Overpitched": {
+   "balls": 598,
+   "runsPerBall": 1.32,
+   "wicketPct": 12.04
+  },
+  "Full": {
+   "balls": 946,
+   "runsPerBall": 1.3,
+   "wicketPct": 10.68
+  },
+  "Good length": {
+   "balls": 947,
+   "runsPerBall": 1.11,
+   "wicketPct": 6.02
+  },
+  "Short": {
+   "balls": 586,
+   "runsPerBall": 1.34,
+   "wicketPct": 9.73
+  },
+  "Drag down": {
+   "balls": 2011,
+   "runsPerBall": 1.41,
+   "wicketPct": 8.45
+  }
+ },
+ "testSlowShortWide": {
+  "balls": 520,
+  "leftPct": 41.15,
+  "fourPct": 5,
+  "runsPerBall": 0.54,
+  "goodBallRunsPerBall": 0.4
+ },
+ "playerRelease": {
+  "control80to87LengthMissSdM": 0.13,
+  "control80to87MissBeyond1p5mPct": 0,
+  "yorkerInstantLandsYorkerPct": 99.39
+ },
+ "oppositionT20Pace": {
+  "balls": 2762,
+  "fullTossPct": 0,
+  "downLegPct": 0.72,
+  "wideOfOffPct": 1.99
+ },
+ "oppositionTESTPace": {
+  "balls": 3947,
+  "fullTossPct": 0,
+  "downLegPct": 0.28,
+  "wideOfOffPct": 1.06
+ },
+ "runButton": {
+  "openCalls": 189968,
+  "warnedPct": 84.98,
+  "refusedPct": 0,
+  "runOutWhenWarnedPct": 72.49,
+  "runOutWhenNotWarnedPct": 0
+ }
+}

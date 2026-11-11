@@ -33,3 +33,5 @@ On any http(s) origin, `npm run serve` included, the page registers `dist/sw.js`
 
 - `node review-check.cjs`: the engine maintainer's portable regression groups (DOM and canvas facades, no browser).
 - `node check-balance.cjs`: gameplay balance acceptance; targets are design ranges and are changed only deliberately, with the reason recorded.
+- `node check-balance-r38.cjs`: revision 38 acceptance (edges, high balls, mistimed strokes, loose balls, bowling error, run calls), plus three contract checks repeated on larger samples for information. `npm run check` runs it after the contract.
+- `node tools/measure-r38.cjs [core.js]`: the same measures on any engine file, for before-and-after comparison against `review-fixtures/core-v37.js`.

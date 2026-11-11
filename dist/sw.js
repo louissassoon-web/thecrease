@@ -1,6 +1,6 @@
 // Cricket · The crease - offline shell. This version repairs cached navigation redirects.
 // The game remains cache-first; a changed page is offered through the existing Update ready UI.
-const VERSION='r37',CACHE='crease-'+VERSION,ASSETS=['./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-512-maskable.png','./icon-180.png'],INDEX=new URL('./index.html',self.location.href).pathname,ROOT=INDEX.slice(0,-'index.html'.length);
+const VERSION='r38',CACHE='crease-'+VERSION,ASSETS=['./manifest.webmanifest','./icon-192.png','./icon-512.png','./icon-512-maskable.png','./icon-180.png'],INDEX=new URL('./index.html',self.location.href).pathname,ROOT=INDEX.slice(0,-'index.html'.length);
 
 // Static hosts may redirect /index.html to /. A followed redirect survives CacheStorage,
 // but a navigation (redirect mode manual) cannot consume it. Fetch the canonical root

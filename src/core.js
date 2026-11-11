@@ -837,12 +837,12 @@ globalThis.Cricket = (() => {
      for(const b of m.bowlers)if(!BOWLERS.some(t=>t.id===b.archetype)||typeof b.name!=='string'||b.name.length>32)throw Error('Invalid bowler');
     }
     if(!['ready','flight','inPlay','result','finished'].includes(state.phase)||!Number.isFinite(state.elapsed)||state.elapsed< -850||state.elapsed>10000||!Number.isFinite(state.resultAge)||state.resultAge<0||state.resultAge>30000)throw Error('Invalid delivery clock');
-    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
+    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37,38].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
     if(state.fieldBrief!==undefined&&typeof state.fieldBrief!=='boolean'||state.fieldBrief&&(state.phase!=='flight'||state.elapsed!==-850||!Number.isFinite(state.briefAge)||state.briefAge<0||state.briefAge>15000))throw Error('Invalid pre-delivery pause');
     if(state.introducedBatters!==undefined&&(!Array.isArray(state.introducedBatters)||state.introducedBatters.length>11||state.introducedBatters.some(i=>!Number.isInteger(i)||i<0||i>10)))throw Error('Invalid saved player introductions');if(state.reward!==undefined&&![0,300,500].includes(state.reward))throw Error('Invalid saved reward');if(state.briefCards!==undefined&&!Broadcast.valid(state.briefCards))throw Error('Invalid saved introduction');if(state.ballBridge!==undefined&&state.ballBridge!==null&&(!['x','z','h'].every(k=>Number.isFinite(state.ballBridge.from?.[k]))||!Number.isFinite(state.ballBridge.duration)||state.ballBridge.duration<.08||state.ballBridge.duration>.22||state.ballBridge.startAt!==undefined&&(!Number.isFinite(state.ballBridge.startAt)||state.ballBridge.startAt<0||state.ballBridge.startAt>30)))throw Error('Invalid saved ball transition');if(p?.scoringVersion>=19&&(!Players.valid(p.batterProfile,format)||!Players.validBowler(p.bowlerProfile)))throw Error('Invalid saved player profile');
     if(p?.scoringVersion>=13&&(!Weather.valid(p.weather)||JSON.stringify(p.weather)!==JSON.stringify(p.conditions?.weather)))throw Error('Invalid saved weather');
     if(p?.scoringVersion>=12){const sign=Hand.sign(p),field=p.savedField;if(!Array.isArray(field)||!Tactics.legal(field.map(f=>({...f,a:f.a*sign})),m)||typeof p.fieldNote!=='string'||p.fieldNote.length>140)throw Error('Invalid saved field');}
-    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion===34?100:p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==(p.scoringVersion>=35?35:p.scoringVersion>=34?34:15)||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>(p.scoringVersion===34?100:3))||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
+    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37,38].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion===34?100:p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==(p.scoringVersion>=35?35:p.scoringVersion>=34?34:15)||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>(p.scoringVersion===34?100:3))||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
     if(state.shot&&(!['ground','loft','defend'].includes(state.shot.mode)||!Number.isFinite(state.shot.angle)||Math.abs(state.shot.angle)>180||!Number.isFinite(state.shot.error)||Math.abs(state.shot.error)>10000))throw Error('Invalid saved shot');
     if(state.botInput){const input=state.botInput;if(!Number.isInteger(input.rngState)||input.rngState<0||input.rngState>4294967295||input.shot&&(!['ground','loft','defend'].includes(input.shot.mode)||!Number.isFinite(input.shot.angle)||Math.abs(input.shot.angle)>180||!Number.isFinite(input.shot.error)||Math.abs(input.shot.error)>10000))throw Error('Invalid opposition shot');}
     for(const shot of [state.shot,state.botInput?.shot])if(shot?.effort!==undefined&&(!Number.isFinite(shot.effort)||shot.effort<0||shot.effort>1))throw Error('Invalid stroke strength');
@@ -1809,11 +1809,11 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
    if(preset==='defend'){for(const angle of [14,-16,65,-100,135]){const target={a:angle,r:57/64,n:angle===14?'long-off':angle===-16?'long-on':angle===65?'deep cover':angle===-100?'deep square leg':'third man'},i=field.map((f,i)=>({i,cost:Tactics.outside(f)?999:Math.abs(f.a-angle)})).sort((a,b)=>a.cost-b.cost)[0]?.i,next=field.map((f,j)=>j===i?target:f);if(Tactics.legal(next,m))field.splice(0,field.length,...next);}}
    return field.map(f=>({...f,a:f.a*sign}));
   },
-  prepare(m,plan={}){const d=Innings.delivery(m),b=d.ball,owner=m.bowlers[b.bowler],choices=this.options(owner),variation=choices.some(v=>v.name===plan.variation)?plan.variation:choices[0].name,rng=RNG.stream(d.rngState),noise=Array.from({length:6},()=>rng.next()),line=clamp(Number(plan.line)||0,-1.1,1.25),preset=['balanced','attack','defend'].includes(plan.field)?plan.field:'balanced';
+  prepare(m,plan={}){const d=Innings.delivery(m,{manual:true}),b=d.ball,owner=m.bowlers[b.bowler],choices=this.options(owner),variation=choices.some(v=>v.name===plan.variation)?plan.variation:choices[0].name,rng=RNG.stream(d.rngState),noise=Array.from({length:6},()=>rng.next()),line=clamp(Number(plan.line)||0,-1.1,1.25),preset=['balanced','attack','defend'].includes(plan.field)?plan.field:'balanced';
    // A manually selected bowler can differ from the legacy scheduled slot.
    // Freeze the selected player's type before constructing the human release.
    if(b.bowlerProfile){b.archetype=b.bowlerProfile.type;b.family=BOWLERS.find(t=>t.id===b.archetype).family;b.arm=b.bowlerProfile.arm;}
-   b.manualBowling={version:37,variation,line,field:preset,noise,control:choices.find(v=>v.name===variation).control,releaseAge:null};b.variation=variation;b.savedField=this.field(m,b,preset);b.fieldNote='Field: '+({balanced:'balanced',attack:'catching positions',defend:'boundary protection'}[preset]);return{ball:b,rngState:rng.state};
+   b.manualBowling={version:38,variation,line,field:preset,noise,control:choices.find(v=>v.name===variation).control,releaseAge:null};b.variation=variation;b.savedField=this.field(m,b,preset);b.fieldNote='Field: '+({balanced:'balanced',attack:'catching positions',defend:'boundary protection'}[preset]);return{ball:b,rngState:rng.state};
   },
   release(template,rawAge,offset=0){const b={...template,manualBowling:{...template.manualBowling}},c=b.manualBowling;if(!c||![30,31,32,34,35,37].includes(c.version))throw Error('This ball has no bowling plan');const age=clamp(rawAge-offset,350,1400),n=c.noise,s=b.bowlerProfile,spin=Strokes.spin(b),p=b.conditions,sign=Hand.sign(b),control=c.control,variation=c.variation;
    const intended=this.lengthAt(age,c.version),rawLength=clamp(intended+(n[0]+n[1]-1)*(1-control/115)*(c.version>=31?1.1:.75),c.version>=31?-5:.18,10.8),length=rawLength>0?Math.max(.18,rawLength):rawLength,lengthName=c.version>=31?(length<=0?'full':length<.85?'yorker':length<4.05?'full':this.label(length)):this.label(length),speed=Math.round(lerp(...s.speed,n[2])-(variation==='Slower ball'?lerp(13,21,n[3]):0)),movement=.55+s.movement*.006;
@@ -1882,8 +1882,9 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  CareerSave.validate=function(raw){const data=saveValidateV29.call(this,raw);if(data.tutorialSeen!==undefined&&typeof data.tutorialSeen!=='boolean')throw Error('Invalid intro preference');if(data.bowlingOffset===undefined)data.bowlingOffset=0;if(!Number.isFinite(data.bowlingOffset)||Math.abs(data.bowlingOffset)>200)throw Error('Invalid bowling timing offset');for(const key of ['bowlingGuide','ballTrail'])if(data[key]!==undefined&&typeof data[key]!=='boolean')throw Error('Invalid bowling preference');for(const state of Object.values(data.sessions)){
    if(state.needsToss!==undefined&&typeof state.needsToss!=='boolean')throw Error('Invalid toss state');
    const pending=state.pending,manual=pending?.manualBowling;if(pending?.fieldingVersion!==undefined&&![30,32].includes(pending.fieldingVersion))throw Error('Invalid fielding rules');
-   if(manual&&(![30,31,32,34,35,37].includes(manual.version)||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)))throw Error('Invalid saved bowling release');
-   if(pending?.fullToss!==undefined&&(typeof pending.fullToss!=='boolean'||![31,32,34,35,37].includes(manual?.version)||pending.fullToss&&(pending.length>0||pending.postTime!==0||pending.bounceT!==1||pending.contactH<.035||pending.contactH>.95)))throw Error('Invalid full-toss flight');
+   if(manual&&(![30,31,32,34,35,37,38].includes(manual.version)||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)||manual.execution!=null&&(!Number.isFinite(manual.execution.length)||Math.abs(manual.execution.length)>16||!Number.isFinite(manual.execution.line)||Math.abs(manual.execution.line)>3||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(manual.execution.slip??null))||manual.intendedLabel!==undefined&&(typeof manual.intendedLabel!=='string'||manual.intendedLabel.length>20)))throw Error('Invalid saved bowling release');
+   if(pending?.execution!==undefined&&(pending.execution?.version!==38||!Number.isFinite(pending.execution.length)||Math.abs(pending.execution.length)>16||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(pending.execution.slip??null)))throw Error('Invalid bowling execution');
+   if(pending?.fullToss!==undefined&&(typeof pending.fullToss!=='boolean'||!([31,32,34,35,37,38].includes(manual?.version)||pending.scoringVersion>=38)||pending.fullToss&&(pending.length>0||pending.postTime!==0||pending.bounceT!==1||pending.contactH<.035||pending.contactH>.95)))throw Error('Invalid full-toss flight');
    const change=state.live?.play?.catchChoice;if(change&&(!Number.isFinite(change.time)||change.time<0||change.time>30||!Array.isArray(change.positions)||change.positions.length!==11||change.positions.some(f=>!Number.isFinite(f.x)||!Number.isFinite(f.z)||Math.hypot(f.x,f.z)>100)))throw Error('Invalid saved fielding choice');
    const a=state.bowlingAction;if(a&&(!Number.isFinite(a.age)||a.age<0||a.age>1400||typeof a.running!=='boolean'||typeof a.released!=='boolean'))throw Error('Invalid bowling action');const plan=state.bowlingPlan;if(plan&&(!Number.isFinite(plan.line)||plan.line< -1.1||plan.line>1.25||typeof plan.variation!=='string'||plan.variation.length>30||!['balanced','attack','defend'].includes(plan.field)))throw Error('Invalid bowling plan');for(const m of state.contest.innings)if(m.bowlingChoices){for(const [over,index]of Object.entries(m.bowlingChoices))if(!/^\d+$/.test(over)||+over>449||!Number.isInteger(index)||index<0||index>4)throw Error('Invalid bowler selection');if(m.format==='T20'&&m.bowlers.some(b=>b.balls>24))throw Error('Bowler exceeded four overs');}if(state.toss30&&(!['heads','tails'].includes(state.toss30.call)||!['heads','tails'].includes(state.toss30.face)||![0,1].includes(state.toss30.winner)||![null,'bat','bowl'].includes(state.toss30.choice)||typeof state.toss30.seen!=='boolean'))throw Error('Invalid toss');}return data;};
 
@@ -2052,5 +2053,296 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
   }return data;
  };
 
- return Object.freeze({ReturnControl,BowlingControl,CatchControl,Catching,FlightInfo,Toss,Appearance,Commentary,Broadcast,Economy,BallView,Players,Presentation,Weather,PreDelivery,Restart,Tactics,Contact,Rules,Running,TeamField,LiveBall,Hand,SoundDesign,Crowd,Stadium,Conditions,Bowling,RNG,Delivery,Shot,Strokes,LegacyShot,ShotV3,Ground,Fielding,BallFlight,NormalBall,View,BatterRig,FielderRig,Match,Save,Squad,Innings,Contest,Opposition,Season,CareerSave,Gesture,Rotation,BOWLERS,FIELDS,clamp,lerp});
+ // ---------------------------------------------------------------------------
+ // R38. New deliveries carry scoring version 38. Balls prepared under 37 or
+ // earlier keep their rules through the wrappers above. Nothing here reads UI
+ // state, and every draw comes from a seeded stream.
+ // ---------------------------------------------------------------------------
+ const R38={
+  gauss(rng){return Math.sqrt(-2*Math.log(Math.max(1e-12,rng.next())))*Math.cos(2*Math.PI*rng.next());},
+  // Height at the bat as a right-hander sees it. Shoulder is about 1.45 m, the head about 1.75 m.
+  height(ball){return Delivery.at(Hand.canonical(ball),1).h;},
+  crossBat:['Hook','Pull','Square cut','Upper cut'],
+  guided:['Late cut','Leg glance','Paddle sweep']
+ };
+
+ // --- Bowling execution: every bowler misses the spot by an amount set by control. ---
+ const Execution={
+  // Standard deviations in metres between aim and outcome, and the chance of a loose ball.
+  spread(control,difficulty=1){
+   const k=clamp((100-control)/60,.03,1.1);
+   return{length:(.22+1.05*k)*difficulty,line:(.05+.30*k)*difficulty,slip:clamp((.012+.11*k)*difficulty,.008,.16)};
+  },
+  difficulty({length,variation,line=0,spin=false,stage='',damp=0}){
+   let d=1;
+   if(!spin&&length<1.05)d*=1.25;
+   if(!spin&&length>8.3)d*=1.12;
+   if(['Slower ball','Googly','Top-spinner','Arm ball'].includes(variation))d*=1.15;
+   if(Math.abs(line)>=.9)d*=1.12;
+   if(stage==='Death overs')d*=1.08;
+   return d*(1+.35*clamp(damp,0,1));
+  },
+  // A derived stream: the match RNG is neither read nor advanced.
+  draw(seed,control,difficulty,yorker=false,loose=1){
+   const rng=RNG.stream(seed>>>0),sd=this.spread(control,difficulty),length=R38.gauss(rng)*sd.length,line=R38.gauss(rng)*sd.line,roll=rng.next(),pick=rng.next(),size=rng.next();
+   let slip=null;
+   if(roll<sd.slip*loose)slip=yorker?(pick<.45?'fullToss':pick<.80?'halfVolley':'leg'):pick<.30?'longHop':pick<.60?'halfVolley':pick<.85?'leg':'wide';
+   return{length,line,slip,size};
+  },
+  // How far a loose ball misses. Length shifts are metres along the pitch (negative is fuller); lines
+  // are for a right-hander. One prepared ball has one error, so its landing point moves with the
+  // release, except where the plan crosses into yorker length and the kind of miss changes.
+  slip(e,spin,yorker=false){
+   if(e.slip==='fullToss')return{shift:-lerp(.6,2.6,e.size)};
+   if(e.slip==='halfVolley')return{shift:yorker?lerp(.6,1.9,e.size):-lerp(1.6,2.8,e.size)};
+   if(e.slip==='longHop')return{shift:lerp(2.2,3.5,e.size),pace:spin?1:.93};
+   if(e.slip==='leg')return{line:-lerp(.32,.72,e.size)};
+   if(e.slip==='wide')return{line:lerp(.72,1.02,e.size)};
+   return{};
+  },
+  height(length,spin){
+   // Pace: waist high at 7.4 m, chest at 8.5, shoulder at 10. Dragged shorter than that the ball climbs
+   // steeply and clears the batter's head, which is a wide, so the longest hold is not a free bouncer.
+   const knots=spin?[[.18,.06],[1,.15],[3.3,.36],[5.5,.60],[8,.85],[10.8,1.08]]:[[.18,.06],[1,.17],[3.3,.44],[5.8,.9],[8.5,1.30],[10,1.659],[10.8,2.25]];
+   let k=1;while(k<knots.length-1&&length>knots[k][0])k++;
+   return lerp(knots[k-1][1],knots[k][1],clamp((length-knots[k-1][0])/(knots[k][0]-knots[k-1][0]),0,1));
+  },
+  // Heights the R37 planner gives a short ball, kept so the correction below is exact.
+  planned(length,name,spin){return name!=='short'?this.height(length,spin):spin?lerp(1.25,1.52,clamp((length-7.8)/1.5,0,1)):lerp(1.55,1.88,clamp((length-8.3)/1.7,0,1));},
+  lengthName(length,spin){return length<=0?'full':length<.85?(spin?'full':'yorker'):length<4.05?'full':spin?(length>=6.2?'short':'good'):length<7.4?'good':'short';},
+  fullToss(b){b.fullToss=true;b.lengthName='full';b.contactH=clamp(.035-b.length*.23,.035,.95);b.kick=0;b.preTime=18.4/(b.speed/3.6);b.postTime=0;b.duration=b.preTime*2600;b.bounceT=1;return b;},
+  // The AI's planned ball, moved by its bowler's error. The planner already spreads length inside
+  // its band, so half of the length error is added on top, and outright loose balls come at 55% of
+  // the manual rate in T20 and 70% in Tests.
+  apply(ball,seed){
+   const b={...ball},s=b.bowlerProfile,spin=Strokes.spin(b),sign=Hand.sign(b),p=b.conditions,bounce=(p?.bounce??1)*(.90+s.bounce*.0013),
+    e=this.draw(seed^0x38a1,s.control,this.difficulty({length:b.length,variation:b.variation,line:Delivery.at(b,1).x*sign,spin,stage:b.fieldStage,damp:p?.weather?.damp||0}),b.lengthName==='yorker',b.format==='TEST'?.70:.55),
+    move=this.slip(e,spin,b.lengthName==='yorker'),planned=b.length,plannedHeight=this.planned(planned,b.lengthName,spin);
+   let length=clamp(planned+e.length*(b.lengthName==='yorker'?.3:.5)+(move.shift||0),-5,10.8);if(length>0)length=Math.max(.18,length);
+   b.length=length;b.speed=Math.round(b.speed*(move.pace??1));b.execution={version:38,length:+(length-planned).toFixed(3),slip:e.slip};
+   if(length<=0)this.fullToss(b);
+   else{
+    b.lengthName=this.lengthName(length,spin);
+    b.contactH=clamp(b.contactH+(this.height(length,spin)-plannedHeight)*bounce,.05,2.08);
+    b.preTime=(18.4-length)/(b.speed/3.6);b.postTime=length/(b.speed/3.6*(spin?.70:b.lengthName==='short'?.64:.79)*(p?.pace??1));
+    b.duration=(b.preTime+b.postTime)*2600;b.bounceT=b.preTime/(b.preTime+b.postTime);
+   }
+   if(move.line!==undefined)b.line+=(move.line-Delivery.at(b,1).x/sign)*sign;
+   return b;
+  }
+ };
+ const deliveryV37=Innings.delivery;
+ Innings.delivery=function(m,options={}){
+  const d=deliveryV37.call(this,m),b=d.ball;b.scoringVersion=38;
+  // A spinner's very full ball is a half-volley for the batter, not a yorker.
+  if(Strokes.spin(b)&&b.lengthName==='yorker')b.lengthName='full';
+  if(options.manual||!b.bowlerProfile)return d;
+  return{...d,ball:Execution.apply(b,d.rngState)};
+ };
+ const releaseV37=BowlingControl.release;
+ BowlingControl.release=function(template,rawAge,offset=0){
+  if(template.manualBowling?.version!==38)return releaseV37.call(this,template,rawAge,offset);
+  const b={...template,manualBowling:{...template.manualBowling}},c=b.manualBowling,age=clamp(rawAge-offset,350,1400),n=c.noise,s=b.bowlerProfile,spin=Strokes.spin(b),p=b.conditions,sign=Hand.sign(b),variation=c.variation,
+   intended=this.lengthAt(age,38),
+   e=Execution.draw(Math.floor(n[0]*4294967296)^0x38e1,c.control,Execution.difficulty({length:intended,variation,line:c.line,spin,stage:b.fieldStage,damp:p?.weather?.damp||0}),!spin&&intended<1.05),
+   move=Execution.slip(e,spin,!spin&&intended<1.05),raw=clamp(intended+e.length+(move.shift||0),-5,10.8),length=raw>0?Math.max(.18,raw):raw,aim=move.line??c.line+e.line,
+   speed=Math.round((lerp(...s.speed,n[2])-(variation==='Slower ball'?lerp(13,21,n[3]):0))*(move.pace??1)),movement=.55+s.movement*.006;
+  const swing=(variation==='Outswinger'?1:variation==='Inswinger'?-1:0)*lerp(.17,.31,n[3])*p.swing*movement*sign;
+  let kick=spin?(b.archetype==='legspin'?(variation==='Googly'?-1:variation==='Top-spinner'?0:1)*lerp(.24,.43,n[4]):variation==='Arm ball'?0:-lerp(.20,.37,n[4]))*p.turn:(n[4]<.5?-1:1)*lerp(.05,.17,n[5])*p.seam;
+  if(spin&&b.arm==='left')kick*=-1;kick=Math.atan(kick*movement/5.5)*sign;
+  const contactH=clamp(Execution.height(length,spin)*p.bounce*(.90+s.bounce*.0013)*(variation==='Top-spinner'?1.10:1)+(n[5]-.5)*p.variation,.05,2.22),
+   preTime=(18.4-length)/(speed/3.6),postTime=length/(speed/3.6*(spin?.70:lerp(.79,.64,clamp((length-6)/3,0,1)))*p.pace);
+  Object.assign(b,{length,lengthName:Execution.lengthName(length,spin),speed,variation,swing,kick,contactH,preTime,postTime,duration:(preTime+postTime)*2600,bounceT:preTime/(preTime+postTime),line:aim*sign});
+  Object.assign(c,{releaseAge:rawAge,correctedAge:age,phase:this.phase(rawAge),intendedLength:intended,intendedLabel:this.releaseLabel(intended,38,spin),releaseLabel:this.releaseLabel(length,38,spin),execution:{length:+(length-intended).toFixed(3),line:+(aim-c.line).toFixed(3),slip:e.slip}});
+  b.fullToss=length<=0;if(b.fullToss)Execution.fullToss(b);
+  return b;
+ };
+
+ // --- Height of the ball: what a stroke can and cannot do above the waist. ---
+ const strokeNameV37=Strokes.name,suitabilityV37=Shot.suitability;
+ // A lofted swipe at a short ball used to fall through to a front-foot drive.
+ Strokes.name=function(angle,mode,ball){const name=strokeNameV37.call(this,angle,mode,ball);return ball?.scoringVersion>=38&&ball.lengthName==='short'&&this.drive(name)?'Back-foot punch':name;};
+ Shot.suitability=function(ball,angle,mode){
+  const base=suitabilityV37.call(this,ball,angle,mode);if(ball.scoringVersion<38||mode==='defend')return base;
+  const h=R38.height(ball),name=this.describe(angle,mode,ball),fall=(from,span,low)=>lerp(1,low,clamp((h-from)/span,0,1));
+  let k=1,reason=base.reason;
+  if(['Hook','Pull'].includes(name)){if(h>1.60){k=fall(1.60,.30,.45);reason='Above the shoulder - hard to control the hook';}}
+  else if(name==='Square cut'){if(h>1.45){k=fall(1.45,.35,.35);reason='Too high to cut down - upper cut or leave it';}}
+  else if(name==='Upper cut'){if(h>1.85)k=fall(1.85,.20,.50);}
+  else if(R38.guided.includes(name)){if(h>1.35){k=fall(1.35,.35,.35);reason='Too high to guide';}}
+  else if(!['Sweep','Slog sweep'].includes(name)&&h>1.30){k=fall(1.30,.35,.25);reason='Too high for a straight bat - hook, cut or get under it';}
+  return k<1?{value:base.value*k,reason}:base;
+ };
+ const contactResolveV37=Contact.resolve;
+ Contact.resolve=function(ball,input,batter,seed){
+  if(ball.scoringVersion<38)return contactResolveV37.call(this,ball,input,batter,seed);
+  const rng=RNG.stream(seed),roll=[rng.next(),rng.next(),rng.next(),rng.next()],pos=Delivery.at(ball,1),out={runs:0,wicket:false,wide:false,contact:false,angle:0,distance:0,loft:false,shot:'Leave',title:'Dot ball',detail:'Safely through to the keeper',timing:'Left alone',error:null,quality:0,rngState:rng.state};
+  if(!input)return out;
+  const window=this.window(ball,batter,input),ae=Math.abs(input.error),defend=input.mode==='defend',loft=input.mode==='loft',spin=Strokes.spin(ball),choice=Shot.suitability(ball,input.angle,input.mode),name=Shot.describe(input.angle,input.mode,ball),
+   pressure=clamp(ae/window,0,1),movement=this.movement(ball)*(spin?.4:1),cut=this.cutCoverage(ball,input),reach=clamp((Math.abs(pos.x)-.6)/.65,0,1),effort=clamp(input.effort??.65,0,1),h=pos.h,cross=R38.crossBat.includes(name);
+  Object.assign(out,{error:input.error,angle:input.angle,loft,shot:name,timing:ae<=35?'Perfect timing':ae<=80?'Good timing':input.error<0?'Early':'Late',timingWindow:window,edge:false});
+  if(ae>window||Math.abs(pos.x)>1.37){out.detail='Beaten - no contact';return out;}
+  // A straight bat cannot reach a ball above the shoulder: it passes over the blade.
+  if(!defend&&!cross&&h>1.45&&roll[2]<clamp((h-1.45)/.32,0,.9)){out.detail='Over the bat - too high for that stroke';return out;}
+  // Short pace balls now carry their own top-edge risk, so the plain timing edge against T20 pace
+  // gives a little back; T20 spin keeps the R37 curve. In Tests the batter now scores off more loose
+  // balls and ducks more bouncers, so the plain edge is a tenth more likely.
+  // A short ball that sits up between waist and chest is the easiest to time; the danger is higher up.
+  const timingRisk=(ball.format==='TEST'?(spin?.77:1.10):(spin?.70:.85))*(['full','good'].includes(ball.lengthName)?.10+1.25*Math.pow(Math.min(.80,effort),6):(.15+.12*effort)*lerp(.6,1,clamp((h-1.15)/.35,0,1)))*(1-Math.exp(-3*Math.pow(Math.max(0,(ae-30)/window),1.3))),
+   q=choice.value*(defend?1-.50*pressure:Math.exp(-(loft?1.6:1.8)*Math.pow(pressure,loft?1.1:1.45))),
+   base=clamp((defend?.003+movement*.006+.09*pressure*pressure:loft?.008+.11*Math.pow(pressure,1.4):.006+movement*.036+timingRisk)*(cut?.58:1)+Math.max(0,.83-choice.value)*.65+reach*.09,0,.75),
+   // Cross-bat strokes above the shoulder: the top edge is the main danger. It grows with height and
+   // swing, and good timing takes most of it away.
+   top=!defend&&cross&&h>1.50?clamp((h-1.50)/.35,0,1)*(name==='Upper cut'?.04+.08*effort:.04+.20*effort)*clamp(.3+1.6*pressure,.3,1.5):0,
+   risk=clamp(base+top,0,.85),edge=roll[0]<risk||q<(defend?.18:.20);
+  if(loft&&['full','good'].includes(ball.lengthName)&&choice.value<.75&&pos.x*input.angle<0&&Math.abs(input.angle)>30&&roll[3]<clamp((Math.abs(pos.x)-.15)*.9+pressure*.25,0,.70)){out.detail='Beaten - the swing passed on the wrong side of the ball';return out;}
+  if(q<.20&&roll[2]<.70){out.detail='Beaten - bat passed outside the ball';return out;}
+  Object.assign(out,{contact:true,quality:q,detail:choice.reason,edge,edgeRisk:risk});
+  if(edge){
+   // The worse the timing, the more often a false stroke goes up in front of the bat instead of
+   // off the edge behind it: none inside 40% of the timing window, four in five at the limit. These
+   // come out of the edges. A ball in the air in front is caught about twice as often as a nick, and
+   // the share is set so that 130 ms timing loses a wicket as often as it did in R37.
+   const topEdge=cross&&h>1.4&&(roll[0]>=base||roll[1]<clamp((h-1.4)/.35,.3,1)),popUp=!topEdge&&!defend&&!loft&&!R38.guided.includes(name)&&roll[3]<.80*clamp((pressure-.40)/.50,0,1),spare=roll[1]*2%1;
+   if(topEdge){
+    // Behind square on the side of the swing: fine leg for a hook, over the cordon for a cut.
+    const side=input.angle<0?-1:1,spread=lerp(side<0?0:6,side<0?72:58,roll[1]);
+    out.angle=side*(180-spread);out.loft=true;out.edgeType='Top edge';out.detail='Top edge - it has gone up';
+   }else if(popUp&&roll[1]<.5){
+    // The face closes or opens too soon and the ball pops up in front of the bat, towards the other side.
+    out.angle=clamp(-input.angle*.5+(spare-.5)*100,-95,95);out.loft=true;out.mishit='leading';out.edgeType='Leading edge';out.detail='Leading edge - it has popped up in front of the bat';
+   }else if(popUp){
+    // Off the splice or the toe: not an edge, but in the air and nowhere near where it was aimed.
+    out.edge=false;out.mishit=input.error<0?'early':'late';out.loft=true;out.detail=input.error<0?'Through the stroke too soon - it has gone up off the splice':'Late on it - spooned off the toe of the bat';
+   }else{
+    const outside=pos.x>=.04||ball.kick>0,deflection=lerp(.8,32,Math.pow(roll[1],1.6));
+    out.angle=(outside?1:-1)*(180-deflection);out.loft=true;out.edgeType=outside?'Outside edge':'Inside edge';out.detail=out.edgeType+(defend?' - soft hands':' - off the edge of the bat');
+   }
+  }
+  return out;
+ };
+ // An outside edge takes the ball away from the stumps. The scatter on an edge used to be able to
+ // turn one back onto stumps the ball was missing; now it can only take it further away.
+ R38.clear=function(launch,out,ball){
+  if(!out.edge||out.edgeType!=='Outside edge'||Rules.hits(Rules.atZ(ball,Rules.wickets[0])))return launch;
+  const hits=angle=>!!Rules.outgoingWicket(NormalBall.build(launch.origin,angle,launch.vx,launch.vy,launch.kind,launch.spinRatio,ball.conditions));
+  if(!hits(launch.angle))return launch;
+  const nominal=out.angle*Math.PI/180,away=nominal-Math.sign(out.angle)*Math.abs(launch.angle-nominal);
+  return hits(away)?launch:{...launch,angle:away};
+ };
+ const launchV37=NormalBall.launch;
+ NormalBall.launch=function(out,ball,input,batter,rng){
+  if(ball.scoringVersion<38)return launchV37.call(this,out,ball,input,batter,rng);
+  const defend=input.mode==='defend',spin=Strokes.spin(ball),incoming=Delivery.incomingSpeed(ball),effort=clamp(input.effort??.65,0,1),origin=Fielding.contactOrigin(ball,input);
+  if(out.edge&&out.edgeType==='Top edge'){
+   const speed=incoming*lerp(.55,1.05,rng.next()),elevation=lerp(30,78,rng.next())*Math.PI/180;
+   return{origin,angle:(out.angle+(rng.next()-.5)*16)*Math.PI/180,vx:speed*Math.cos(elevation),vy:speed*Math.sin(elevation),kind:'edge',spinRatio:.08,effort};
+  }
+  if(out.mishit){
+   const b=Players.effective(ball,batter,input),power=b.attributes.power,window=Contact.window(ball,batter,input),error=clamp(input.error/window,-1,1),q=out.quality,early=out.mishit==='early',
+    glance=Math.sin(Math.abs(out.angle*Math.PI/180)/2)**2,ground=incoming*lerp(.09+.13*q*q,.65,glance)+(2+23*effort)*power*(.25+.75*q)*(1-.55*glance),
+    leading=out.mishit==='leading',speed=leading?(6+10*effort)*lerp(.75,1.35,rng.next()):Math.max(ground*.6,(9+13*effort)*power*lerp(.75,1.15,rng.next())),elevation=lerp(leading?28:early?38:18,leading?62:early?66:42,rng.next())*Math.PI/180;
+   return{origin,angle:(out.angle+(leading?0:error*30)+(rng.next()*2-1)*(leading?8:22))*Math.PI/180,vx:speed*Math.cos(elevation),vy:speed*Math.sin(elevation),kind:'shot',spinRatio:-.10,effort};
+  }
+  // An edge off a full swing that reaches the cordon at catching height travels as it did, so the
+  // catchers get the same chance. One that goes into the ground first or over their heads takes more
+  // of the bat's swing with it, and runs away towards the rope.
+  if(out.edge&&!spin&&!defend){
+   const pace=.90+.20*rng.next(),target=lerp(-.9,3.2,rng.next()),speed=incoming*.70*pace*(target<.15||target>2.4?1.08+.16*effort:1),flight=Math.max(.12,12.5/speed),vy=clamp((target-origin.h+4.905*flight*flight)/flight,-2.8,7.5);
+   return R38.clear({origin,angle:(out.angle+(rng.next()-.5)*24)*Math.PI/180,vx:speed,vy,kind:'edge',spinRatio:.08,effort},out,ball);
+  }
+  const launch=R38.clear(launchV37.call(this,out,ball,input,batter,rng),out,ball);
+  // A cross-bat stroke at a ball above the shoulder goes square or behind, and is hard to keep down.
+  const h=origin.h;
+  if(!out.edge&&!defend&&h>1.5&&['Hook','Pull','Square cut'].includes(out.shot)){
+   const k=clamp((h-1.5)/.45,0,1),limit=(78+20*k)*Math.PI/180,side=Math.sign(launch.angle)||(out.shot==='Square cut'?1:-1);
+   if(Math.abs(launch.angle)<limit)launch.angle=side*limit;
+   if(!out.loft&&rng.next()<(out.shot==='Square cut'?.6:.75)*k){
+    const speed=launch.vx,elevation=lerp(8,30,rng.next())*Math.PI/180;
+    launch.vx=speed*Math.cos(elevation);launch.vy=speed*Math.sin(elevation);launch.kind='shot';launch.spinRatio=-.12;out.loft=true;out.detail='Too high to keep down';
+   }
+  }
+  return launch;
+ };
+
+ // --- The opposition reads how loose a ball is, and gets out of the way of a high one. ---
+ const oppositionV37=Opposition.input;
+ // 0 is a good ball; 1 is a gift. A full toss, a slow long hop, a spinner's half-volley, width with a
+ // hittable length and anything on the pads all count.
+ Opposition.loose=function(ball,test=false){
+  const c=Hand.canonical(ball),at=Delivery.at(c,1),x=at.x,h=at.h,spin=Strokes.spin(ball),slow=clamp((27-Delivery.incomingSpeed(ball))/12,0,1),length=ball.length,short=ball.lengthName==='short';
+  let score=0;
+  if(ball.fullToss)score=h<1.2?.55+.35*slow:.30;
+  else if(spin)score=length<.85?.20:length<2.1?.50:length>=7.4?.90:length>=6.2?.70:test?0:length<3.2?.35:length<4.05?.15:0;
+  else if(short)score=h<1.5?.15+.60*slow:.05+.20*slow;
+  if(x>.5&&x<1.1&&(short||length<3.4||ball.fullToss))score+=short?.30:.18;
+  if(x<-.2&&x>-.8&&ball.lengthName!=='yorker')score+=.25;
+  score*=1-.5*clamp(Contact.movement(c)-.3,0,1);
+  if(h>1.62)score*=.4;
+  // A ball that would hit the stumps is never a free hit: miss it and you are out.
+  if(!ball.fullToss&&Rules.hits(Rules.atZ(c,Rules.wickets[0])))score*=.25;
+  return clamp(score,0,1);
+ };
+ Opposition.input=function(m,ball,contest=null){
+  if(ball.scoringVersion<38)return oppositionV37.call(this,m,ball,contest);
+  const rng=RNG.stream(m.rngState),normal=()=>R38.gauss(rng),p=ball.batterProfile,b=ball.bowlerProfile,test=m.format==='TEST',spin=Strokes.spin(ball),sign=Hand.sign(ball),canonical=Hand.canonical(ball),at=Delivery.at(canonical,1),x=at.x,h=at.h,plan=test?this.testPlan(m,contest):null,
+   skill=spin?p?.spin??70:p?.pace??70,rating=p?.timing??70,gift=this.loose(ball,test),
+   readMistake=rng.next()<((plan?.survive?.015:test?.04:.064)+(100-skill)*(plan?.survive?.0006:.0012))*(1-.6*gift),loose=readMistake?0:gift,seen=x+(readMistake?normal()*.55:0),
+   lengthError=readMistake?Math.round(normal()):0,names=['yorker','full','good','short'],readLength=names[clamp(names.indexOf(ball.lengthName)+lengthError,0,3)],
+   perceived={...ball,line:ball.line+(seen-x)*sign,lengthName:readLength,contactH:clamp(h+lengthError*.30,.05,2.1)},short=readLength==='short',full=readLength==='full',yorker=readLength==='yorker',death=!test&&m.balls>=90,
+   needed=m.target==null?null:Math.max(0,m.target-m.runs),ballsLeft=test?Math.max(1,(Contest.LIMIT-(m.pitchClock||0))/40):Math.max(1,120-m.balls),required=needed==null?0:needed/ballsLeft*6,
+   totals=contest?Contest.totals(contest):null,deficit=totals?totals[1-m.side]-totals[m.side]:0,intent=test?0:this.t20Intent(m),
+   saveTest=test&&(needed!==null&&(required>3.5-m.wickets*.10||needed>(10-m.wickets)*35&&ballsLeft<540)||needed===null&&m.number===2&&deficit>60&&ballsLeft<900),set=Math.min(1,(m.batters[m.striker]?.balls||0)/25),
+   leave={shot:null,rngState:0};
+  // Too wide to reach, high and wide of off, or over the head: let it go. The last is a wide.
+  if((Math.abs(seen)>1.18||short&&perceived.contactH>1.62&&seen>.45||short&&perceived.contactH>2.02)&&rng.next()<.93){leave.rngState=rng.state;return leave;}
+  // A loose ball outside off is there to be hit, however cautious the plan.
+  if(test&&seen>.65&&rng.next()<(plan?.survive?(full?.45:.72):saveTest?.85:.48)*(1-loose)){leave.rngState=rng.state;return leave;}
+  // Above the shoulder the percentage play in a Test is to get under it. In T20 a dot ball is a small
+  // defeat, so only the head-high ones are ducked, and no more than half of those; chasing sides take
+  // even more of them on.
+  const evade=short?(test?clamp((perceived.contactH-1.45)/.34,0,.95):clamp((perceived.contactH-1.68)/.30,0,.55)*(death?.8:1)*(1-.5*Math.max(0,intent))):0;
+  if(evade>0&&rng.next()<evade)return{shot:{angle:0,mode:'defend',error:normal()*40,effort:0,callRuns:true,pushRun:false},rngState:rng.state};
+  const driveable=full||readLength==='good'&&perceived.contactH<1.05&&Math.abs(seen)>.18&&Math.abs(seen)<.72&&Contact.movement(canonical)<.85,
+   caution=test?(plan?.survive?(yorker?.96:full?.55:short?.70:driveable?.65:.83):saveTest?.95:yorker?.85:!full&&!short?(driveable?.64:.82):full?.42:.30):yorker?.30:!full&&!short?.055:.015,
+   defence=caution*(1-(plan?.survive||saveTest?.60:.92)*loose);
+  let mode=rng.next()<defence*(1-Math.max(0,intent)*.6)?'defend':rng.next()<(test?(plan?.survive?0:.009+.02*loose):(death?.40:.26)*(1+intent*.8)*(full?1.2:short?1:.6)*(m.wickets>6?.65:1)*(1-.3*loose))&&!yorker?'loft':'ground';
+  const angles=[0,26,44,68,92,135,-30,-52,-95,-145],field=Innings.field(m,ball),weights=angles.map(angle=>{
+   const shot={angle:angle*sign,mode},value=Shot.suitability(perceived,shot.angle,mode).value,angleRad=angle*Math.PI/180,dist=mode==='loft'?58:26,
+    gap=Math.min(...Fielding.positions(field).map(f=>Math.hypot(f.x*sign-Math.sin(angleRad)*dist,f.z-Math.cos(angleRad)*dist))),stroke=Players.shotSkill(p||{drive:70,backFoot:70,sweep:70,loft:70,defence:70},ball,shot),side=seen>.20&&angle< -18||seen<-.20&&angle>18?.14:1;
+   return Math.pow(value,6)*side*(.65+stroke/130)*Math.pow(.6+Math.min(25,gap)/25,1+loose)*(mode==='loft'&&Math.abs(angle)>115?.15:1);
+  });
+  let pick=rng.next()*weights.reduce((a,b)=>a+b,0),index=0;while(index<weights.length-1&&pick>weights[index])pick-=weights[index++];
+  // A loose ball is easier to time: there is more of it to see and less to fear.
+  const form=.88+RNG.stream(m.seed^0x395ace).next()*.25,bowler=.90+(b?.rating??75)/500,
+   sd=(test?45:58)*(1.48-rating*.005)*(1.18-skill*.002)*bowler*form*(1.10-set*.10)*(1-(test?.26:mode==='loft'?.60:.42)*loose),error=normal()*sd+(readMistake?normal()*(mode==='defend'?220:310):0);
+  let effort=mode==='defend'?0:mode==='loft'?lerp(test?.86:.95,1,rng.next()):plan?.build?lerp(.58,full?.84:short?.82:.78,rng.next()):plan?.survive?lerp(.60,.82,rng.next()):clamp(lerp(.60,test?.86:.88,rng.next())+intent*.05,.45,.97);
+  if(mode==='ground')effort=lerp(effort,test?.90:.96,loose);
+  return{shot:{angle:(mode==='defend'?0:angles[index])*sign,mode,error,effort,callRuns:true,pushRun:!test&&(death||intent>.65)&&rng.next()<.06+Math.max(0,intent)*.16},rngState:rng.state};
+ };
+
+ // --- Running calls: say what the batter can see. ---
+ const runningCreateV37=Running.create,runningOfferV37=Running.offer;
+ Running.create=function(out,ball){
+  const r=runningCreateV37.call(this,out,ball);
+  if(ball.scoringVersion>=38&&r.play?.running)r.play={...r.play,running:{...r.play.running,offerVersion:38}};
+  return r;
+ };
+ // Within a third of a second either way the call is tight and stays the batter's to make.
+ // Beyond that the answer is plain: the run is on, or the throw wins by a distance.
+ Running.offer=function(out,time){
+  const base=runningOfferV37.call(this,out,time);
+  if(out?.play?.running?.offerVersion!==38||base.status==='closed'||base.status==='queued')return base;
+  const status=out.play.boundaryVersion===25||base.margin>=.35?'available':base.margin>-.35?'tight':'late';
+  return{...base,status,allowed:status!=='late',hint:status==='late'?'No run. The throw would beat you.':status==='tight'?'Tight. It could go either way.':'Run '+base.number+' is on.'};
+ };
+ const commentaryV37=Commentary.line;
+ Commentary.line=function(r,input,waiting=false,key=''){
+  if(r?.edgeType==='Top edge')return waiting?'Top edge! It has gone straight up.':r.wicket?'A top edge, and the catch is held.':r.dropped?'A top edge, and it is put down.':r.runs>=4?'Top-edged, and it carries all the way.':'A top edge that lands safely.';
+  if(r?.edgeType==='Leading edge')return waiting?'A leading edge! It has popped up.':r.wicket?'A leading edge, and it is caught.':r.dropped?'A leading edge, and it goes down.':'A leading edge that drops safely.';
+  if(r?.mishit&&!r.edge)return waiting?'Mistimed, and it is in the air.':r.wicket?'Mistimed into the air, and the catch is held.':r.dropped?'Mistimed in the air, and put down.':'Mistimed, but it falls clear of the field.';
+  return commentaryV37.call(this,r,input,waiting,key);
+ };
+
+ return Object.freeze({Execution,ReturnControl,BowlingControl,CatchControl,Catching,FlightInfo,Toss,Appearance,Commentary,Broadcast,Economy,BallView,Players,Presentation,Weather,PreDelivery,Restart,Tactics,Contact,Rules,Running,TeamField,LiveBall,Hand,SoundDesign,Crowd,Stadium,Conditions,Bowling,RNG,Delivery,Shot,Strokes,LegacyShot,ShotV3,Ground,Fielding,BallFlight,NormalBall,View,BatterRig,FielderRig,Match,Save,Squad,Innings,Contest,Opposition,Season,CareerSave,Gesture,Rotation,BOWLERS,FIELDS,clamp,lerp});
 })();
