@@ -1794,11 +1794,11 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
   label(length){return length<1.05?'yorker':length<4.05?'full':length<7.4?'good':'short';},
   phase(age){return lerp(.72,1.14,clamp(age/1400,0,1));},
   options(owner){const type=owner.archetype,s=Players.data[owner.playerId]?.bowling||owner.skills||owner,items=type==='legspin'?['Leg-break','Top-spinner','Googly']:type==='offspin'?['Off-break','Arm ball']:type==='swing'?['Seam-up','Outswinger','Inswinger','Slower ball']:type==='leftpace'?['Angled seam-up',...((s.movement??0)>=90?['Outswinger']:[]),'Inswinger','Slower ball']:['Seam-up',...((s.movement??0)>=80?['Outswinger']:[]),...((s.movement??0)>=90?['Inswinger']:[]),'Slower ball'];return items.map(name=>({name,control:Math.round(clamp((s.control??70)+(name==='Seam-up'||name.includes('break')?4:name==='Slower ball'||name==='Googly'?(s.variation??65)/5-20:-5),35,98))}));},
-  symbol(owner,variation,hand='right'){const spin=['legspin','offspin'].includes(owner.archetype),sign=hand==='left'?-1:1,arm=owner.arm==='left'?-1:1;
+  symbol(owner,variation,hand='right',world=false){const spin=['legspin','offspin'].includes(owner.archetype),sign=hand==='left'?-1:1,arm=owner.arm==='left'?-1:1;
    if(/swinger/.test(variation))return{kind:'swing',direction:(variation==='Outswinger'?-1:1)*sign};
    if(variation==='Slower ball')return{kind:'slow',direction:0};
    if(variation==='Top-spinner')return{kind:'dip',direction:0};
-   if(spin){const turn=owner.archetype==='legspin'?(variation==='Googly'?-1:1):variation==='Arm ball'?0:-1;return{kind:turn?'turn':'straight',direction:-turn*arm*sign};}
+   if(spin){const turn=owner.archetype==='legspin'?(variation==='Googly'?-1:1):variation==='Arm ball'?0:-1;return{kind:turn?'turn':'straight',direction:-turn*arm*(world?1:sign)};}
    return{kind:'seam',direction:variation==='Angled seam-up'?1:0};
   },
   eligible(m){const over=Math.floor(m.balls/6),last=m.history.findLast(r=>r.over===over-1)?.delivery.bowler,started=m.history.some(r=>r.over===over);return m.bowlers.map((b,i)=>({index:i,name:b.name,allowed:started?i===Innings.bowler(m):i!==last&&(m.format!=='T20'||b.balls<24),balls:b.balls}));},
@@ -1882,7 +1882,7 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  CareerSave.validate=function(raw){const data=saveValidateV29.call(this,raw);if(data.tutorialSeen!==undefined&&typeof data.tutorialSeen!=='boolean')throw Error('Invalid intro preference');if(data.bowlingOffset===undefined)data.bowlingOffset=0;if(!Number.isFinite(data.bowlingOffset)||Math.abs(data.bowlingOffset)>200)throw Error('Invalid bowling timing offset');for(const key of ['bowlingGuide','ballTrail'])if(data[key]!==undefined&&typeof data[key]!=='boolean')throw Error('Invalid bowling preference');for(const state of Object.values(data.sessions)){
    if(state.needsToss!==undefined&&typeof state.needsToss!=='boolean')throw Error('Invalid toss state');
    const pending=state.pending,manual=pending?.manualBowling;if(pending?.fieldingVersion!==undefined&&![30,32].includes(pending.fieldingVersion))throw Error('Invalid fielding rules');
-   if(manual&&(![30,31,32,34,35,37,38,39].includes(manual.version)||manual.side!==undefined&&!['over','round'].includes(manual.side)||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)||manual.execution!=null&&(!Number.isFinite(manual.execution.length)||Math.abs(manual.execution.length)>16||!Number.isFinite(manual.execution.line)||Math.abs(manual.execution.line)>3||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(manual.execution.slip??null))||manual.intendedLabel!==undefined&&(typeof manual.intendedLabel!=='string'||manual.intendedLabel.length>20)))throw Error('Invalid saved bowling release');
+   if(manual&&(![30,31,32,34,35,37,38,39].includes(manual.version)||manual.side!==undefined&&!['over','round'].includes(manual.side)||manual.frame!==undefined&&manual.frame!=='world'||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)||manual.execution!=null&&(!Number.isFinite(manual.execution.length)||Math.abs(manual.execution.length)>16||!Number.isFinite(manual.execution.line)||Math.abs(manual.execution.line)>3||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(manual.execution.slip??null))||manual.intendedLabel!==undefined&&(typeof manual.intendedLabel!=='string'||manual.intendedLabel.length>20)))throw Error('Invalid saved bowling release');
    if(pending?.execution!==undefined&&(pending.execution?.version!==38||!Number.isFinite(pending.execution.length)||Math.abs(pending.execution.length)>16||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(pending.execution.slip??null)))throw Error('Invalid bowling execution');
    if(pending?.fullToss!==undefined&&(typeof pending.fullToss!=='boolean'||!([31,32,34,35,37,38,39].includes(manual?.version)||pending.scoringVersion>=38)||pending.fullToss&&(pending.length>0||pending.postTime!==0||pending.bounceT!==1||pending.contactH<.035||pending.contactH>.95)))throw Error('Invalid full-toss flight');
    const change=state.live?.play?.catchChoice;if(change&&(!Number.isFinite(change.time)||change.time<0||change.time>30||!Array.isArray(change.positions)||change.positions.length!==11||change.positions.some(f=>!Number.isFinite(f.x)||!Number.isFinite(f.z)||Math.hypot(f.x,f.z)>100)))throw Error('Invalid saved fielding choice');
@@ -2150,7 +2150,8 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
   // R39 (plan version 39): the plan names the ball as a right-hander meets it, so its swing is no longer mirrored for a left-hander.
   const swing=(variation==='Outswinger'?1:variation==='Inswinger'?-1:0)*lerp(.17,.31,n[3])*p.swing*movement*(c.version>=39?1:sign);
   let kick=spin?(b.archetype==='legspin'?(variation==='Googly'?-1:variation==='Top-spinner'?0:1)*lerp(.24,.43,n[4]):variation==='Arm ball'?0:-lerp(.20,.37,n[4]))*p.turn:(n[4]<.5?-1:1)*lerp(.05,.17,n[5])*p.seam;
-  if(spin&&b.arm==='left')kick*=-1;kick=Math.atan(kick*movement/5.5)*sign;
+  // A plan prepared in the world's frame (see BowlingControl.prepare below) keeps its turn against either hand: a leg-break turns into a left-hander.
+  if(spin&&b.arm==='left')kick*=-1;kick=Math.atan(kick*movement/5.5)*(spin&&c.frame==='world'?1:sign);
   const contactH=clamp(Execution.height(length,spin)*p.bounce*(.90+s.bounce*.0013)*(variation==='Top-spinner'?1.10:1)+(n[5]-.5)*p.variation,.05,2.22),
    preTime=(18.4-length)/(speed/3.6),postTime=length/(speed/3.6*(spin?.70:lerp(.79,.64,clamp((length-6)/3,0,1)))*p.pace);
   Object.assign(b,{length,lengthName:Execution.lengthName(length,spin),speed,variation:c.version>=39?this.display(variation,b.battingHand):variation,swing,kick,contactH,preTime,postTime,duration:(preTime+postTime)*2600,bounceT:preTime/(preTime+postTime),line:aim*sign});
@@ -2373,7 +2374,7 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  // does the opposite. Both terms are centred so that an innings as a whole is no harder than before.
  Conditions.at=function(m){
   const p=conditionsV38.call(this,m);if(m.pitchModel!==39)return p;
-  const rng=RNG.stream(((m.pitchSeed??m.seed)^0x39c1b1)>>>0),lift=rng.next()*2-1,quick=rng.next()*2-1,rough=rng.next(),test=m.format==='TEST',
+  const rng=RNG.stream(((m.pitchSeed??m.seed)^0x39c1a7)>>>0),lift=rng.next()*2-1,quick=rng.next()*2-1,rough=rng.next(),test=m.format==='TEST',
    overs=p.ageBalls/6,hard=1-clamp(overs/(test?55:16),0,1),fresh=1-clamp(overs/(test?38:10),0,1),uneven=.55+1.35*rough*rough,mid=test?.3:.55,size=test?1:.6,spread=test?1:.7,
    ball={bounce:1+.10*size*(hard-mid),pace:1+.05*size*(hard-mid)};
   return{...p,version:39,end:Ends.of(m),hard,ball,character:{lift:+lift.toFixed(3),quick:+quick.toFixed(3),uneven:+uneven.toFixed(3)},
@@ -2405,14 +2406,17 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  // --- Manual bowling: the ball is the bowler's, its name is the batter's. ---
  // A plan now names the delivery as a right-hander meets it. Against a left-hander the same ball
  // keeps its swing in the world and takes the other name: an in-swinger to a right-hander is an
- // out-swinger to a left-hander. The opposition's bowlers already worked this way. Round the wicket
- // moves the release to the far side of the stumps, wider out, and leaves everything else alone.
+ // out-swinger to a left-hander. Spin is the same ball against either hand too (`frame:'world'`): a
+ // leg-break that leaves a right-hander turns into a left-hander, and keeps its name. The opposition's
+ // bowlers already worked this way. A version 39 plan saved before the frame was recorded keeps its
+ // mirrored turn. Round the wicket moves the release to the far side of the stumps, wider out, and
+ // leaves everything else alone.
  const prepareV38=BowlingControl.prepare;
  BowlingControl.display=function(variation,hand='right'){return hand==='left'&&/swinger/.test(variation)?(variation==='Outswinger'?'Inswinger':'Outswinger'):variation;};
  BowlingControl.releaseX=function(arm,spin,side='over'){const x=arm==='left'?(spin?-.54:-.60):spin?.54:.43;return side==='round'?-Math.sign(x)*clamp(Math.abs(x)+.5,.9,1.05):x;};
  BowlingControl.prepare=function(m,plan={}){
   const d=prepareV38.call(this,m,plan),b=d.ball,c=b.manualBowling;
-  c.version=39;c.side=plan.side==='round'?'round':'over';
+  c.version=39;c.frame='world';c.side=plan.side==='round'?'round':'over';
   b.releaseX=this.releaseX(b.arm,Strokes.spin(b),c.side);b.variation=this.display(c.variation,b.battingHand);
   return d;
  };

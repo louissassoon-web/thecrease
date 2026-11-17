@@ -182,12 +182,12 @@ PASS A match begun under revision 38 keeps its pitch, ball and wind, and its pre
 PASS A revision 38 save validates as it stands; a revision 39 save keeps its end, side, plan and banner record, and a damaged one is refused
 PASS Overs come from alternate ends: the wind turns round with the end, swing follows it, and the over’s first ball names the end
 PASS Every match has its own pitch: bounce, pace and variable bounce are drawn once per match, vary more than before, and never read match RNG
-PASS The player’s swing belongs to the bowler: a left-hander meets the same ball under the other name, and round the wicket moves only the release
+PASS The player’s ball belongs to the bowler: a left-hander meets the same swing under the other name and the same turn under the same name, and round the wicket moves only the release
 PASS Fast-forward applies only to the ball it was pressed on, in the field and at the crease
-PASS The camera keeps the main view while the ball stays in it, lifts when the ball leaves it, and with motion reduced cuts only after the stroke is shown
+PASS The camera keeps the main view while the ball stays in frame, however far it runs, lifts when the ball leaves it, and with motion reduced cuts only after the stroke is shown
 PASS The wheel names the ball for the batter on strike, and the white arrow sends the bowler round the wicket and back
 PASS Wind arrow, radar and scenery share the picture’s frame: they turn round in the field, and the ground is seen from the other end on alternate overs
-PASS Banners: the pitch report before the first ball, stumps and the next morning in a Test, the new ball after 80 overs, each shown once
+PASS Banners: the pitch report before the first ball, stumps and the next morning in a Test, the new ball after 80 overs, each shown once and until it is tapped
 PASS The ball carries its seam: angled the way it will swing, canted the way it will turn, across the line for a slower ball, and tumbling once struck
 11 revision 39 groups passed.
 All 141 portable review groups passed.

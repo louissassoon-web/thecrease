@@ -160,21 +160,21 @@
  function celebrationDone(){return !Number.isFinite(state.celebrationAge)||state.celebrationAge>=Cricket.Presentation.duration(lastResult());}
  function renderCelebration(){const e=resultPhase()&&resultRevealed()&&!simulating?Cricket.Presentation.celebration(lastResult(),state.celebrationAge):null;$('celebration').hidden=!e;$('fieldArena').dataset.celebrating=String(!!e);document.documentElement.dataset.motion=reducedMotion?'reduced':'calm';if(!e)return;$('celebration').style.opacity=String(reducedMotion?1:e.alpha);$('celebration').dataset.milestone=String(!!e.value);for(const [id,value]of [['celebrationValue',e.numeral],['celebrationTitle',e.caption],['celebrationDetail',e.kind==='six'&&lastResult()?.sixDistance?lastResult().sixDistance+' metre six':e.detail]])if($(id).textContent!==value)$(id).textContent=value;}
  // R39 banners: the pitch report before the first ball, stumps and the next morning's report in a Test, and the
- // new ball after 80 overs. One is raised when the ball is dead and nothing else is on screen, and it waits for a
- // tap or for its time. `state.banners` records what this match has already shown; a match in progress when this
+ // new ball after 80 overs. One is raised when the ball is dead and nothing else is on screen, and it stays until
+ // it is tapped (or a key is pressed). `state.banners` records what this match has already shown; a match in progress when this
  // revision arrives starts with everything marked as seen. Presentation only: no match RNG is read.
  let banner=null;
  function ballMark(){return state.contest.innings.length+':'+Math.floor(state.match.balls/480);}
  function bannerMarks(){const c=state.contest;if(state.banners?.seed!==c.seed)state.banners=c.innings.length>1||c.innings[0].balls>0||c.innings[0].history.length>0?{seed:c.seed,pitch:true,day:isTest()?Contest.clock(c).day:1,ball:ballMark()}:{seed:c.seed};return state.banners;}
  function bannerQueue(late=false){
   if(!career()||state.contest.phase==='complete')return[];const c=state.contest,m=state.match,marks=bannerMarks(),cards=[],test=isTest(),
-   report=(kind,kicker,title)=>{const r=Cricket.Conditions.report(m);return{kind,kicker,title,detail:r.surface,lines:[...r.lines,r.ball+'. '+r.sky],stats:r.stats,duration:10000};};
+   report=(kind,kicker,title)=>{const r=Cricket.Conditions.report(m);return{kind,kicker,title,detail:r.surface,lines:[...r.lines,r.ball+'. '+r.sky],stats:r.stats};};
   if(!marks.pitch&&!late&&!(state.needsToss&&Cricket.Toss.available(c)))cards.push(report('pitch',venue().name+(test?' · Day 1':''),'PITCH REPORT'));
   if(test){const day=Contest.clock(c).day;
    if(day>(marks.day||1)){const unbeaten=m.complete?[]:[m.striker,m.nonStriker].filter(i=>!m.batters[i].dismissal).map(i=>stripName(m.batters[i].name)+' '+m.batters[i].runs+'*');
-    cards.push({kind:'stumps',kicker:'Stumps',title:'END OF DAY '+(day-1),detail:m.teamName+' '+m.runs+'/'+m.wickets+' · '+Match.overs(m.balls)+' overs',lines:[c.innings.length>1||m.target!==null?matchMessage(m):(m.number===2?'Second innings':'First innings'),unbeaten.join(' · ')].filter(Boolean),stats:[],duration:6000});
+    cards.push({kind:'stumps',kicker:'Stumps',title:'END OF DAY '+(day-1),detail:m.teamName+' '+m.runs+'/'+m.wickets+' · '+Match.overs(m.balls)+' overs',lines:[c.innings.length>1||m.target!==null?matchMessage(m):(m.number===2?'Second innings':'First innings'),unbeaten.join(' · ')].filter(Boolean),stats:[]});
     cards.push(report('day','Pitch report','DAY '+day));}
-   if(c.phase==='play'&&!m.complete&&m.balls>0&&m.balls%480===0&&marks.ball!==ballMark())cards.push({kind:'ball',kicker:Match.overs(m.balls)+' overs bowled',title:'NEW BALL',detail:'Hard again, with a proud seam.',lines:['More pace and bounce off the pitch.','It carries to the keeper and the slips.','It swings and seams until it softens.'],stats:[],duration:6000});
+   if(c.phase==='play'&&!m.complete&&m.balls>0&&m.balls%480===0&&marks.ball!==ballMark())cards.push({kind:'ball',kicker:Match.overs(m.balls)+' overs bowled',title:'NEW BALL',detail:'Hard again, with a proud seam.',lines:['More pace and bounce off the pitch.','It carries to the keeper and the slips.','It swings and seams until it softens.'],stats:[]});
   }
   return cards;
  }
@@ -182,9 +182,9 @@
  function showBanner(then=null,late=false){if(banner||ceremony||paused||simulating||!career())return false;const cards=bannerQueue(late);if(!cards.length)return false;banner={cards,index:0,age:0,then,shown:null};clearGesture();haptic('light');renderBanner();return true;}
  function maybeBanner(){return bannerIdle()&&showBanner();}
  function advanceBanner(){if(!banner)return;banner.index++;banner.age=0;if(banner.index<banner.cards.length){renderBanner();return;}const then=banner.then,c=state.contest;banner=null;state.banners={seed:c.seed,pitch:true,day:isTest()?Contest.clock(c).day:1,ball:ballMark()};state.betweenAge=0;lastFrame=performance.now();persist();renderBanner();renderUI();if(then)then();}
- function tickBanner(dt){banner.age+=dt;renderBanner();if(banner.age>=banner.cards[banner.index].duration)advanceBanner();}
+ function tickBanner(dt){banner.age=Math.min(60000,banner.age+dt);renderBanner();}
  function renderBanner(){const card=banner?.cards[banner.index]||null;$('matchBanner').hidden=!card;$('fieldArena').dataset.banner=String(!!card);if(!card)return;
-  $('matchBanner').style.opacity=String(reducedMotion?1:clamp(banner.age/260,0,1));$('bannerHint').textContent='Tap to continue · '+Math.max(1,Math.ceil((card.duration-banner.age)/1000))+' s';if(banner.shown===card)return;banner.shown=card;
+  $('matchBanner').style.opacity=String(reducedMotion?1:clamp(banner.age/260,0,1));if(banner.shown===card)return;banner.shown=card;$('bannerHint').textContent='Tap to continue'+(banner.cards.length>1?' · '+(banner.index+1)+' of '+banner.cards.length:'');
   $('matchBanner').dataset.kind=card.kind;$('bannerKicker').textContent=card.kicker;$('bannerTitle').textContent=card.title;$('bannerDetail').textContent=card.detail;$('bannerLines').replaceChildren();for(const text of card.lines){const li=document.createElement('li');li.textContent=text;$('bannerLines').append(li);}
   $('bannerChart').replaceChildren();$('bannerChart').hidden=!card.stats.length;for(const [label,value]of card.stats){const row=document.createElement('div'),name=document.createElement('span'),track=document.createElement('div'),bar=document.createElement('div'),number=document.createElement('span');row.className='rating-row';name.textContent=label;track.className='rating-track';bar.className='rating-fill';bar.style.width=value+'%';number.className='rating-value';number.textContent=value;track.append(bar);row.append(name,track,number);$('bannerChart').append(row);}
  }
@@ -409,16 +409,16 @@
   return target;
  }
  let cameraFade=null;
- // R39: the main view is kept for as long as the ball can be followed in it. The ball is sampled until it is
- // fielded, and along the return throw; the camera lifts only if a sample leaves the frame or goes further from
- // the camera than HOLD_RANGE metres, beyond which the ball is a dot near the horizon. The test is made when the
- // ball is struck and again if a run or a chosen return changes the play; once lifted, the camera stays lifted.
- const HOLD_RANGE=38,STROKE_HOLD=550,cameraHold={ball:null,play:null,lift:false};
+ // R39: the main view is kept for as long as the ball is in it. The ball is sampled until it is fielded, and
+ // along the return throw; the camera lifts only if a sample leaves the frame. However far the ball runs, it is
+ // followed from the main view while it is in frame (the owner's decision, 17 November 2026). The test is made
+ // when the ball is struck and again if a run or a chosen return changes the play; once lifted, it stays lifted.
+ const STROKE_HOLD=550,cameraHold={ball:null,play:null,lift:false};
  function staysInView(play,view){
   if(!play?.event)return false;const w=fieldSize.w,h=fieldSize.h,points=[];
   for(let i=0;i<=16;i++)points.push(Cricket.Fielding.freeBall(play,play.event.time*i/16));
   if(play.throw)for(let i=0;i<=8;i++)points.push(Cricket.TeamField.ballAt(play,lerp(play.throw.release,play.throw.breakTime,i/8)));
-  return points.every(p=>{const q=Cricket.View.project(p.x,p.z,p.h,view,w,h);return q.depth>1.2&&q.depth<HOLD_RANGE&&q.x>w*.05&&q.x<w*.95&&q.y>h*.10&&q.y<h*.93;});
+  return points.every(p=>{const q=Cricket.View.project(p.x,p.z,p.h,view,w,h);return q.depth>1.2&&q.x>w*.05&&q.x<w*.95&&q.y>h*.10&&q.y<h*.93;});
  }
  function cameraLifts(play){const c=cameraHold;if(c.ball!==state.pending){c.ball=state.pending;c.play=null;c.lift=false;}if(c.play!==play){c.play=play;if(!c.lift)c.lift=!staysInView(play,battingCamera());}return c.lift;}
  function sceneCamera(replay,play){
@@ -890,8 +890,8 @@
   // The arrow sits on the side the bowler would move to and points that way. In this view a right-hander's off side is on the left.
   const round=plan.side==='round',to=-runSide()>0?'left':'right';$('bowlingGallery').dataset.switch=to;$('sideBtn').setAttribute('aria-pressed',String(round));$('sideLabel').textContent=round?'Over the wicket':'Round the wicket';$('sideBtn').setAttribute('aria-label',(round?'Go back over the wicket':'Go round the wicket')+'. The bowler moves to the '+to+' of the stumps.');
   $('lineLeftBtn').disabled=at===0;$('lineRightBtn').disabled=at===lines.length-1;$('lineLeftBtn').setAttribute('aria-label','Aim '+(lines[at-1]?.name||'left'));$('lineRightBtn').setAttribute('aria-label','Aim '+(lines[at+1]?.name||'right'));$('bowlingGallery').dataset.hand=hand;$('deliveryUpBtn').disabled=v===0;$('deliveryDownBtn').disabled=v===items.length-1;
-  $('deliveryIcon').getContext('2d').clearRect(0,0,48,48);drawDeliveryIcon($('deliveryIcon').getContext('2d'),24,24,22,Cricket.BowlingControl.symbol(activeOwner(),ballName(plan.variation,hand),hand));
-  for(const [key,index]of [['previousVariation',v-1],['nextVariation',v+1]]){const item=items[index],button=$(key);button.disabled=!item;button.style.visibility=item?'visible':'hidden';$(key+'Name').textContent=item?ballName(item.name,hand):'';const c=$(key+'Icon').getContext('2d');c.clearRect(0,0,48,48);if(item)drawDeliveryIcon(c,24,24,22,Cricket.BowlingControl.symbol(activeOwner(),ballName(item.name,hand),hand));}
+  $('deliveryIcon').getContext('2d').clearRect(0,0,48,48);drawDeliveryIcon($('deliveryIcon').getContext('2d'),24,24,22,Cricket.BowlingControl.symbol(activeOwner(),ballName(plan.variation,hand),hand,true));
+  for(const [key,index]of [['previousVariation',v-1],['nextVariation',v+1]]){const item=items[index],button=$(key);button.disabled=!item;button.style.visibility=item?'visible':'hidden';$(key+'Name').textContent=item?ballName(item.name,hand):'';const c=$(key+'Icon').getContext('2d');c.clearRect(0,0,48,48);if(item)drawDeliveryIcon(c,24,24,22,Cricket.BowlingControl.symbol(activeOwner(),ballName(item.name,hand),hand,true));}
   $('galleryLineHeading').textContent='AIM · '+(hand==='left'?'LEFT':'RIGHT')+'-HANDER';$('galleryHint').textContent='Swipe up or down for the ball, sideways to aim. Hold to bowl.';
  }
  // The line against the stumps, seen from the bowler's end. Distances are compressed so that all five lines fit.
@@ -941,7 +941,7 @@
  // R38: the plan is read on the pitch. An arrow runs from the bowler to the line aimed at, and its far end bends
  // the way the ball is meant to move. The bend is drawn larger than life so that it reads on a phone. Length is
  // set by the release, and the arrow never includes the bowler's error.
- function drawAim(ball,line,hand,strong){const sign=hand==='left'?-1:1,symbol=Cricket.BowlingControl.symbol(ball,ball.variation,hand),move=-(symbol.direction||0),x0=state.phase==='ready'?Cricket.BowlingControl.releaseX(ball.arm,Cricket.Strokes.spin(ball),state.bowlingPlan?.side):state.pending?.releaseX??.43,pts=[];
+ function drawAim(ball,line,hand,strong){const sign=hand==='left'?-1:1,symbol=Cricket.BowlingControl.symbol(ball,ball.variation,hand,state.phase==='ready'||ball.manualBowling?.frame==='world'),move=-(symbol.direction||0),x0=state.phase==='ready'?Cricket.BowlingControl.releaseX(ball.arm,Cricket.Strokes.spin(ball),state.bowlingPlan?.side):state.pending?.releaseX??.43,pts=[];
   for(let i=0;i<=24;i++){const t=i/24,z=lerp(16.2,.42,t),p=project(lerp(x0,line*sign,t)+(symbol.kind==='swing'?move*.55*t*t:symbol.kind==='turn'?move*.5*clamp((5.3-z)/4.88,0,1):0),z,.03);if(p.depth>.6)pts.push(p);}
   if(pts.length<4)return;const end=pts.at(-1),before=pts.at(-4),a=Math.atan2(end.y-before.y,end.x-before.x),gold=strong?'#f1d589':'#f1d589cc';ctx.save();ctx.lineCap='round';ctx.lineJoin='round';
   for(const [colour,width]of [['#0b1c22b0',7],[gold,3.5]]){ctx.strokeStyle=colour;ctx.lineWidth=width;ctx.setLineDash(symbol.kind==='slow'&&width<5?[8,7]:[]);ctx.beginPath();ctx.moveTo(pts[0].x,pts[0].y);for(const p of pts.slice(1))ctx.lineTo(p.x,p.y);ctx.stroke();}
@@ -951,7 +951,7 @@
   if(ready){const plan=bowlingPlan();drawAim({...activeOwner(),variation:ballName(plan.variation,striker)},plan.line,striker,true);return;}
   const ball=state.pending,age=state.bowlingAction.age,w=fieldSize.w,h=fieldSize.h,phase=Cricket.BowlingControl.phase(age),spin=Cricket.Strokes.spin(ball),length=Cricket.BowlingControl.lengthAt(age-(app.bowlingOffset||0),ball.manualBowling.version);
   if(!state.bowlingAction.running)drawAim(ball,ball.manualBowling.line,striker,false);if(app.bowlingGuide!==false){const at={x:ball.manualBowling.line*Hand.sign(state.pending),z:Math.max(0,length)};groundOval(ctx,at.x,at.z,.28,.4,'#f1d5899c');}
-  const height=Math.min(204,h-24),left=8,top=clamp(h*.30,12,Math.max(12,h-height-12)),x=left+48;ctx.save();ctx.fillStyle='#102b30dc';ctx.fillRect(left,top,100,height);drawDeliveryIcon(ctx,x,top+23,18,Cricket.BowlingControl.symbol(ball,ball.variation,striker));ctx.textAlign='center';ctx.fillStyle='#f0d6a3';ctx.font=canvasFont(12);ctx.fillText(ball.variation,x,top+48,94);
+  const height=Math.min(204,h-24),left=8,top=clamp(h*.30,12,Math.max(12,h-height-12)),x=left+48;ctx.save();ctx.fillStyle='#102b30dc';ctx.fillRect(left,top,100,height);drawDeliveryIcon(ctx,x,top+23,18,Cricket.BowlingControl.symbol(ball,ball.variation,striker,ball.manualBowling?.frame==='world'));ctx.textAlign='center';ctx.fillStyle='#f0d6a3';ctx.font=canvasFont(12);ctx.fillText(ball.variation,x,top+48,94);
   const y=top+76,theta=phase*Math.PI*2,hand={x:x+Math.sin(theta)*19,y:y-Math.cos(theta)*19};ctx.strokeStyle='#c8d6bd55';ctx.lineWidth=1;ctx.beginPath();ctx.arc(x,y,21,-Math.PI,0);ctx.stroke();line(ctx,{x,y:y+22},{x,y},'#e1c283',4);line(ctx,{x,y},hand,'#f3d5aa',4);circle(ctx,hand.x,hand.y,3,isTest()?'#c64b4b':'#f9f5e5');circle(ctx,x-11,y+5,5,'#ecd0ad');ctx.fillStyle='#fff2d8';ctx.font=canvasFont(12);ctx.fillText('SWIPE UP · LIFT',x,y+38,94);
   if(app.bowlingGuide!==false){const sy=y+53,span=Math.max(38,top+height-12-sy),labels=spin?[[-1,'Full toss'],[2.3,'Full'],[5.3,'Good length'],[10.8,'Drag down']]:[[-1,'Full toss'],[2.3,'Full'],[5.3,'Good length'],[10.8,'Short']];ctx.font=canvasFont(12);ctx.textAlign='left';ctx.fillStyle='#cbd6c7';const py=len=>sy+clamp((len+1)/11.8,0,1)*span;line(ctx,{x:left+8,y:sy},{x:left+8,y:sy+span},'#718f835e',2);for(const [len,label]of labels)ctx.fillText(label,left+18,py(len)+3);circle(ctx,left+8,py(length),3.5,'#f0d6a3');}ctx.restore();
  }

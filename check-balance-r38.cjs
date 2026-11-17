@@ -1,7 +1,8 @@
 // Revision 38 acceptance harness. Run from the repository root: node check-balance-r38.cjs
 // It loads the pure engine from dist/index.html, exactly as check-balance.cjs does, and measures the
 // behaviour added in revision 38 against the targets agreed in the revision 38 plan. The 48-check
-// contract in check-balance.cjs is unedited; nothing here replaces it.
+// contract in check-balance.cjs was unedited in revision 38; revision 39 enlarged three of its samples
+// and changed no band. Nothing here replaces it.
 //
 // Bands. Each check states the plan's target in its label where the two differ. A band is the plan's
 // target widened by about one standard error of the sample used here, so that a check fails when the
@@ -141,7 +142,7 @@ const per=a=>mean(a.map(r=>r.runs)),out=a=>pct(a.filter(r=>r.wicket).length,a.le
 // ---- 7. Three contract checks on larger samples, for information ----
 function human(format,s,seeds,maxBalls=120){const t={legal:0,wickets:0};innings(format,s,seeds,maxBalls,(ball,input,res)=>{if(res.legal)t.legal++;if(res.wicket)t.wickets++;});return t.legal/Math.max(1,t.wickets);}
 const mix=human('T20',{sigma:60,effort:.85,loftRate:.25},120);
-check('T20 25% loft mix, 60 ms sd, on 120 innings: balls per wicket (the contract uses 10 and a floor of 20)',mix,20,60);
+check('T20 25% loft mix, 60 ms sd, on 120 innings: balls per wicket (the contract used 10 until revision 39 and now uses 240)',mix,20,60);
 info('  the same measurement on revision 37','20.63','its ten contract innings read 24.04; the floor is 20');
 info('T20 ground strokes, 60 ms sd, on 120 innings: balls per wicket',human('T20',{sigma:60,effort:.75,loftRate:0},120).toFixed(1),'revision 37: 62.0; contract band 30-90');
 info('T20 ground strokes, 130 ms sd, on 120 innings: balls per wicket',human('T20',{sigma:130,effort:.75,loftRate:0},120).toFixed(1),'revision 37: 22.4; contract band 12-40');

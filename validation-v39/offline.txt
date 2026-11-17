@@ -1,4 +1,4 @@
-built dist/index.html 788814 chars, sha256 85a9274a22566ef7043be24234c7d7ff39f14f18c936713471d81679fdc1910e
+built dist/index.html 789337 chars, sha256 8422af208d39cb67293ecf24f25e8982e07457000a970ac78d0dbbf39a84c8b8
 PASS First install then reload and offline reopen use navigation-safe HTML
 PASS Already-cached redirected HTML is repaired on read
 PASS Shell fetches the canonical directory URL, including subdirectory installs

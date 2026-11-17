@@ -1,3 +1,4 @@
+# Recorded before the contract's samples were enlarged: these are the OLD samples, 10 and 24 innings.
 # Pitch stream constants tried against the contract's two small samples (final parameters).
 # c_mix: section 1 loft mix on 10 innings (floor 20 balls per wicket, ceiling 9.5 an over). c_split: section 5 spin against pace on 24 innings (band 0.7 to 1.6).
 0x39c1a7 {"c_mix":{"rr":9.32,"bpw":18.27},"c_split":1.04}

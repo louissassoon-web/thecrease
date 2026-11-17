@@ -1,7 +1,7 @@
 // How often the main view is kept (revision 39). Run from the repository root: node tools/measure-camera-r39.cjs
-// In the field: a plain plan against the opposition. At the crease: the contract's simulated batter. RANGE and INSET override the rule.
+// In the field: a plain plan against the opposition. At the crease: the contract's simulated batter. RANGE (metres from the camera, default none) and INSET override the rule.
 const fs=require('fs'),vm=require('vm');vm.runInThisContext(fs.readFileSync('src/core.js','utf8'));const C=Cricket,lerp=(a,b,t)=>a+(b-a)*t;
-const RANGE=+process.env.RANGE||38,W=412,H=439,inset=(process.env.INSET||'.05,.95,.10,.93').split(',').map(Number);
+const RANGE=+process.env.RANGE||Infinity,W=412,H=439,inset=(process.env.INSET||'.05,.95,.10,.93').split(',').map(Number);
 function stays(play,view){if(!play?.event)return false;const pts=[];for(let i=0;i<=16;i++)pts.push(C.Fielding.freeBall(play,play.event.time*i/16));if(play.throw)for(let i=0;i<=8;i++)pts.push(C.TeamField.ballAt(play,lerp(play.throw.release,play.throw.breakTime,i/8)));
  return pts.every(p=>{const q=C.View.project(p.x,p.z,p.h,view,W,H);return q.depth>1.2&&q.depth<RANGE&&q.x>W*inset[0]&&q.x<W*inset[1]&&q.y>H*inset[2]&&q.y<H*inset[3];});}
 function gauss(rng){let u=0,v=0;while(u===0)u=rng.next();while(v===0)v=rng.next();return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);}
