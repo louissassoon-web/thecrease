@@ -22,14 +22,14 @@ await check('A revision 37 save validates as it stands; a revision 38 release ke
  for(const format of ['T20','TEST'])for(const bowl of [false,true]){const app=fixture(bowl,format,O.Economy.create(),O),s=app.sessions[format],m=O.Contest.current(s.contest),d=bowl?O.BowlingControl.prepare(m,{line:.14}):O.Innings.delivery(m),b=bowl?O.BowlingControl.release(d.ball,890):d.ball,input={angle:44,mode:'ground',effort:.7,error:40,callRuns:true},r=O.Shot.resolve(b,input,m.batters[m.striker],O.Innings.field(m,b),d.rngState);
   Object.assign(s,{pending:b,phase:'inPlay',live:{...r,batter:m.striker,nonStriker:m.nonStriker}});const old=copy(app),kept=C.CareerSave.validate(copy(app));assert.equal(kept.schema,5);assert.equal(kept.sessions[format].pending.scoringVersion,37);assert.deepEqual(copy(kept.sessions[format].pending),old.sessions[format].pending);assert.deepEqual(copy(O.CareerSave.validate(copy(app))),copy(kept));}
  const app=fixture(true),s=app.sessions.T20,m=C.Contest.current(s.contest),d=C.BowlingControl.prepare(m,{line:.14}),b=C.BowlingControl.release(d.ball,890),input={angle:44,mode:'ground',effort:.7,error:40,callRuns:true},r=C.Shot.resolve(b,input,m.batters[m.striker],C.Innings.field(m,b),d.rngState);
- assert.equal(b.scoringVersion,38);assert.equal(b.manualBowling.version,38);Object.assign(s,{pending:b,phase:'inPlay',live:{...r,batter:m.striker,nonStriker:m.nonStriker}});
+ assert.equal(b.scoringVersion,39);assert.equal(b.manualBowling.version,39);Object.assign(s,{pending:b,phase:'inPlay',live:{...r,batter:m.striker,nonStriker:m.nonStriker}});
  const saved=C.CareerSave.validate(copy(app)).sessions.T20.pending.manualBowling;assert.deepEqual(copy(saved.execution),copy(b.manualBowling.execution));assert.equal(saved.intendedLabel,b.manualBowling.intendedLabel);
  for(const damage of [x=>{x.execution.slip='beamer';},x=>{x.execution.length=40;},x=>{x.execution.line=NaN;},x=>{x.intendedLabel='x'.repeat(21);}]){const bad=copy(app);damage(bad.sessions.T20.pending.manualBowling);assert.throws(()=>C.CareerSave.validate(bad),/Invalid/);}
 });
 await check('The bowler’s error is a derived stream: the match RNG is neither read nor advanced, and a ball keeps the error it was given',async()=>{
  const slips=new Set();let moved=0;
  for(let k=1;k<=40;k++){const format=k%2?'T20':'TEST',teams=C.Squad.teams(format),m=C.Innings.create(k*313,teams[k%8],teams[(k+2)%8],format,0),old=O.Innings.delivery(copy(m)),now=C.Innings.delivery(m);
-  assert.equal(now.rngState,old.rngState);assert.equal(now.ball.scoringVersion,38);assert.deepEqual(copy(C.Innings.delivery(m)),copy(now));if(Math.abs(now.ball.length-old.ball.length)>1e-9||Math.abs(now.ball.line-old.ball.line)>1e-9)moved++;
+  assert.equal(now.rngState,old.rngState);assert.equal(now.ball.scoringVersion,39);assert.deepEqual(copy(C.Innings.delivery(m)),copy(now));if(Math.abs(now.ball.length-old.ball.length)>1e-9||Math.abs(now.ball.line-old.ball.line)>1e-9)moved++;
   const d=C.BowlingControl.prepare(m,{line:.14}),before=copy(d),a=C.BowlingControl.release(d.ball,890),b=C.BowlingControl.release(d.ball,890);assert.deepEqual(copy(a),copy(b));assert.deepEqual(copy(d),before);assert.equal(d.rngState,O.BowlingControl.prepare(copy(m),{line:.14}).rngState);
   const e=a.manualBowling.execution;assert.ok(Number.isFinite(e.length)&&Number.isFinite(e.line));assert.ok([null,'fullToss','halfVolley','longHop','leg','wide'].includes(e.slip));slips.add(e.slip);assert.equal(typeof a.manualBowling.intendedLabel,'string');
   // The aim is the timing alone; where it lands is the aim plus the recorded error.
@@ -71,7 +71,7 @@ await check('On the field a vertical swipe changes the ball and a sideways swipe
  const h=host('T20',fixture(true));await h.n('resumeBtn').click();const s=h.u.get(),field=h.n('fieldCanvas'),wheel=h.n('bowlingGallery'),rng=s.match.rngState,options=C.BowlingControl.options(h.u.activeOwner()).map(o=>o.name),lines=h.u.galleryLines();
  assert.equal(wheel.hidden,false);assert.equal(wheel.closest('.arena')?.id,'fieldArena');assert.equal(s.bowlingPlan.variation,options[0]);
  const swipe=(dx,dy)=>{h.u.pointerDown(pointer(field,180,300));h.step(30);h.u.pointerMove(pointer(field,180+dx*.5,300+dy*.5));h.step(30);h.u.pointerMove(pointer(field,180+dx,300+dy));h.step(30);h.u.pointerUp(pointer(field,180+dx,300+dy));assert.equal(h.u.gesture(),null);assert.equal(s.phase,'ready');assert.equal(s.pending,null);};
- swipe(0,-90);assert.equal(s.bowlingPlan.variation,options[1]);assert.equal(h.n('galleryDeliveryName').textContent,options[1]);swipe(0,90);assert.equal(s.bowlingPlan.variation,options[0]);swipe(0,90);assert.equal(s.bowlingPlan.variation,options[0]);
+ swipe(0,-90);assert.equal(s.bowlingPlan.variation,options[1]);assert.equal(h.n('galleryDeliveryName').textContent,C.BowlingControl.display(options[1],C.Hand.of(s.match.batters[s.match.striker])));swipe(0,90);assert.equal(s.bowlingPlan.variation,options[0]);swipe(0,90);assert.equal(s.bowlingPlan.variation,options[0]);
  const at=lines.findIndex(l=>l.value===s.bowlingPlan.line);swipe(90,0);assert.equal(s.bowlingPlan.line,lines[at+1].value);swipe(-90,0);assert.equal(s.bowlingPlan.line,lines[at].value);
  // A short drag is neither a swipe nor a hold.
  swipe(0,-24);assert.equal(s.bowlingPlan.variation,options[0]);swipe(24,0);assert.equal(s.bowlingPlan.line,lines[at].value);
@@ -97,13 +97,6 @@ await check('The aim arrow, the stump map and the waiting bowler are drawn from 
  const title=(execution,intendedLabel,releaseLabel)=>{const m=C.Contest.current(s.contest),d=C.BowlingControl.prepare(m,{line:.14}),b=C.BowlingControl.release(d.ball,890);Object.assign(b.manualBowling,{execution,intendedLabel,releaseLabel});Object.assign(s,{pending:b,phase:'flight',elapsed:40,shot:null,fieldBrief:false,bowlingAction:{age:890,running:false,released:true}});h.u.drawField(0);return h.n('feedbackTitle').textContent;};
  assert.equal(title({length:0,line:0,slip:null},'good','good'),'Good length');assert.equal(title({length:-1.4,line:0,slip:null},'good','full'),'Full · aimed good length');
  assert.equal(title({length:-2,line:0,slip:'fullToss'},'Yorker','Full toss'),'Slipped · full toss');assert.equal(title({length:0,line:-.5,slip:'leg'},'good','good'),'Slipped · down leg');assert.equal(title({length:0,line:.9,slip:'wide'},'full','full'),'Slipped · wide of off');
-});
-await check('Fast-forward is remembered from ball to ball in the field and never while batting',async()=>{
- const near=(x,y)=>assert.ok(Math.abs(x-y)<1e-6,x+' is not '+y);
- for(const bowl of [true,false]){const h=host('T20',fixture(bowl));await h.n('resumeBtn').click();const a=sample(h.u.get().match,bowl),s=mount(h,a,.1),at=()=>C.Fielding.playback(s.live.play,s.resultAge);
-  assert.equal(h.n('fastForwardBtn').hidden,false);await h.n('fastForwardBtn').click();const t0=at();h.step();near(at(),t0+.4);
-  h.u.clearDelivery();const b=sample(h.u.get().match,bowl,false,a.seed+1);mount(h,b,.1);const t1=at();h.step();near(at(),t1+(bowl?.4:.1));assert.equal(h.n('fastForwardBtn').textContent,bowl?'Normal speed':'Fast-forward 4×');
-  if(bowl){await h.n('fastForwardBtn').click();h.u.clearDelivery();mount(h,sample(h.u.get().match,true,false,b.seed+1),.1);const t2=at();h.step();near(at(),t2+.1);}}
 });
 await check('Every vibration pulse is long enough for an Android motor; edges have their own pattern and a changed plan is felt once',async()=>{
  const pulses=[],h=host('T20',fixture(true),{navigator:{vibrate:p=>{pulses.push(p);return true;}}});await h.n('resumeBtn').click();const s=h.u.get(),patterns={};

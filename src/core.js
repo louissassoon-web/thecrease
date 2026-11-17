@@ -837,12 +837,12 @@ globalThis.Cricket = (() => {
      for(const b of m.bowlers)if(!BOWLERS.some(t=>t.id===b.archetype)||typeof b.name!=='string'||b.name.length>32)throw Error('Invalid bowler');
     }
     if(!['ready','flight','inPlay','result','finished'].includes(state.phase)||!Number.isFinite(state.elapsed)||state.elapsed< -850||state.elapsed>10000||!Number.isFinite(state.resultAge)||state.resultAge<0||state.resultAge>30000)throw Error('Invalid delivery clock');
-    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37,38].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
+    const m=Contest.current(c),p=state.pending;if(['flight','inPlay'].includes(state.phase)){if(c.phase!=='play'||!p||p.bowler!==Innings.bowler(m)||!['speed','duration','bounceT','length','line','kick','swing','releaseX','contactH','preTime','postTime','releaseH'].every(k=>Number.isFinite(p[k]))||p.duration<800||p.duration>4000||![5,6,7,8,9,10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37,38,39].includes(p.scoringVersion))throw Error('Invalid pending delivery');}
     if(state.fieldBrief!==undefined&&typeof state.fieldBrief!=='boolean'||state.fieldBrief&&(state.phase!=='flight'||state.elapsed!==-850||!Number.isFinite(state.briefAge)||state.briefAge<0||state.briefAge>15000))throw Error('Invalid pre-delivery pause');
     if(state.introducedBatters!==undefined&&(!Array.isArray(state.introducedBatters)||state.introducedBatters.length>11||state.introducedBatters.some(i=>!Number.isInteger(i)||i<0||i>10)))throw Error('Invalid saved player introductions');if(state.reward!==undefined&&![0,300,500].includes(state.reward))throw Error('Invalid saved reward');if(state.briefCards!==undefined&&!Broadcast.valid(state.briefCards))throw Error('Invalid saved introduction');if(state.ballBridge!==undefined&&state.ballBridge!==null&&(!['x','z','h'].every(k=>Number.isFinite(state.ballBridge.from?.[k]))||!Number.isFinite(state.ballBridge.duration)||state.ballBridge.duration<.08||state.ballBridge.duration>.22||state.ballBridge.startAt!==undefined&&(!Number.isFinite(state.ballBridge.startAt)||state.ballBridge.startAt<0||state.ballBridge.startAt>30)))throw Error('Invalid saved ball transition');if(p?.scoringVersion>=19&&(!Players.valid(p.batterProfile,format)||!Players.validBowler(p.bowlerProfile)))throw Error('Invalid saved player profile');
     if(p?.scoringVersion>=13&&(!Weather.valid(p.weather)||JSON.stringify(p.weather)!==JSON.stringify(p.conditions?.weather)))throw Error('Invalid saved weather');
     if(p?.scoringVersion>=12){const sign=Hand.sign(p),field=p.savedField;if(!Array.isArray(field)||!Tactics.legal(field.map(f=>({...f,a:f.a*sign})),m)||typeof p.fieldNote!=='string'||p.fieldNote.length>140)throw Error('Invalid saved field');}
-    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37,38].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion===34?100:p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==(p.scoringVersion>=35?35:p.scoringVersion>=34?34:15)||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>(p.scoringVersion===34?100:3))||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
+    if(state.phase==='inPlay'){const r=state.live;if(!r||r.rulesVersion!==10||![10,11,12,13,15,16,17,19,20,22,23,24,25,26,27,34,35,37,38,39].includes(p.scoringVersion)||r.batter!==m.striker||r.nonStriker!==m.nonStriker||r.play?.teamVersion!==10||!Number.isFinite(r.decisionTime)||r.decisionTime<0||r.decisionTime>29||!Number.isInteger(r.rngState)||r.rngState<0||r.rngState>4294967295||r.runs!==r.batRuns+Object.values(r.extrasDetail).reduce((a,b)=>a+b,0))throw Error('Invalid live ball');const legs=r.play.running?.legs||[],commands=r.play.running?.commands||[];if(legs.length>(p.scoringVersion===34?100:p.scoringVersion>=15?3:5)||p.scoringVersion>=15&&r.play.running&&(r.play.running.version!==(p.scoringVersion>=35?35:p.scoringVersion>=34?34:15)||!Number.isInteger(r.play.running.maxRuns)||r.play.running.maxRuns<0||r.play.running.maxRuns>(p.scoringVersion===34?100:3))||legs.some((l,i)=>!Number.isFinite(l.start)||!Number.isFinite(l.end)||l.start<0||l.end<=l.start||i&&l.start<legs[i-1].end)||commands.length>100||commands.some(x=>!['run','hold'].includes(x.kind)||!Number.isFinite(x.time)||x.time<0||x.time>30))throw Error('Invalid running decisions');}
     if(state.shot&&(!['ground','loft','defend'].includes(state.shot.mode)||!Number.isFinite(state.shot.angle)||Math.abs(state.shot.angle)>180||!Number.isFinite(state.shot.error)||Math.abs(state.shot.error)>10000))throw Error('Invalid saved shot');
     if(state.botInput){const input=state.botInput;if(!Number.isInteger(input.rngState)||input.rngState<0||input.rngState>4294967295||input.shot&&(!['ground','loft','defend'].includes(input.shot.mode)||!Number.isFinite(input.shot.angle)||Math.abs(input.shot.angle)>180||!Number.isFinite(input.shot.error)||Math.abs(input.shot.error)>10000))throw Error('Invalid opposition shot');}
     for(const shot of [state.shot,state.botInput?.shot])if(shot?.effort!==undefined&&(!Number.isFinite(shot.effort)||shot.effort<0||shot.effort>1))throw Error('Invalid stroke strength');
@@ -1882,11 +1882,11 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  CareerSave.validate=function(raw){const data=saveValidateV29.call(this,raw);if(data.tutorialSeen!==undefined&&typeof data.tutorialSeen!=='boolean')throw Error('Invalid intro preference');if(data.bowlingOffset===undefined)data.bowlingOffset=0;if(!Number.isFinite(data.bowlingOffset)||Math.abs(data.bowlingOffset)>200)throw Error('Invalid bowling timing offset');for(const key of ['bowlingGuide','ballTrail'])if(data[key]!==undefined&&typeof data[key]!=='boolean')throw Error('Invalid bowling preference');for(const state of Object.values(data.sessions)){
    if(state.needsToss!==undefined&&typeof state.needsToss!=='boolean')throw Error('Invalid toss state');
    const pending=state.pending,manual=pending?.manualBowling;if(pending?.fieldingVersion!==undefined&&![30,32].includes(pending.fieldingVersion))throw Error('Invalid fielding rules');
-   if(manual&&(![30,31,32,34,35,37,38].includes(manual.version)||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)||manual.execution!=null&&(!Number.isFinite(manual.execution.length)||Math.abs(manual.execution.length)>16||!Number.isFinite(manual.execution.line)||Math.abs(manual.execution.line)>3||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(manual.execution.slip??null))||manual.intendedLabel!==undefined&&(typeof manual.intendedLabel!=='string'||manual.intendedLabel.length>20)))throw Error('Invalid saved bowling release');
+   if(manual&&(![30,31,32,34,35,37,38,39].includes(manual.version)||manual.side!==undefined&&!['over','round'].includes(manual.side)||typeof manual.variation!=='string'||manual.variation.length>30||!['balanced','attack','defend'].includes(manual.field)||!Number.isFinite(manual.line)||Math.abs(manual.line)>1.25||!Number.isFinite(manual.control)||manual.control<35||manual.control>98||!Array.isArray(manual.noise)||manual.noise.length!==6||manual.noise.some(n=>!Number.isFinite(n)||n<0||n>=1)||manual.releaseAge!==null&&(!Number.isFinite(manual.releaseAge)||manual.releaseAge<450||manual.releaseAge>1400)||manual.root&&!['x','z'].every(k=>Number.isFinite(manual.root[k])&&Math.abs(manual.root[k])<30)||manual.execution!=null&&(!Number.isFinite(manual.execution.length)||Math.abs(manual.execution.length)>16||!Number.isFinite(manual.execution.line)||Math.abs(manual.execution.line)>3||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(manual.execution.slip??null))||manual.intendedLabel!==undefined&&(typeof manual.intendedLabel!=='string'||manual.intendedLabel.length>20)))throw Error('Invalid saved bowling release');
    if(pending?.execution!==undefined&&(pending.execution?.version!==38||!Number.isFinite(pending.execution.length)||Math.abs(pending.execution.length)>16||![null,'fullToss','halfVolley','longHop','leg','wide'].includes(pending.execution.slip??null)))throw Error('Invalid bowling execution');
-   if(pending?.fullToss!==undefined&&(typeof pending.fullToss!=='boolean'||!([31,32,34,35,37,38].includes(manual?.version)||pending.scoringVersion>=38)||pending.fullToss&&(pending.length>0||pending.postTime!==0||pending.bounceT!==1||pending.contactH<.035||pending.contactH>.95)))throw Error('Invalid full-toss flight');
+   if(pending?.fullToss!==undefined&&(typeof pending.fullToss!=='boolean'||!([31,32,34,35,37,38,39].includes(manual?.version)||pending.scoringVersion>=38)||pending.fullToss&&(pending.length>0||pending.postTime!==0||pending.bounceT!==1||pending.contactH<.035||pending.contactH>.95)))throw Error('Invalid full-toss flight');
    const change=state.live?.play?.catchChoice;if(change&&(!Number.isFinite(change.time)||change.time<0||change.time>30||!Array.isArray(change.positions)||change.positions.length!==11||change.positions.some(f=>!Number.isFinite(f.x)||!Number.isFinite(f.z)||Math.hypot(f.x,f.z)>100)))throw Error('Invalid saved fielding choice');
-   const a=state.bowlingAction;if(a&&(!Number.isFinite(a.age)||a.age<0||a.age>1400||typeof a.running!=='boolean'||typeof a.released!=='boolean'))throw Error('Invalid bowling action');const plan=state.bowlingPlan;if(plan&&(!Number.isFinite(plan.line)||plan.line< -1.1||plan.line>1.25||typeof plan.variation!=='string'||plan.variation.length>30||!['balanced','attack','defend'].includes(plan.field)))throw Error('Invalid bowling plan');for(const m of state.contest.innings)if(m.bowlingChoices){for(const [over,index]of Object.entries(m.bowlingChoices))if(!/^\d+$/.test(over)||+over>449||!Number.isInteger(index)||index<0||index>4)throw Error('Invalid bowler selection');if(m.format==='T20'&&m.bowlers.some(b=>b.balls>24))throw Error('Bowler exceeded four overs');}if(state.toss30&&(!['heads','tails'].includes(state.toss30.call)||!['heads','tails'].includes(state.toss30.face)||![0,1].includes(state.toss30.winner)||![null,'bat','bowl'].includes(state.toss30.choice)||typeof state.toss30.seen!=='boolean'))throw Error('Invalid toss');}return data;};
+   const a=state.bowlingAction;if(a&&(!Number.isFinite(a.age)||a.age<0||a.age>1400||typeof a.running!=='boolean'||typeof a.released!=='boolean'))throw Error('Invalid bowling action');const plan=state.bowlingPlan;if(plan&&(!Number.isFinite(plan.line)||plan.line< -1.1||plan.line>1.25||typeof plan.variation!=='string'||plan.variation.length>30||!['balanced','attack','defend'].includes(plan.field)||plan.side!==undefined&&!['over','round'].includes(plan.side)))throw Error('Invalid bowling plan');for(const m of state.contest.innings)if(m.bowlingChoices){for(const [over,index]of Object.entries(m.bowlingChoices))if(!/^\d+$/.test(over)||+over>449||!Number.isInteger(index)||index<0||index>4)throw Error('Invalid bowler selection');if(m.format==='T20'&&m.bowlers.some(b=>b.balls>24))throw Error('Bowler exceeded four overs');}if(state.toss30&&(!['heads','tails'].includes(state.toss30.call)||!['heads','tails'].includes(state.toss30.face)||![0,1].includes(state.toss30.winner)||![null,'bat','bowl'].includes(state.toss30.choice)||typeof state.toss30.seen!=='boolean'))throw Error('Invalid toss');}return data;};
 
  // R31 full tosses follow an unbounced parabola to the bat. No artificial
  // pitch, turn, turf sound or post-bounce slowdown; older paths are untouched.
@@ -2141,18 +2141,19 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
  };
  const releaseV37=BowlingControl.release;
  BowlingControl.release=function(template,rawAge,offset=0){
-  if(template.manualBowling?.version!==38)return releaseV37.call(this,template,rawAge,offset);
+  if(![38,39].includes(template.manualBowling?.version))return releaseV37.call(this,template,rawAge,offset);
   const b={...template,manualBowling:{...template.manualBowling}},c=b.manualBowling,age=clamp(rawAge-offset,350,1400),n=c.noise,s=b.bowlerProfile,spin=Strokes.spin(b),p=b.conditions,sign=Hand.sign(b),variation=c.variation,
    intended=this.lengthAt(age,38),
    e=Execution.draw(Math.floor(n[0]*4294967296)^0x38e1,c.control,Execution.difficulty({length:intended,variation,line:c.line,spin,stage:b.fieldStage,damp:p?.weather?.damp||0}),!spin&&intended<1.05),
    move=Execution.slip(e,spin,!spin&&intended<1.05),raw=clamp(intended+e.length+(move.shift||0),-5,10.8),length=raw>0?Math.max(.18,raw):raw,aim=move.line??c.line+e.line,
    speed=Math.round((lerp(...s.speed,n[2])-(variation==='Slower ball'?lerp(13,21,n[3]):0))*(move.pace??1)),movement=.55+s.movement*.006;
-  const swing=(variation==='Outswinger'?1:variation==='Inswinger'?-1:0)*lerp(.17,.31,n[3])*p.swing*movement*sign;
+  // R39 (plan version 39): the plan names the ball as a right-hander meets it, so its swing is no longer mirrored for a left-hander.
+  const swing=(variation==='Outswinger'?1:variation==='Inswinger'?-1:0)*lerp(.17,.31,n[3])*p.swing*movement*(c.version>=39?1:sign);
   let kick=spin?(b.archetype==='legspin'?(variation==='Googly'?-1:variation==='Top-spinner'?0:1)*lerp(.24,.43,n[4]):variation==='Arm ball'?0:-lerp(.20,.37,n[4]))*p.turn:(n[4]<.5?-1:1)*lerp(.05,.17,n[5])*p.seam;
   if(spin&&b.arm==='left')kick*=-1;kick=Math.atan(kick*movement/5.5)*sign;
   const contactH=clamp(Execution.height(length,spin)*p.bounce*(.90+s.bounce*.0013)*(variation==='Top-spinner'?1.10:1)+(n[5]-.5)*p.variation,.05,2.22),
    preTime=(18.4-length)/(speed/3.6),postTime=length/(speed/3.6*(spin?.70:lerp(.79,.64,clamp((length-6)/3,0,1)))*p.pace);
-  Object.assign(b,{length,lengthName:Execution.lengthName(length,spin),speed,variation,swing,kick,contactH,preTime,postTime,duration:(preTime+postTime)*2600,bounceT:preTime/(preTime+postTime),line:aim*sign});
+  Object.assign(b,{length,lengthName:Execution.lengthName(length,spin),speed,variation:c.version>=39?this.display(variation,b.battingHand):variation,swing,kick,contactH,preTime,postTime,duration:(preTime+postTime)*2600,bounceT:preTime/(preTime+postTime),line:aim*sign});
   Object.assign(c,{releaseAge:rawAge,correctedAge:age,phase:this.phase(rawAge),intendedLength:intended,intendedLabel:this.releaseLabel(intended,38,spin),releaseLabel:this.releaseLabel(length,38,spin),execution:{length:+(length-intended).toFixed(3),line:+(aim-c.line).toFixed(3),slip:e.slip}});
   b.fullToss=length<=0;if(b.fullToss)Execution.fullToss(b);
   return b;
@@ -2344,5 +2345,108 @@ Rachin Ravindra|offspin|left|78|91|70|69|70|66|25|57|61`;
   return commentaryV37.call(this,r,input,waiting,key);
  };
 
- return Object.freeze({Execution,ReturnControl,BowlingControl,CatchControl,Catching,FlightInfo,Toss,Appearance,Commentary,Broadcast,Economy,BallView,Players,Presentation,Weather,PreDelivery,Restart,Tactics,Contact,Rules,Running,TeamField,LiveBall,Hand,SoundDesign,Crowd,Stadium,Conditions,Bowling,RNG,Delivery,Shot,Strokes,LegacyShot,ShotV3,Ground,Fielding,BallFlight,NormalBall,View,BatterRig,FielderRig,Match,Save,Squad,Innings,Contest,Opposition,Season,CareerSave,Gesture,Rotation,BOWLERS,FIELDS,clamp,lerp});
+ // ---------------------------------------------------------------------------
+ // R39. New deliveries carry scoring version 39 and new contests pitch model 39.
+ // A contest begun under an earlier revision keeps its pitch, ball and wind to
+ // the end, and a ball prepared under 38 or earlier keeps its rules. Every draw
+ // comes from a seeded stream of its own; the match RNG is neither read nor
+ // advanced here.
+ // ---------------------------------------------------------------------------
+
+ // --- Ends: overs are bowled from alternate ends, and every innings opens from end 0. ---
+ // The engine's world keeps the striker at the origin, so a change of ends turns everything fixed to
+ // the ground through 180 degrees about that point. The wind is the only such thing the engine reads.
+ const Ends={
+  of(m,over=Math.floor(m.balls/6)){return over%2;},
+  wind(w,end){return end?{...w,windX:-w.windX||0,windZ:-w.windZ||0}:w;}
+ };
+ const contestCreateV38=Contest.create,attachV38=Conditions.attach,conditionsV38=Conditions.at,weatherAtV38=Weather.at;
+ Contest.create=function(...args){const c=contestCreateV38.apply(this,args);return{...c,pitchModel:39,innings:c.innings.map(m=>({...m,pitchModel:39}))};};
+ Conditions.attach=function(c,m){const n=attachV38.call(this,c,m);return c.pitchModel===39?{...n,pitchModel:39}:n;};
+ Weather.at=function(m){const w=weatherAtV38.call(this,m);return m.pitchModel===39?Ends.wind(w,Ends.of(m)):w;};
+
+ // --- Pitch and ball. Each match has its own surface, and the ball changes as it ages. ---
+ // lift, quick and uneven are drawn once per match: how high the ball stands up, how fast it comes off
+ // the surface, and how far one ball's bounce differs from the next. hard is the ball: 1 when new, 0
+ // once it has gone soft (55 overs in a Test, 16 in a Twenty20). A hard ball leaves the pitch faster
+ // and higher, which is also what carries an edge to the cordon, and its seam grips more; a soft one
+ // does the opposite. Both terms are centred so that an innings as a whole is no harder than before.
+ Conditions.at=function(m){
+  const p=conditionsV38.call(this,m);if(m.pitchModel!==39)return p;
+  const rng=RNG.stream(((m.pitchSeed??m.seed)^0x39c1b1)>>>0),lift=rng.next()*2-1,quick=rng.next()*2-1,rough=rng.next(),test=m.format==='TEST',
+   overs=p.ageBalls/6,hard=1-clamp(overs/(test?55:16),0,1),fresh=1-clamp(overs/(test?38:10),0,1),uneven=.55+1.35*rough*rough,mid=test?.3:.55,size=test?1:.6,spread=test?1:.7,
+   ball={bounce:1+.10*size*(hard-mid),pace:1+.05*size*(hard-mid)};
+  return{...p,version:39,end:Ends.of(m),hard,ball,character:{lift:+lift.toFixed(3),quick:+quick.toFixed(3),uneven:+uneven.toFixed(3)},
+   bounce:p.bounce*(1+.08*spread*lift)*ball.bounce,pace:p.pace*(1+.035*spread*quick)*ball.pace,
+   seam:p.seam*(.70+.44*fresh)/(.76+.30*fresh),variation:p.variation*uneven};
+ };
+ // The report describes the surface, so the ball's own share of bounce and pace is taken back out.
+ Conditions.report=function(m){
+  const p=this.at(m),c=p.character||{lift:0,quick:0,uneven:1},test=m.format==='TEST',
+   scale=(v,lo,hi)=>Math.round(clamp((v-lo)/(hi-lo),0,1)*100),bounce=p.bounce/(p.ball?.bounce??1),pace=p.pace/(p.ball?.pace??1),seam=.65+p.grass*.85,
+   w=p.weather,e=w?Weather.effects(w):null,overs=Math.floor(p.ageBalls/6);
+  return{
+   surface:({true:'Firm surface',grass:'Grass on the surface',dry:'Dry, abrasive surface'})[p.id]+(p.wear>.45?', worn':p.wear>.2?', wearing':''),
+   lines:[
+    c.lift>.4?'Extra bounce. The short ball will climb.':c.lift<-.4?'Low bounce. The ball will skid on.':'Even height off a length.',
+    c.quick>.4?'Quick. The ball comes on to the bat.':c.quick<-.4?'Slow. The ball holds in the surface.':'Medium pace off the pitch.',
+    p.variation<.035?'Bounce you can trust.':p.variation<.08?'The odd ball will misbehave.':'Uneven. Some will shoot, some will lift.',
+    seam>=1.05&&p.turn<1.25?'Seam movement for the quicks.':p.turn>=1.25&&seam<1.05?'Turn for the spinners.':seam>=1.05?'Seam early, turn as it wears.':'Little sideways movement.'
+   ],
+   stats:[['Bounce',scale(bounce,.84,1.16)],['Pace',scale(pace,.86,1.08)],['Seam',scale(seam,.65,1.35)],['Turn',scale(p.turn,.75,2)]],
+   ball:test?(overs<1?'New red ball':'Red ball, '+overs+' overs old'):(overs<1?'New white ball':'White ball, '+overs+' overs old'),
+   sky:w?w.name+', '+Math.round(w.temp)+'°C. '+(w.damp>.27?'Damp: lower bounce. ':'')+(e.swing>1.035?'The air favours swing.':e.swing<.96?'Little help for swing.':'Usual swing.'):''
+  };
+ };
+
+ const deliveryV38=Innings.delivery;
+ Innings.delivery=function(m,options={}){const d=deliveryV38.call(this,m,options);d.ball.scoringVersion=39;if(m.pitchModel===39)d.ball.end=Ends.of(m);return d;};
+
+ // --- Manual bowling: the ball is the bowler's, its name is the batter's. ---
+ // A plan now names the delivery as a right-hander meets it. Against a left-hander the same ball
+ // keeps its swing in the world and takes the other name: an in-swinger to a right-hander is an
+ // out-swinger to a left-hander. The opposition's bowlers already worked this way. Round the wicket
+ // moves the release to the far side of the stumps, wider out, and leaves everything else alone.
+ const prepareV38=BowlingControl.prepare;
+ BowlingControl.display=function(variation,hand='right'){return hand==='left'&&/swinger/.test(variation)?(variation==='Outswinger'?'Inswinger':'Outswinger'):variation;};
+ BowlingControl.releaseX=function(arm,spin,side='over'){const x=arm==='left'?(spin?-.54:-.60):spin?.54:.43;return side==='round'?-Math.sign(x)*clamp(Math.abs(x)+.5,.9,1.05):x;};
+ BowlingControl.prepare=function(m,plan={}){
+  const d=prepareV38.call(this,m,plan),b=d.ball,c=b.manualBowling;
+  c.version=39;c.side=plan.side==='round'?'round':'over';
+  b.releaseX=this.releaseX(b.arm,Strokes.spin(b),c.side);b.variation=this.display(c.variation,b.battingHand);
+  return d;
+ };
+
+ // --- Before the ball: the end the over is bowled from. ---
+ const cardsV38=Broadcast.cards,cardsValidV38=Broadcast.valid;
+ Broadcast.cards=function(m,previous,ball,introduced=[]){
+  if(!(ball?.scoringVersion>=39))return cardsV38.call(this,m,previous,ball,introduced);
+  // The wind turns round with the end, so swing wording alone is no longer a change in the weather.
+  const sky=w=>w.name+':'+(w.damp>.27?2:w.damp>.12?1:0),same=previous?.weather&&ball.weather&&sky(previous.weather)===sky(ball.weather),
+   cards=cardsV38.call(this,m,same?{...previous,weather:ball.weather}:previous,ball,introduced);
+  if(ball.end!==undefined&&(!previous||previous.end!==ball.end)){
+   const w=ball.weather,speed=w?Weather.wind(w).speed:0,e=w?Weather.effects(w):null,
+    air=speed<5?'Still air':(Math.abs(w.windZ)<.35?'Crosswind':w.windZ>0?'Into the wind':'Wind behind')+' · '+speed+' km/h';
+   cards.push({kind:'end',title:m.balls?'Change of ends':'Opening end',name:String(ball.end),detail:air+(e&&e.swing>1.035?' · more swing':e&&e.swing<.96?' · less swing':''),stats:[],duration:1800});
+  }
+  return cards;
+ };
+ Broadcast.valid=function(cards){
+  if(!Array.isArray(cards)||cards.length>5)return false;const ends=cards.filter(c=>c?.kind==='end'),rest=cards.filter(c=>c?.kind!=='end');
+  return ends.length<=1&&ends.every(c=>['0','1'].includes(c.name)&&['title','detail'].every(k=>typeof c[k]==='string'&&c[k].length<180)&&c.duration===1800&&Array.isArray(c.stats)&&c.stats.length===0)&&cardsValidV38.call(this,rest);
+ };
+
+ const saveValidateV38=CareerSave.validate;
+ CareerSave.validate=function(raw){
+  const data=saveValidateV38.call(this,raw);
+  for(const s of Object.values(data.sessions)){
+   const c=s.contest,p=s.pending,b=s.banners;
+   if(c.pitchModel!==undefined&&c.pitchModel!==39||c.innings.some(m=>m.pitchModel!==undefined&&m.pitchModel!==39))throw Error('Invalid pitch model');
+   if(p?.end!==undefined&&![0,1].includes(p.end))throw Error('Invalid bowling end');
+   if(b!==undefined&&(!b||typeof b!=='object'||!Number.isInteger(b.seed)||b.seed<0||b.seed>4294967295||b.pitch!==undefined&&typeof b.pitch!=='boolean'||b.day!==undefined&&(!Number.isInteger(b.day)||b.day<1||b.day>5)||b.ball!==undefined&&(typeof b.ball!=='string'||b.ball.length>12)))throw Error('Invalid banner record');
+  }
+  return data;
+ };
+
+ return Object.freeze({Ends,Execution,ReturnControl,BowlingControl,CatchControl,Catching,FlightInfo,Toss,Appearance,Commentary,Broadcast,Economy,BallView,Players,Presentation,Weather,PreDelivery,Restart,Tactics,Contact,Rules,Running,TeamField,LiveBall,Hand,SoundDesign,Crowd,Stadium,Conditions,Bowling,RNG,Delivery,Shot,Strokes,LegacyShot,ShotV3,Ground,Fielding,BallFlight,NormalBall,View,BatterRig,FielderRig,Match,Save,Squad,Innings,Contest,Opposition,Season,CareerSave,Gesture,Rotation,BOWLERS,FIELDS,clamp,lerp});
 })();

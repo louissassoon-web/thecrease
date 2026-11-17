@@ -1,0 +1,238 @@
+{
+ "engine": "dist/index.html",
+ "scale": 1,
+ "t20Ground60": {
+  "innings": 240,
+  "balls": 28800,
+  "runsPerOver": 6.84,
+  "ballsPerWicket": 64.03,
+  "edgePct": 4.77,
+  "edgesCaughtPct": 22.71,
+  "sixPct": 0
+ },
+ "t20Ground130": {
+  "innings": 240,
+  "balls": 28520,
+  "runsPerOver": 5.06,
+  "ballsPerWicket": 21.76,
+  "edgePct": 7.12,
+  "edgesCaughtPct": 26.7,
+  "sixPct": 0
+ },
+ "t20LoftMix60": {
+  "innings": 240,
+  "balls": 28539,
+  "runsPerOver": 9.34,
+  "ballsPerWicket": 21.49,
+  "edgePct": 4.99,
+  "edgesCaughtPct": 24.31,
+  "sixPct": 1.19
+ },
+ "t20Slog60": {
+  "innings": 120,
+  "balls": 5552,
+  "runsPerOver": 17.55,
+  "ballsPerWicket": 4.49,
+  "edgePct": 2.81,
+  "edgesCaughtPct": 33.33,
+  "sixPct": 21.76
+ },
+ "testGround60": {
+  "innings": 48,
+  "balls": 12858,
+  "runsPerOver": 3.57,
+  "ballsPerWicket": 67.4,
+  "edgePct": 3.31,
+  "edgesCaughtPct": 37.32,
+  "sixPct": 0
+ },
+ "split60": {
+  "innings": 240,
+  "spin": {
+   "balls": 12684,
+   "runsPerOver": 6.63,
+   "ballsPerWicket": 77.88,
+   "edgePct": 4.08,
+   "edgesCaughtPct": 22.63
+  },
+  "pace": {
+   "balls": 16116,
+   "runsPerOver": 7.1,
+   "ballsPerWicket": 62.45,
+   "edgePct": 5.03,
+   "edgesCaughtPct": 23.43
+  },
+  "ballsPerWicketRatio": 1.25,
+  "runsPerOverRatio": 0.93,
+  "edgeRatio": 0.81
+ },
+ "split130": {
+  "innings": 240,
+  "spin": {
+   "balls": 12632,
+   "runsPerOver": 4.66,
+   "ballsPerWicket": 17.99,
+   "edgePct": 6.92,
+   "edgesCaughtPct": 25.17
+  },
+  "pace": {
+   "balls": 15916,
+   "runsPerOver": 5.15,
+   "ballsPerWicket": 24.95,
+   "edgePct": 7.23,
+   "edgesCaughtPct": 27.98
+  },
+  "ballsPerWicketRatio": 0.72,
+  "runsPerOverRatio": 0.9,
+  "edgeRatio": 0.96
+ },
+ "ballAgeT20": [
+  {
+   "band": "overs 1-4",
+   "balls": 4493,
+   "runsPerOver": 8.92,
+   "ballsPerWicket": 18.86,
+   "edgePct": 8.59,
+   "edgesCaughtPct": 27.46,
+   "goodLengthHeightM": 0.939,
+   "goodLengthSpeedOffPitchKmh": 108.11,
+   "swingM": 0.094,
+   "seamRad": 0.0182
+  },
+  {
+   "band": "overs 5-10",
+   "balls": 2810,
+   "runsPerOver": 8.08,
+   "ballsPerWicket": 20,
+   "edgePct": 7.83,
+   "edgesCaughtPct": 29.55,
+   "goodLengthHeightM": 0.92,
+   "goodLengthSpeedOffPitchKmh": 105.6,
+   "swingM": 0.051,
+   "seamRad": 0.0154
+  },
+  {
+   "band": "overs 11-20",
+   "balls": 8716,
+   "runsPerOver": 6.47,
+   "ballsPerWicket": 38.96,
+   "edgePct": 6,
+   "edgesCaughtPct": 22.94,
+   "goodLengthHeightM": 0.891,
+   "goodLengthSpeedOffPitchKmh": 101.81,
+   "swingM": 0.032,
+   "seamRad": 0.0117
+  }
+ ],
+ "ballAgeTEST": [
+  {
+   "band": "overs 1-15",
+   "balls": 2887,
+   "runsPerOver": 4.73,
+   "ballsPerWicket": 56.16,
+   "edgePct": 4.57,
+   "edgesCaughtPct": 33.33,
+   "goodLengthHeightM": 0.951,
+   "goodLengthSpeedOffPitchKmh": 110.61,
+   "swingM": 0.139,
+   "seamRad": 0.0217
+  },
+  {
+   "band": "overs 16-40",
+   "balls": 2702,
+   "runsPerOver": 4.5,
+   "ballsPerWicket": 43.28,
+   "edgePct": 4.7,
+   "edgesCaughtPct": 38.58,
+   "goodLengthHeightM": 0.916,
+   "goodLengthSpeedOffPitchKmh": 107.2,
+   "swingM": 0.059,
+   "seamRad": 0.0163
+  },
+  {
+   "band": "overs 41-80",
+   "balls": 5118,
+   "runsPerOver": 3.88,
+   "ballsPerWicket": 58.15,
+   "edgePct": 3.79,
+   "edgesCaughtPct": 34.54,
+   "goodLengthHeightM": 0.884,
+   "goodLengthSpeedOffPitchKmh": 105.27,
+   "swingM": 0.052,
+   "seamRad": 0.0138
+  },
+  {
+   "band": "overs 81-95, second new ball",
+   "balls": 1843,
+   "runsPerOver": 3.42,
+   "ballsPerWicket": 50.11,
+   "edgePct": 4.72,
+   "edgesCaughtPct": 31.03,
+   "goodLengthHeightM": 0.942,
+   "goodLengthSpeedOffPitchKmh": 108.42,
+   "swingM": 0.142,
+   "seamRad": 0.0206
+  }
+ ],
+ "pitchT20": {
+  "matches": 400,
+  "bounceMean": 1.019,
+  "bounceSd": 0.049,
+  "bounceLowest": 0.902,
+  "bounceHighest": 1.121,
+  "paceSd": 0.025,
+  "variableBounceMeanM": 0.022,
+  "variableBounceSdM": 0.01,
+  "goodLengthHeightBetweenMatchesSdM": 0.06
+ },
+ "pitchTEST": {
+  "matches": 400,
+  "bounceMean": 1.053,
+  "bounceSd": 0.062,
+  "bounceLowest": 0.91,
+  "bounceHighest": 1.185,
+  "paceSd": 0.029,
+  "variableBounceMeanM": 0.039,
+  "variableBounceSdM": 0.016,
+  "goodLengthHeightBetweenMatchesSdM": 0.116
+ },
+ "testVariableBounceByDayM": [
+  0.042,
+  0.074,
+  0.107,
+  0.139,
+  0.158
+ ],
+ "testVariableBounceHighestByDayM": [
+  0.088,
+  0.146,
+  0.197,
+  0.247,
+  0.297
+ ],
+ "windyHeadOrTailMatches": {
+  "matches": 49,
+  "windReversesBetweenOversPct": 100,
+  "meanSwingDifferenceBetweenEndsPct": 32.82
+ },
+ "playerSwing": {
+  "rightHanders": 220,
+  "leftHanders": 160,
+  "sameDirectionInTheWorldForRightHandersPct": 100,
+  "sameDirectionInTheWorldForLeftHandersPct": 100,
+  "names": {
+   "right": {
+    "Outswinger is shown as Outswinger": 177,
+    "Inswinger is shown as Inswinger": 43
+   },
+   "left": {
+    "Outswinger is shown as Inswinger": 118,
+    "Inswinger is shown as Outswinger": 42
+   }
+  },
+  "releaseFromMiddleStumpM": {
+   "over": 0.5,
+   "round": 0.98
+  }
+ }
+}

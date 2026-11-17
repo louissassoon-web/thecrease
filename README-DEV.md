@@ -35,3 +35,6 @@ On any http(s) origin, `npm run serve` included, the page registers `dist/sw.js`
 - `node check-balance.cjs`: gameplay balance acceptance; targets are design ranges and are changed only deliberately, with the reason recorded.
 - `node check-balance-r38.cjs`: revision 38 acceptance (edges, high balls, mistimed strokes, loose balls, bowling error, run calls), plus three contract checks repeated on larger samples for information. `npm run check` runs it after the contract.
 - `node tools/measure-r38.cjs [core.js]`: the same measures on any engine file, for before-and-after comparison against `review-fixtures/core-v37.js`.
+- `node check-r39.cjs`: revision 39 groups, run by `review-check.cjs`: the frozen revision 38 engine (`review-fixtures/core-v38.js`) against this one, ends, the pitch model, round the wicket and swing naming, the camera, banners and the ball.
+- `node tools/measure-r39.cjs [core.js]`: before-and-after measures for revision 39 on any engine file. It repeats the contract's small-sample checks on 240 innings and measures the ball by age, the pitch from match to match and the wind from end to end. `SCALE=0.25` runs a quarter of every sample.
+- `node tools/measure-camera-r39.cjs`: the share of balls on which the main view is kept, by role, format and kind of play.
