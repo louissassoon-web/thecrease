@@ -8,6 +8,14 @@
 // survival floor lowered from 5 to 4 (a committed loft every ball should not be made safer to pass a check); a 60 ms edge check
 // added to section 7 so the risk curve must rise gradually rather than step; AI samples raised from 40 to 120 T20 matches
 // and from 14 to 40 Tests, because 169 on 40 seeds was 180 on the next 120 and 1 draw in 14 Tests was 0 in the next 40.
+// 17 November 2026, for revision 39, on the owner's decision: the loft-mix sample raised from 10 to 240 innings and the
+// spin-against-pace sample (which also gives the share of spin edges caught and the boundary-ball checks) from 24 to 240.
+// Every match now has its own pitch, and on the old samples the same engine read 17.2 to 23.6 balls per wicket for the loft
+// mix, and 0.98 to 3.15 for the spin-against-pace ratio, depending only on the constant that seeds the pitch stream. No band
+// has changed. Under the same decision the AI Test sample is raised from 40 to 120 Tests: on forty the first-innings mean
+// read 368 to 406 on ten pitch constants against a ceiling of 400 and two of the ten failed; on 120 the same ten read 364
+// to 386. The other small samples (ground strokes and the all-loft slog on 10 innings, the Test day on 8) kept every
+// verdict across 38 pitch constants and are as they were; the slog has the least room, 4.13 at its lowest against a floor of 4.
 const fs=require('node:fs'),vm=require('node:vm'),path=require('node:path');
 const html=fs.readFileSync(path.join(__dirname,'dist/index.html'),'utf8');
 vm.runInThisContext(html.match(/<script id="cricket-core">([\s\S]*?)<\/script>/)[1]);
@@ -35,7 +43,7 @@ check('T20 ground strokes, 60 ms timing sd: runs per over',groundGood.rr,5,7.5);
 check('T20 ground strokes, 60 ms timing sd: balls per wicket',groundGood.ballsPerWicket,30,90);
 const groundPoor=human('T20',{sigma:130,effort:.75,loftRate:0});
 check('T20 ground strokes, 130 ms timing sd: balls per wicket',groundPoor.ballsPerWicket,12,40);
-const mix=human('T20',{sigma:60,effort:.85,loftRate:.25});
+const mix=human('T20',{sigma:60,effort:.85,loftRate:.25},240);
 check('T20 25% loft mix, 60 ms sd: runs per over',mix.rr,7,9.5);
 check('T20 25% loft mix, 60 ms sd: balls per wicket',mix.ballsPerWicket,20,60);
 const slog=human('T20',{sigma:60,effort:1,loftRate:1});
@@ -72,7 +80,7 @@ check('AI T20 first-innings wickets',t20.wickets,5,8.5);
 check('AI T20 sixes per innings',t20.sixesPerInnings,4,9);
 check('AI T20 wides, % of balls',t20.widePct,1.5,4.5,'%');
 check('AI T20 lbw, % of dismissals',t20.lbwPct,4,20,'%');
-const test=ai('TEST',40);
+const test=ai('TEST',120);
 check('AI Test first-innings mean',test.mean,280,400);
 check('AI Test first-innings standard deviation',test.sd,55,140);
 check('AI Test first innings declared, %',test.declaredPct,0,30,'%');
@@ -105,7 +113,7 @@ function humanSplit(format,s,seeds=24,maxBalls=120){const teams=C.Squad.teams(fo
    const e=res.play?.event;if(e?.type==='four'&&!res.wicket&&res.contact){t.boundaries=(t.boundaries||0)+1;if(e.chaser?.id||e.id)t.chased=(t.chased||0)+1;if(e.time>=1&&C.Running.offer(res,.45).allowed)t.runnable=(t.runnable||0)+1;if(e.time>=1)t.slowFours=(t.slowFours||0)+1;if(res.batRuns>=4)t.scoredFour=(t.scoredFour||0)+1;}}}
  for(const t of Object.values(out))Object.assign(t,{rr:6*t.runs/Math.max(1,t.legal),ballsPerWicket:t.legal/Math.max(1,t.wickets),fourPct:100*t.fours/t.balls,edgePct:100*t.edges/t.balls,edgeCaughtPct:100*t.edgesCaught/Math.max(1,t.edges),scale:t.screen/Math.max(1,t.physical),ropePct:100*(t.rope||0)/Math.max(1,t.timed||0),chasedPct:100*(t.chased||0)/Math.max(1,t.boundaries||0),runnablePct:100*(t.runnable||0)/Math.max(1,t.slowFours||0),scoredFourPct:100*(t.scoredFour||0)/Math.max(1,t.boundaries||0)});
  return out;}
-const parity=humanSplit('T20',{sigma:60,effort:.75,loftRate:0}),parityPoor=humanSplit('T20',{sigma:130,effort:.75,loftRate:0});
+const parity=humanSplit('T20',{sigma:60,effort:.75,loftRate:0},240),parityPoor=humanSplit('T20',{sigma:130,effort:.75,loftRate:0},240);
 check('Spin v pace, 60 ms ground strokes: balls-per-wicket ratio',parity.spin.ballsPerWicket/parity.pace.ballsPerWicket,.7,1.6);
 check('Spin v pace, 130 ms ground strokes: balls-per-wicket ratio',parityPoor.spin.ballsPerWicket/parityPoor.pace.ballsPerWicket,.6,1.6);
 check('Spin v pace, 60 ms ground strokes: runs-per-over ratio',parity.spin.rr/parity.pace.rr,.8,1.1);

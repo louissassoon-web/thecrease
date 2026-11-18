@@ -1,29 +1,36 @@
 {
-  "sourceRevision": 38,
-  "scoringVersion": 38,
+  "sourceRevision": 39,
+  "scoringVersion": 39,
   "saveSchema": 5,
   "playerProfileVersion": 19,
-  "date": "2026-11-11",
+  "date": "2026-11-17",
   "design": "https://claude.ai/code/artifact/45ee297f-2076-43fb-b295-b50f74f8ca90",
-  "htmlSha256": "9360f8b1616b971665019757ecbfcd4de99ed06bf4b4077e92304e9cf1ecb35d",
-  "harnessSha256": "8e09003ca2128e0684c87cf7f034178631aac2bd88c3c4f439aa3c4973c59747",
+  "htmlSha256": "8422af208d39cb67293ecf24f25e8982e07457000a970ac78d0dbbf39a84c8b8",
+  "harnessSha256": "38451d18725071dcd7bb157ce34812b5f567798c49a277f3c8feaa0b91e93166",
   "url": "https://cricket-three-over.workspace-710372.chatgpt.site",
   "balance": {
     "passed": 48,
     "total": 48,
     "disputedFailures": []
   },
-  "reviewGroupsPassed": 131,
-  "report": "validation-v38/REPORT.md",
+  "reviewGroupsPassed": 141,
+  "report": "validation-v39/REPORT.md",
   "notes": "APP_STORE_READINESS.md",
-  "previousHtmlSha256": "d8415d3654d819e453a33f0be122150a5d75dd2ddf643c2ec056e381ec3d624d",
-  "localChanges": "R38 owner play notes: bowling wheel with aim arrow, execution error for every bowler, opposition punishes loose balls, edges for four, high-ball and mistimed-stroke contact, run-call wording, earlier and slower run-out choice, broadcast strip, light and weather on screen, longer vibration pulses. No new dependencies.",
-  "baseCommit": "87a742da942cf21221bc3898bb1dd624210ad7bb",
-  "offlineShellVersion": "r38",
-  "offlineReport": "validation-v38/offline.txt",
+  "previousHtmlSha256": "9360f8b1616b971665019757ecbfcd4de99ed06bf4b4077e92304e9cf1ecb35d",
+  "localChanges": "R39 owner play notes: fast-forward per ball only, camera kept in the main view while the ball is in frame, stroke shown before the cut under reduced motion, swing named for the batter on strike and spin the same ball against either hand, round the wicket, wind arrow and radar in the picture's frame, ends alternate each over, per-match pitch with a report, day and new-ball banners that close on a tap, ball hardness by age, clearer ball with a world-space seam and a close-up. No new dependencies.",
+  "baseCommit": "aa164cae7b942bb442fea33ac0b8beb3505ae9ef",
+  "offlineShellVersion": "r39",
+  "offlineReport": "validation-v39/offline.txt",
   "acceptance": {
     "harness": "check-balance-r38.cjs",
     "passed": 51,
     "total": 51
-  }
+  },
+  "pitchModel": 39,
+  "measures": {
+    "tool": "tools/measure-r39.cjs",
+    "before": "validation-v39/measures-before.json",
+    "after": "validation-v39/measures-after.json"
+  },
+  "harnessNote": "17 November 2026, on the owner's decision: loft-mix sample 10 to 240 innings, spin-against-pace sample 24 to 240, AI Test sample 40 to 120 Tests. No band changed. Previous hash 8e09003ca2128e0684c87cf7f034178631aac2bd88c3c4f439aa3c4973c59747."
 }

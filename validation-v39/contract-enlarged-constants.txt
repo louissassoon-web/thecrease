@@ -1,0 +1,184 @@
+# The contract with its three enlarged samples (loft mix and spin against pace on 240 innings, AI Tests on 120) on ten pitch
+# stream constants. 0x39c1a7 is the constant in the build; its full output is balance.txt. Nine of the ten pass all 48 checks.
+# 0x39c1ab fails one: AI Twenty20 first-innings wickets, 8.58 against a ceiling of 8.5. That check is taken on 120 matches and has
+# read 8.47, 8.31 and 8.30 in revisions 37, 38 and 39, so the game sits near that limit; it is not a small sample.
+
+== 0x39c1a7
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.39   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          21.52   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.44   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       188   target 120-190
+PASS AI T20 first-innings mean                                            166.85   target 150-180
+PASS AI T20 first-innings wickets                                            8.3   target 5-8.5
+PASS AI T20 sixes per innings                                               4.28   target 4-9
+PASS AI T20 lbw, % of dismissals                                           4.64%   target 4-20%
+PASS AI Test first-innings mean                                           375.38   target 280-400
+PASS AI Test first innings declared, %                                    19.17%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      27.02%   target 10-30%
+PASS AI Test won by the side batting last, %                              46.67%   target 30-65%
+PASS AI Test draws, %                                                     10.83%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.39   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  21.11%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1a8
+PASS T20 25% loft mix, 60 ms sd: runs per over                               9.4   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                           21.5   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                         4.6   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       188   target 120-190
+PASS AI T20 first-innings mean                                            166.63   target 150-180
+PASS AI T20 first-innings wickets                                           8.14   target 5-8.5
+PASS AI T20 sixes per innings                                                4.4   target 4-9
+PASS AI T20 lbw, % of dismissals                                            5.7%   target 4-20%
+PASS AI Test first-innings mean                                           386.38   target 280-400
+PASS AI Test first innings declared, %                                       20%   target 0-30%
+PASS AI Test bowled, % of dismissals                                       28.1%   target 10-30%
+PASS AI Test won by the side batting last, %                                 50%   target 30-65%
+PASS AI Test draws, %                                                     14.17%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.36   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  20.52%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1a9
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.39   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                           21.3   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.24   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       188   target 120-190
+PASS AI T20 first-innings mean                                            167.25   target 150-180
+PASS AI T20 first-innings wickets                                           8.27   target 5-8.5
+PASS AI T20 sixes per innings                                               4.33   target 4-9
+PASS AI T20 lbw, % of dismissals                                           5.57%   target 4-20%
+PASS AI Test first-innings mean                                           377.82   target 280-400
+PASS AI Test first innings declared, %                                       20%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      27.68%   target 10-30%
+PASS AI Test won by the side batting last, %                              44.17%   target 30-65%
+PASS AI Test draws, %                                                     10.83%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio               1.5   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  22.48%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1aa
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.33   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          20.91   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.13   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       187   target 120-190
+PASS AI T20 first-innings mean                                            168.07   target 150-180
+PASS AI T20 first-innings wickets                                           8.32   target 5-8.5
+PASS AI T20 sixes per innings                                               4.32   target 4-9
+PASS AI T20 lbw, % of dismissals                                           5.13%   target 4-20%
+PASS AI Test first-innings mean                                           370.48   target 280-400
+PASS AI Test first innings declared, %                                     17.5%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      27.28%   target 10-30%
+PASS AI Test won by the side batting last, %                              43.33%   target 30-65%
+PASS AI Test draws, %                                                     13.33%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.43   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  21.37%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1ab
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.33   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          21.29   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.13   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       187   target 120-190
+PASS AI T20 first-innings mean                                            167.52   target 150-180
+FAIL AI T20 first-innings wickets                                           8.58   target 5-8.5
+PASS AI T20 sixes per innings                                               4.33   target 4-9
+PASS AI T20 lbw, % of dismissals                                           5.35%   target 4-20%
+PASS AI Test first-innings mean                                           383.38   target 280-400
+PASS AI Test first innings declared, %                                    19.17%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      26.93%   target 10-30%
+PASS AI Test won by the side batting last, %                               52.5%   target 30-65%
+PASS AI Test draws, %                                                     11.67%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.45   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  20.65%   target 15-40%
+47 passed, 1 failed of 48 balance checks.
+
+== 0x39c1ae
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.32   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          20.79   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.52   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       186   target 120-190
+PASS AI T20 first-innings mean                                            170.38   target 150-180
+PASS AI T20 first-innings wickets                                            8.3   target 5-8.5
+PASS AI T20 sixes per innings                                               4.52   target 4-9
+PASS AI T20 lbw, % of dismissals                                           5.45%   target 4-20%
+PASS AI Test first-innings mean                                           363.68   target 280-400
+PASS AI Test first innings declared, %                                    16.67%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      27.16%   target 10-30%
+PASS AI Test won by the side batting last, %                              51.67%   target 30-65%
+PASS AI Test draws, %                                                      9.17%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.58   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  19.48%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1b1
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.34   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          21.49   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.53   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       187   target 120-190
+PASS AI T20 first-innings mean                                            166.76   target 150-180
+PASS AI T20 first-innings wickets                                           8.27   target 5-8.5
+PASS AI T20 sixes per innings                                               4.31   target 4-9
+PASS AI T20 lbw, % of dismissals                                           5.63%   target 4-20%
+PASS AI Test first-innings mean                                           369.17   target 280-400
+PASS AI Test first innings declared, %                                     17.5%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      27.35%   target 10-30%
+PASS AI Test won by the side batting last, %                              53.33%   target 30-65%
+PASS AI Test draws, %                                                      9.17%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.36   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  21.02%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1bc
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.29   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          21.04   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.46   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       186   target 120-190
+PASS AI T20 first-innings mean                                            165.92   target 150-180
+PASS AI T20 first-innings wickets                                           8.17   target 5-8.5
+PASS AI T20 sixes per innings                                                4.2   target 4-9
+PASS AI T20 lbw, % of dismissals                                           4.98%   target 4-20%
+PASS AI Test first-innings mean                                           379.03   target 280-400
+PASS AI Test first innings declared, %                                    15.83%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      28.34%   target 10-30%
+PASS AI Test won by the side batting last, %                              38.33%   target 30-65%
+PASS AI Test draws, %                                                      9.17%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.49   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  19.19%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1c2
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.36   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          21.15   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.33   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       187   target 120-190
+PASS AI T20 first-innings mean                                            169.84   target 150-180
+PASS AI T20 first-innings wickets                                           8.21   target 5-8.5
+PASS AI T20 sixes per innings                                               4.48   target 4-9
+PASS AI T20 lbw, % of dismissals                                           5.12%   target 4-20%
+PASS AI Test first-innings mean                                           369.28   target 280-400
+PASS AI Test first innings declared, %                                    18.33%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      27.02%   target 10-30%
+PASS AI Test won by the side batting last, %                               47.5%   target 30-65%
+PASS AI Test draws, %                                                     11.67%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio              1.45   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  18.13%   target 15-40%
+48 passed, 0 failed of 48 balance checks.
+
+== 0x39c1c9
+PASS T20 25% loft mix, 60 ms sd: runs per over                              9.41   target 7-9.5
+PASS T20 25% loft mix, 60 ms sd: balls per wicket                          21.15   target 20-60
+PASS T20 loft every ball, 60 ms sd: balls per wicket                        4.46   target 4-16
+PASS Projected 20-over total, 25% loft mix at 60 ms sd                       188   target 120-190
+PASS AI T20 first-innings mean                                            165.31   target 150-180
+PASS AI T20 first-innings wickets                                           8.34   target 5-8.5
+PASS AI T20 sixes per innings                                               4.24   target 4-9
+PASS AI T20 lbw, % of dismissals                                           5.14%   target 4-20%
+PASS AI Test first-innings mean                                           368.07   target 280-400
+PASS AI Test first innings declared, %                                    15.83%   target 0-30%
+PASS AI Test bowled, % of dismissals                                      27.89%   target 10-30%
+PASS AI Test won by the side batting last, %                              49.17%   target 30-65%
+PASS AI Test draws, %                                                     13.33%   target 5-25%
+PASS Spin v pace, 60 ms ground strokes: balls-per-wicket ratio               1.5   target 0.7-1.6
+PASS Spin edges that are caught, 60 ms ground strokes, %                  21.22%   target 15-40%
+48 passed, 0 failed of 48 balance checks.

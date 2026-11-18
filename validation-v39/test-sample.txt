@@ -1,0 +1,72 @@
+# The contract and its samples, 17 November 2026.
+# Method: the functions of check-balance.cjs, taken from that file by text and run on the engine in dist/index.html with the
+# pitch stream constant replaced; revision 38 is review-fixtures/core-v38.js. Seeds are the contract's own.
+
+== 1. AI v AI Tests: first-innings mean on the contract's first 40 Tests and on 120 (ceiling 400)
+engine or pitch constant     first 40  next 40  last 40  all 120      sd  std err  declared %  draws %  last-bat wins %  bowled %   lbw %
+revision 38, frozen engine     375.23   366.70   372.50   371.48  112.29    10.25       14.17    11.67            46.67     28.17   13.46
+0x39c1a7, in the build         391.32   367.13   367.68   375.38  118.11    10.78       19.17    10.83            46.67     27.02   14.18
+0x39c1a8                       404.45   380.45   374.23   386.38  119.41    10.90       20.00    14.17            50.00     28.10   13.40
+0x39c1a9                       397.82   365.73   369.90   377.82  121.86    11.12       20.00    10.83            44.17     27.68   14.46
+0x39c1aa                       374.82   379.98   356.63   370.48  121.33    11.08       17.50    13.33            43.33     27.28   14.42
+0x39c1ab                       406.13   379.35   364.68   383.38  123.17    11.24       19.17    11.67            52.50     26.93   14.40
+0x39c1ae                       372.15   347.98   370.90   363.68  116.87    10.67       16.67     9.17            51.67     27.16   13.63
+0x39c1b1                       376.95   366.52   364.02   369.17  115.50    10.54       17.50     9.17            53.33     27.35   13.82
+0x39c1bc                       399.88   341.02   396.20   379.03  108.66     9.92       15.83     9.17            38.33     28.34   13.83
+0x39c1c2                       373.57   372.00   362.27   369.28  119.76    10.93       18.33    11.67            47.50     27.02   13.40
+0x39c1c9                       368.23   376.77   359.20   368.07  118.47    10.82       15.83    13.33            49.17     27.89   13.99
+# Revision 39, ten constants. First 40: 368.23 to 406.13, mean 386.53, 2 of 10 over the ceiling. All 120: 363.68 to 386.38, mean 374.27, 0 of 10 over the ceiling.
+# On 120 Tests every other AI Test check passes on all ten: sd 108.66 to 123.17 (55-140), declared 15.83 to 20.00% (0-30), draws 9.17 to 14.17% (5-25), last-bat wins 38.33 to 53.33% (30-65), bowled 26.93 to 28.34% (10-30), lbw 13.40 to 14.46% (8-25).
+# Time on this machine: the whole contract takes 87 s with 120 Tests against 55 s with 40.
+
+== 2. The contract's other small samples on 38 pitch constants, 0x39c1a7 to 0x39c1cc
+sample                                           lowest  highest     mean      sd      band  failures
+all-loft slog, 10 innings: balls per wicket        4.13     4.60     4.34    0.13      4-16         0
+all-loft slog, 10 innings: six % of balls         20.09    24.68    22.05    1.15     10-35         0
+ground strokes 60 ms, 10 innings: runs per over     6.56     6.90     6.75    0.09     5-7.5         0
+ground strokes 60 ms, 10 innings: balls/wicket    46.28    83.21    61.23    7.52     30-90         0
+ground strokes 130 ms, 10 innings: balls/wicket    25.17    31.49    27.55    1.59     12-40         0
+Test day, 8 innings: runs per over                 3.10     3.87     3.49    0.19   2.8-4.8         0
+Test day, 8 innings: balls per wicket             46.69   110.58    76.05   13.76    40-130         0
+# No verdict changes with the constant, so these samples are as they were. The slog has the least room: 4.13 at its lowest
+# against a floor of 4; on 120 innings it reads 4.42 (tools/measure-r39.cjs).
+
+== 3. The 38 lines behind section 2
+{"hex":"0x39c1a7","slog10":{"bpw":4.44,"sixPct":22.49,"wickets":100},"g60_10":{"rr":6.77,"bpw":64},"g130_10":{"bpw":26.36},"test8":{"rr":3.59,"bpw":77.85}}
+{"hex":"0x39c1a8","slog10":{"bpw":4.6,"sixPct":23.79,"wickets":100},"g60_10":{"rr":6.72,"bpw":61.11},"g130_10":{"bpw":26.84},"test8":{"rr":3.64,"bpw":65.69}}
+{"hex":"0x39c1a9","slog10":{"bpw":4.24,"sixPct":22.37,"wickets":100},"g60_10":{"rr":6.58,"bpw":60.68},"g130_10":{"bpw":27.57},"test8":{"rr":3.58,"bpw":77.48}}
+{"hex":"0x39c1aa","slog10":{"bpw":4.13,"sixPct":20.75,"wickets":100},"g60_10":{"rr":6.74,"bpw":54.95},"g130_10":{"bpw":26.93},"test8":{"rr":3.69,"bpw":60.06}}
+{"hex":"0x39c1ab","slog10":{"bpw":4.13,"sixPct":21.46,"wickets":100},"g60_10":{"rr":6.89,"bpw":72.25},"g130_10":{"bpw":26.27},"test8":{"rr":3.34,"bpw":58.19}}
+{"hex":"0x39c1ac","slog10":{"bpw":4.45,"sixPct":24.45,"wickets":100},"g60_10":{"rr":6.8,"bpw":55.1},"g130_10":{"bpw":25.71},"test8":{"rr":3.68,"bpw":74.96}}
+{"hex":"0x39c1ad","slog10":{"bpw":4.37,"sixPct":20.58,"wickets":100},"g60_10":{"rr":6.73,"bpw":54.76},"g130_10":{"bpw":25.69},"test8":{"rr":3.16,"bpw":75.14}}
+{"hex":"0x39c1ae","slog10":{"bpw":4.52,"sixPct":20.77,"wickets":100},"g60_10":{"rr":6.78,"bpw":67.65},"g130_10":{"bpw":25.69},"test8":{"rr":3.1,"bpw":57}}
+{"hex":"0x39c1af","slog10":{"bpw":4.28,"sixPct":21.95,"wickets":100},"g60_10":{"rr":6.86,"bpw":68.06},"g130_10":{"bpw":26.32},"test8":{"rr":3.53,"bpw":68}}
+{"hex":"0x39c1b0","slog10":{"bpw":4.3,"sixPct":22.3,"wickets":100},"g60_10":{"rr":6.9,"bpw":83.21},"g130_10":{"bpw":28.39},"test8":{"rr":3.66,"bpw":78.11}}
+{"hex":"0x39c1b1","slog10":{"bpw":4.53,"sixPct":20.94,"wickets":100},"g60_10":{"rr":6.64,"bpw":68.12},"g130_10":{"bpw":27.48},"test8":{"rr":3.38,"bpw":72.24}}
+{"hex":"0x39c1b2","slog10":{"bpw":4.36,"sixPct":22.94,"wickets":100},"g60_10":{"rr":6.75,"bpw":55.05},"g130_10":{"bpw":27.71},"test8":{"rr":3.49,"bpw":84.56}}
+{"hex":"0x39c1b3","slog10":{"bpw":4.56,"sixPct":23.19,"wickets":100},"g60_10":{"rr":6.88,"bpw":55.1},"g130_10":{"bpw":31.49},"test8":{"rr":3.34,"bpw":100.33}}
+{"hex":"0x39c1b4","slog10":{"bpw":4.19,"sixPct":21.11,"wickets":100},"g60_10":{"rr":6.79,"bpw":60.84},"g130_10":{"bpw":25.17},"test8":{"rr":3.37,"bpw":87.92}}
+{"hex":"0x39c1b5","slog10":{"bpw":4.42,"sixPct":20.92,"wickets":100},"g60_10":{"rr":6.65,"bpw":64},"g130_10":{"bpw":26.34},"test8":{"rr":3.3,"bpw":46.69}}
+{"hex":"0x39c1b6","slog10":{"bpw":4.27,"sixPct":21.49,"wickets":100},"g60_10":{"rr":6.72,"bpw":54.86},"g130_10":{"bpw":25.64},"test8":{"rr":3.43,"bpw":70.4}}
+{"hex":"0x39c1b7","slog10":{"bpw":4.33,"sixPct":22.82,"wickets":100},"g60_10":{"rr":6.72,"bpw":64.33},"g130_10":{"bpw":25.26},"test8":{"rr":3.45,"bpw":84.24}}
+{"hex":"0x39c1b8","slog10":{"bpw":4.17,"sixPct":21.03,"wickets":100},"g60_10":{"rr":6.58,"bpw":64.11},"g130_10":{"bpw":27.67},"test8":{"rr":3.33,"bpw":87.88}}
+{"hex":"0x39c1b9","slog10":{"bpw":4.36,"sixPct":22.62,"wickets":100},"g60_10":{"rr":6.88,"bpw":57.95},"g130_10":{"bpw":29.05},"test8":{"rr":3.16,"bpw":70.37}}
+{"hex":"0x39c1ba","slog10":{"bpw":4.23,"sixPct":21.61,"wickets":100},"g60_10":{"rr":6.67,"bpw":54.81},"g130_10":{"bpw":27.05},"test8":{"rr":3.38,"bpw":77.93}}
+{"hex":"0x39c1bb","slog10":{"bpw":4.18,"sixPct":22.56,"wickets":100},"g60_10":{"rr":6.83,"bpw":64.06},"g130_10":{"bpw":27.55},"test8":{"rr":3.41,"bpw":100.52}}
+{"hex":"0x39c1bc","slog10":{"bpw":4.46,"sixPct":23.8,"wickets":100},"g60_10":{"rr":6.77,"bpw":68},"g130_10":{"bpw":27.07},"test8":{"rr":3.59,"bpw":81.27}}
+{"hex":"0x39c1bd","slog10":{"bpw":4.13,"sixPct":20.09,"wickets":100},"g60_10":{"rr":6.85,"bpw":55.24},"g130_10":{"bpw":26.84},"test8":{"rr":3.28,"bpw":64}}
+{"hex":"0x39c1be","slog10":{"bpw":4.43,"sixPct":23.8,"wickets":100},"g60_10":{"rr":6.62,"bpw":68},"g130_10":{"bpw":26.72},"test8":{"rr":3.7,"bpw":110.58}}
+{"hex":"0x39c1bf","slog10":{"bpw":4.38,"sixPct":22.03,"wickets":100},"g60_10":{"rr":6.73,"bpw":46.28},"g130_10":{"bpw":28.37},"test8":{"rr":3.72,"bpw":75.36}}
+{"hex":"0x39c1c0","slog10":{"bpw":4.23,"sixPct":20.87,"wickets":100},"g60_10":{"rr":6.63,"bpw":54.95},"g130_10":{"bpw":30.58},"test8":{"rr":3.18,"bpw":64.06}}
+{"hex":"0x39c1c1","slog10":{"bpw":4.2,"sixPct":21.35,"wickets":100},"g60_10":{"rr":6.88,"bpw":67.94},"g130_10":{"bpw":28.39},"test8":{"rr":3.42,"bpw":84.24}}
+{"hex":"0x39c1c2","slog10":{"bpw":4.33,"sixPct":22.02,"wickets":100},"g60_10":{"rr":6.8,"bpw":68.41},"g130_10":{"bpw":30.5},"test8":{"rr":3.87,"bpw":56.38}}
+{"hex":"0x39c1c3","slog10":{"bpw":4.41,"sixPct":23.13,"wickets":100},"g60_10":{"rr":6.87,"bpw":57.8},"g130_10":{"bpw":28.93},"test8":{"rr":3.66,"bpw":91.3}}
+{"hex":"0x39c1c4","slog10":{"bpw":4.27,"sixPct":21.41,"wickets":100},"g60_10":{"rr":6.72,"bpw":50.22},"g130_10":{"bpw":28.12},"test8":{"rr":3.55,"bpw":88.04}}
+{"hex":"0x39c1c5","slog10":{"bpw":4.45,"sixPct":21.91,"wickets":100},"g60_10":{"rr":6.56,"bpw":60.74},"g130_10":{"bpw":26.91},"test8":{"rr":3.32,"bpw":63.7}}
+{"hex":"0x39c1c6","slog10":{"bpw":4.24,"sixPct":20.92,"wickets":100},"g60_10":{"rr":6.73,"bpw":60.74},"g130_10":{"bpw":26.45},"test8":{"rr":3.42,"bpw":100.33}}
+{"hex":"0x39c1c7","slog10":{"bpw":4.34,"sixPct":20.45,"wickets":100},"g60_10":{"rr":6.73,"bpw":55.14},"g130_10":{"bpw":29.82},"test8":{"rr":3.65,"bpw":80.88}}
+{"hex":"0x39c1c8","slog10":{"bpw":4.3,"sixPct":22.17,"wickets":100},"g60_10":{"rr":6.77,"bpw":57.8},"g130_10":{"bpw":28.27},"test8":{"rr":3.48,"bpw":70.3}}
+{"hex":"0x39c1c9","slog10":{"bpw":4.46,"sixPct":21.09,"wickets":100},"g60_10":{"rr":6.72,"bpw":50.43},"g130_10":{"bpw":31.35},"test8":{"rr":3.49,"bpw":61.56}}
+{"hex":"0x39c1ca","slog10":{"bpw":4.58,"sixPct":23.09,"wickets":100},"g60_10":{"rr":6.74,"bpw":55.05},"g130_10":{"bpw":27.02},"test8":{"rr":3.73,"bpw":72.34}}
+{"hex":"0x39c1cb","slog10":{"bpw":4.29,"sixPct":23.13,"wickets":100},"g60_10":{"rr":6.77,"bpw":72.38},"g130_10":{"bpw":27.64},"test8":{"rr":3.7,"bpw":66.06}}
+{"hex":"0x39c1cc","slog10":{"bpw":4.51,"sixPct":24.68,"wickets":100},"g60_10":{"rr":6.82,"bpw":72.63},"g130_10":{"bpw":27.6},"test8":{"rr":3.72,"bpw":84}}

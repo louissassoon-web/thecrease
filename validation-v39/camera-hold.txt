@@ -1,0 +1,34 @@
+T20 in the field: 4504 balls, main view kept on 26.2%
+   pickup                       2817  kept 32%
+   boundary                     1165  kept 1%
+   wicket: caught                285  kept 18%
+   through to the keeper         196  kept 100%
+   wicket: lbw                    17  kept 100%
+   take                           15  kept 20%
+   wicket: bowled                  9  kept 100%
+T20 at the crease: 4800 balls, main view kept on 46.3%
+   pickup                       3119  kept 43%
+   defended, pickup              772  kept 100%
+   boundary                      705  kept 12%
+   through to the keeper         148  kept 5%
+   wicket: caught                 48  kept 27%
+   take                            5  kept 40%
+   wicket: bowled                  3  kept 100%
+TEST in the field: 9600 balls, main view kept on 64.1%
+   pickup                       7479  kept 71%
+   boundary                     1312  kept 1%
+   through to the keeper         683  kept 98%
+   wicket: caught                 94  kept 93%
+   wicket: lbw                    16  kept 100%
+   wicket: bowled                 12  kept 100%
+   take                            2  kept 100%
+   dead                            2  kept 100%
+TEST at the crease: 9600 balls, main view kept on 55.1%
+   pickup                       4698  kept 39%
+   defended, pickup             3257  kept 99%
+   boundary                     1179  kept 14%
+   through to the keeper         300  kept 0%
+   wicket: caught                146  kept 15%
+   wicket: bowled                 18  kept 100%
+   defended, take                  1  kept 0%
+   take                            1  kept 0%
